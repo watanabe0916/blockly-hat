@@ -54,7 +54,7 @@ function init() {
       tr.appendChild(td);
       td.appendChild(disk);
       td.className = "cell";
-      td.onclick = clicked;
+      td.onclick = click_player;
       
     }
     board.appendChild(tr);
@@ -577,6 +577,15 @@ function opponentPut(){
 }
 
 async function turnPlayer(){
+  const color = turn ? BLACK : WHITE;
+  click_player().then((clickResult) => {
+    const clickedx = clickResult.x;
+    const clickedy = clickResult.y;
+
+    firstCheck(clickedx,clickedy,color);
+  }).catch((error) => {
+    window.alert("errorです",error);
+  });
   // let put = await clicked_Player();
   
 
@@ -679,22 +688,15 @@ function BoardCount(){
   return count_cell;
 }
 
-function click_player(){
-  const color = turn ? BLACK : WHITE;
-  const y = this.parentNode.rowIndex;
-  const x = this.cellIndex;
-  if (data[y][x] !== 0) {
-    return;
-  }
-  const result = checkPut(x, y, color,data);
-  if (result.length > 0) {
-    result.forEach((value) => {
-      putDisc(value[0], value[1], color);
-    });
-    //turnChange();
-  }
-  //showTurn();
-  return ;//new Promise(resolve => {
 
-  //})
+
+function click_player(){
+  return new Promise((resolve) => {
+    const clickHandler = function(this){
+      resolve({x: this.cellIndex, y: this.parentNode.rowIndex});
+
+      document.removeEventListener("click", clickHandler);
+    };
+    document.addEventListener("click", clickHandler);
+  })
 }
