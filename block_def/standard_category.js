@@ -1,3 +1,5 @@
+
+
 //文字列(クォーテーションあり)
 Blockly.Blocks.string = {
   /**
@@ -52,7 +54,11 @@ Blockly.Blocks.num = {
 
 Blockly.Hat.num = function (block) {
   const num = block.getFieldValue('num');
-  return num
+  return num;
+};
+Blockly.JavaScript.num = function (block) {
+  const num = block.getFieldValue('num');
+  return num;
 };
 
 // 数値 ステートメント
@@ -109,7 +115,7 @@ Blockly.Blocks.num2 = {
 
 Blockly.Hat.num2 = function (block) {
   const num = block.getFieldValue('num');
-  return num
+  return num + " ";
 };
 
 // 数値2 ステートメント
@@ -139,6 +145,76 @@ Blockly.Blocks.num2_statement = {
 Blockly.Hat.num2_statement = function (block) {
   const num = block.getFieldValue('num') + ".";
   return num;
+};
+
+
+//更新変数
+// Blockly.Blocks.update_variable = {
+//   /**
+//    * Block for shuffle characters.
+//    * @this Blockly.Block
+//    */
+//   init() {
+//     this.jsonInit({
+//       type: "update_variable",
+//       message0: "更新変数%1.",
+//       args0: [{
+//         type: "field_input",
+//         name: "var_name",
+//         text: "abc"
+//       }],
+//       previousStatement: null,
+//       nextStatement: null,
+//       colour: 0,
+//       tooltip: "",
+//       helpUrl: ""
+//     });
+//   },
+// };
+Blockly.defineBlocksWithJsonArray([
+  {
+  "type": "update_variable",
+  "message0": "更新変数 %1 ，初期値 %2",
+  "args0": [
+    {
+      "type": "field_input",
+      "name": "var_name",
+      "text": "name"
+    },
+    {
+      "type": "field_input",
+      "name": "init_value",
+      "text": "value"
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 0,
+  "tooltip": "",
+  "helpUrl": ""
+}]);
+Blockly.Hat.update_variable = function (block) {
+  // let variables = [];
+  const var_name = block.getFieldValue('var_name') + '.';
+  
+  const init_value = block.getFieldValue('init_value') + '.';
+  //const variables = variable2.split('.');
+  // const variables_length = variables.length;
+  // let temporary_variable = '';
+  //   let n = 0;
+  //   while (n <= variables_length - 2) { // 配列の最後のメモリが空白になるので-1で調整
+  //       temporary_variable += variables[n] + " ";
+  //       n++;
+  //   }
+  //console.log(var_name);
+  // console.log(init_value);
+  // variables[0] = var_name;
+  // variables[1] = init_value;
+  // console.log(variables);
+  let code = var_name;
+  code += init_value;
+  
+  return code;
 };
 
 
@@ -181,6 +257,12 @@ Blockly.Hat.print = function (block) {
   OPERATOR += ") ^()";
   return OPERATOR + "\n";
 };
+/*Blockly.JavaScript.print = function (block) {
+  const arg = Blockly.JavaScript.statementToCode(block, 'arg', Blockly.JavaScript.ORDER_FUNCTION_CALL);
+  let OPERATOR = "alert(" + arg +")";
+  return OPERATOR;
+};*/
+
 
 // インクリメント演算
 Blockly.Blocks.increment_operator = {
