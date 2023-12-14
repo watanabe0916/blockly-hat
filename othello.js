@@ -95,11 +95,11 @@ function init() {
   }
   //showTurn();
 }
-window.onload = function(){
-  //turnSelect();
-  setTimeout(init(),10000);
-  setTimeout(showTurn(),15000);
-}
+
+
+init();
+showTurn();
+
 
 //turnSelect();
 
@@ -143,6 +143,9 @@ function showTurn() {
   let blacDisk = checkReverse(BLACK);
 
   let whiteDisk = checkReverse(WHITE);
+  if (turn == false){
+    turnCPU();
+  }
 
   if (numWhite + numBlack === cells * cells || (!blacDisk && !whiteDisk)) {
     if (numBlack > numWhite) {
