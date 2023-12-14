@@ -54,7 +54,7 @@ function init() {
       tr.appendChild(td);
       td.appendChild(disk);
       td.className = "cell";
-      td.onclick = click_player;
+      td.onclick = clicked;
       
     }
     board.appendChild(tr);
