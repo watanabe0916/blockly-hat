@@ -523,6 +523,7 @@ function returnPosition(){
 }
 
 function turnSelect(){
+  let player = true;
   // sente.classList.remove("hide");
   // gote.classList.remove("hide");
   // sente.addEventListener('click',function(){
@@ -538,7 +539,7 @@ function turnSelect(){
   //   gote.classList.add("hide");
   //   return false;
   // });
-  return true;
+  return player;
 }
 
 function returnTurn(){
