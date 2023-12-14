@@ -96,7 +96,7 @@ function init() {
   //showTurn();
 }
 window.onload = function(){
-  turnSelect();
+  //turnSelect();
   setTimeout(init(),10000);
   setTimeout(showTurn(),15000);
 }
