@@ -96,8 +96,9 @@ function init() {
   //showTurn();
 }
 
-init();
-showTurn();
+turnSelect();
+setTimeout(init(),10000);
+setTimeout(showTurn(),15000);
 //turnSelect();
 
 // 石を描画
