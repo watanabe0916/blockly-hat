@@ -347,7 +347,7 @@ function refInit() {
       tr.appendChild(td);
       td.appendChild(disk);
       td.className = "cell";
-      td.onclick = turnPlayer;
+      td.onclick = clicked;
     }
     board.appendChild(tr);
   }
@@ -523,21 +523,22 @@ function returnPosition(){
 }
 
 function turnSelect(){
-  sente.classList.remove("hide");
-  gote.classList.remove("hide");
-  sente.addEventListener('click',function(){
-    console.log("sente");
-    sente.classList.add("hide");
-    gote.classList.add("hide");
+  // sente.classList.remove("hide");
+  // gote.classList.remove("hide");
+  // sente.addEventListener('click',function(){
+  //   console.log("sente");
+  //   sente.classList.add("hide");
+  //   gote.classList.add("hide");
     
-    return true;
-  });
-  gote.addEventListener('click',function(){
-    console.log("gote");
-    sente.classList.add("hide");
-    gote.classList.add("hide");
-    return false;
-  });
+  //   return true;
+  // });
+  // gote.addEventListener('click',function(){
+  //   console.log("gote");
+  //   sente.classList.add("hide");
+  //   gote.classList.add("hide");
+  //   return false;
+  // });
+  return true;
 }
 
 function returnTurn(){
