@@ -141,12 +141,16 @@ Blockly.Hat.add = function (block) {
   const dropdown_name = block.getFieldValue('code');
   if (dropdown_name == 1) {
     var code = "+";
+    var calc = "sum"
   } else if (dropdown_name == 2) {
     var code = "-";
+    var calc = "difference"
   } else if (dropdown_name == 3) {
     var code = "*";
+    var calc = "product"
   } else if (dropdown_name == 4) {
     var code = "/";
+    var calc = "quotient"
   } else {
     var code = "?";
   }
@@ -154,9 +158,9 @@ Blockly.Hat.add = function (block) {
 
   // 数値の長さを判定し、配列に分割した後にHat形式で出力
   const nums = arg.split('.');
-  const nums_length = nums.length
+  const nums_length = nums.length;
 
-  const alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+  //const alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
 
   // 入力された数値の整列
   let temporary_num = '';
@@ -170,19 +174,22 @@ Blockly.Hat.add = function (block) {
   let temporary_alphabet = '^(';
   let calc_alphabet = '';
   let i = 0;
+  calc_alphabet += code + " ";
+
   while (i <= nums_length - 2) { // 配列の最後のメモリが空白になるので-1で調整
     if (i != 0)
       temporary_alphabet += " "; // 空白挿入
-    temporary_alphabet += alphabet[i];
+      temporary_alphabet += alphabet[i];
 
     if (i != 0)
-      calc_alphabet += code + " ";
-    calc_alphabet += alphabet[i] + " ";
+      calc_alphabet += " ";
+      calc_alphabet += alphabet[i];
 
     i++;
   }
   temporary_alphabet += ")";
-  calc_alphabet += "^(sum)";
-
-  return temporary_num + temporary_alphabet + "\n" + calc_alphabet + "\n" + "print(sum)";
+  calc_alphabet += " ^("
+  calc_alphabet += calc;
+  calc_alphabet += ")";
+  return temporary_num + temporary_alphabet + "\n" + calc_alphabet + "\n" + "print(" + calc + ")";
 };

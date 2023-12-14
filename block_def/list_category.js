@@ -1,3 +1,5 @@
+//リストブロックの定義
+
 // リストの初期状態を定義
 Blockly.Blocks.createlist = {
     init() {
@@ -56,10 +58,6 @@ Blockly.Hat.createlist = function (block) {
 };
 
 
-
-
-
-
 // リストの先頭に要素を追加
 Blockly.Blocks.add_headlist_node = {
     init() {
@@ -113,10 +111,6 @@ Blockly.Hat.add_headlist_node = function (block) {
 };
 
 
-
-
-
-
 // リスト 要素定義
 Blockly.Blocks.list_element = {
     init() {
@@ -140,14 +134,6 @@ Blockly.Hat.list_element = function (block) {
     const element = block.getFieldValue('element');
     return element;
 };
-
-
-
-
-
-
-
-
 
 
 // リスト 出力
@@ -181,10 +167,6 @@ Blockly.Hat.list_print = function (block) {
 };
 
 
-
-
-
-
 // リスト 変数
 Blockly.Blocks.list_variable = {
     init() {
@@ -215,63 +197,32 @@ Blockly.Hat.list_variable = function (block) {
 };
 
 
+Blockly.Blocks.list_out_variable = {
+    init() {
+        this.jsonInit({
+            type: "block_type",
+            message0: "リスト: %1",
+            args0: [{
+                type: "field_input",
+                name: "list_name",
+                text: "list_name"
+            }],
+            output : true,
+            tooltip: "",
+            helpUrl: "",
+            colour: 15,
+        });
+    },
+};
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Blockly.Hat.list_out_variable = function (block) {
+    const list_name = block.getFieldValue('list_name');
+    
+    let OPERATOR = ""
+    OPERATOR += list_name
+    //OPERATOR += "."
+    return OPERATOR;
+};
 
 
 

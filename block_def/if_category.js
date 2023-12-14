@@ -1,4 +1,6 @@
-// // 分岐(if)
+
+
+/// 分岐(if)
 // Blockly.Blocks.controls_if = {
 //     /**
 //      * Block for shuffle characters.
@@ -93,9 +95,15 @@ Blockly.Blocks.if_else = {
 };
 
 Blockly.Hat.if_else = function (block) {
-    const if_conditions = Blockly.Hat.statementToCode(block, 'if_conditions', Blockly.Hat.ORDER_FUNCTION_CALL);
+    let if_conditions = Blockly.Hat.statementToCode(block, 'if_conditions', Blockly.Hat.ORDER_FUNCTION_CALL);
     const if_order = Blockly.Hat.statementToCode(block, 'if', Blockly.Hat.ORDER_FUNCTION_CALL);
     const else_order = Blockly.Hat.statementToCode(block, 'else', Blockly.Hat.ORDER_FUNCTION_CALL);
+    let split = if_conditions.slice(if_conditions.indexOf("^"),if_conditions.indexOf(")")+1);
+    //console.log(split);
+    //let reg = new RegExp(split,"gi");
+    //console.log(reg);
+    if_conditions = if_conditions.replace(split,"");
+    //console.log(if_conditions);
 
     return  "if" + "(" + if_conditions + ")\n(\n" + if_order + ")\n(\n" + else_order + "\n)";
 };
