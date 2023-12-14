@@ -523,23 +523,23 @@ function returnPosition(){
 }
 
 function turnSelect(){
-  let player = true;
-  // sente.classList.remove("hide");
-  // gote.classList.remove("hide");
-  // sente.addEventListener('click',function(){
-  //   console.log("sente");
-  //   sente.classList.add("hide");
-  //   gote.classList.add("hide");
+  // let player = true;
+  sente.classList.remove("hide");
+  gote.classList.remove("hide");
+  sente.addEventListener('click',function(){
+    console.log("sente");
+    sente.classList.add("hide");
+    gote.classList.add("hide");
     
-  //   return true;
-  // });
-  // gote.addEventListener('click',function(){
-  //   console.log("gote");
-  //   sente.classList.add("hide");
-  //   gote.classList.add("hide");
-  //   return false;
-  // });
-  return player;
+    return true;
+  });
+  gote.addEventListener('click',function(){
+    console.log("gote");
+    sente.classList.add("hide");
+    gote.classList.add("hide");
+    return false;
+  });
+  return;
 }
 
 function returnTurn(){
@@ -578,16 +578,22 @@ function opponentPut(){
   return opponentPossibility;
 }
 
-async function turnPlayer(){
-  const color = turn ? BLACK : WHITE;
-  click_player().then((clickResult) => {
-    const clickedx = clickResult.x;
-    const clickedy = clickResult.y;
+function turnPlayer(){
+  const myturn = turn;
+  while(myturn == turn){
+    continue;
+  }
+  
+  // const color = turn ? BLACK : WHITE;
+  // click_player().then((clickResult) => {
+  //   const clickedx = clickResult.x;
+  //   const clickedy = clickResult.y;
 
-    firstCheck(clickedx,clickedy,color);
-  }).catch((error) => {
-    window.alert("errorです",error);
-  });
+  //   firstCheck(clickedx,clickedy,color);
+  // }).catch((error) => {
+  //   window.alert("errorです",error);
+  // });
+
   // let put = await clicked_Player();
   
 
