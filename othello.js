@@ -16,7 +16,7 @@ const test = document.getElementById("test");
 const turn_select = document.getElementById("turn_select");
 const sente = document.getElementById("sente");
 const gote = document.getElementById("gote");
-//let done = 0;
+let done = [];
 // スタート画面でマスの数が選択された時の処理
 /*function start(e) {
   cells = Number(e.target.id);
@@ -54,7 +54,7 @@ function init() {
       tr.appendChild(td);
       td.appendChild(disk);
       td.className = "cell";
-      td.onclick = turnPlayer;
+      td.onclick = clicked;
       
     }
     board.appendChild(tr);
@@ -576,18 +576,23 @@ function opponentPut(){
   return opponentPossibility;
 }
 
-function turnPlayer(){
+async function turnPlayer(){
+  // let put = await clicked_Player();
+  
+
+
   // let currentTurn = turn;
   // while (turn == currentTurn){
   // }
-  const color = turn ? BLACK : WHITE;
-  const y = this.parentNode.rowIndex;
-  const x = this.cellIndex;
+  // const color = turn ? BLACK : WHITE;
+  // const y = this.parentNode.rowIndex;
+  // const x = this.cellIndex;
 
-  firstCheck(x,y,color);
+  // firstCheck(x,y,color);
   
   // const td = document.getElementsByTagName("td");
   // console.log(td);
+  
   // td.onclick = clicked;
   // console.log(td);
   // showTurn();
@@ -674,4 +679,22 @@ function BoardCount(){
   return count_cell;
 }
 
+function click_player(){
+  const color = turn ? BLACK : WHITE;
+  const y = this.parentNode.rowIndex;
+  const x = this.cellIndex;
+  if (data[y][x] !== 0) {
+    return;
+  }
+  const result = checkPut(x, y, color,data);
+  if (result.length > 0) {
+    result.forEach((value) => {
+      putDisc(value[0], value[1], color);
+    });
+    //turnChange();
+  }
+  //showTurn();
+  return ;//new Promise(resolve => {
 
+  //})
+}
