@@ -1,3 +1,4 @@
+
 // 比較演算子
 Blockly.Blocks.arg_compare = {
     init() {
@@ -31,6 +32,10 @@ Blockly.Blocks.arg_compare = {
             [
               ">=",
               ">="
+            ],
+            [
+              "!=",
+              "!="
             ]
           ]
         },
@@ -51,14 +56,18 @@ Blockly.Blocks.arg_compare = {
   };
   
   Blockly.Hat.arg_compare = function (block) {
-    const left_side = Blockly.Hat.valueToCode(block, 'left_side', Blockly.Hat.ORDER_FUNCTION_CALL);
+    const left_side = Blockly.Hat.statementToCode(block, 'left_side', Blockly.Hat.ORDER_FUNCTION_CALL);
     const operator = block.getFieldValue('operator');
-    const right_side = Blockly.Hat.valueToCode(block, 'right_side', Blockly.Hat.ORDER_FUNCTION_CALL);
-  
-    return left_side + " " + operator + " " + right_side;
+    const right_side = Blockly.Hat.statementToCode(block, 'right_side', Blockly.Hat.ORDER_FUNCTION_CALL);
+
+    return operator + left_side + right_side;
   
   };
   
+  //Blockly.Hat.variables_set = function (a) {
+  //  var b = Blockly.Hat.statementToCode(a, "VALUE", Blockly.Hat.ORDER_FUNCTION_CALL) || "0";
+  //  return b + " " + "^" + "(" + Blockly.Hat.variableDB_.getName(a.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE) + ")\n";
+  //};
 
 //繰り返し
 Blockly.Blocks.loop = {
@@ -166,13 +175,13 @@ Blockly.Hat.condition_loop = function (block) {
         n++;
     }
     
-    return OPERATOR + temporary_num + OPERATOR2 + "\n" + break_order_left + if_conditions + break_order_right + "\n" + "(" + "\n" + do_order + "\n" + OPERATOR3 + return_code + OPERATOR4 + "\n" + ")" + "\n" + ") 0";
+    return OPERATOR + temporary_num + OPERATOR2 + "\n" + break_order_left + if_conditions + break_order_right + "\n" + "(" + "\n" + do_order + "\n" + OPERATOR3 + return_code + OPERATOR4 + "\n" + ")" + "\n" + ") 0\n";
 };
 
 
 
 
-//loop&break
+//while&break
 Blockly.Blocks.loop_if_break = {
     /**
      * Block for shuffle characters.
@@ -181,30 +190,24 @@ Blockly.Blocks.loop_if_break = {
     init() {
         this.jsonInit({
             type: "block_type",
-            message0: "繰り返し %1 %2 初期値 %3 処理 %4 脱出 %5 %6",
+            message0: "繰り返し(while) %1 更新変数 %2 繰り返し条件 %3 処理 %4",
             args0: [{
-                    type: "field_input",
-                    name: "value",
-                    text: "loop"
+                    type: "input_dummy",
+                    //name: "value",
+                    //text: "loop1"
                 },
                 {
-                    type: "input_dummy"
+                  type:"input_statement",
+                  name:"arg"
+                },
+                
+                {
+                  type: "input_value",
+                  name: "conditions"
                 },
                 {
-                    type: "input_statement",
-                    name: "arg"
-                },
-                {
-                    type: "input_statement",
-                    name: "do"
-                },
-                {
-                    type: "field_input",
-                    name: "value2",
-                    text: "break"
-                },
-                {
-                    type: "input_dummy"
+                  type: "input_statement",
+                  name: "syori"
                 }
             ],
             previousStatement: null,
@@ -215,16 +218,56 @@ Blockly.Blocks.loop_if_break = {
         });
     },
 };
-Blockly.JavaScript.loop_if_break = function (block) {
-    const OPERATOR = "for(;;){";
-    const OPERATOR2_1 = "{";
-    const OPERATOR2_2 = "}";
-    const do_code = Blockly.JavaScript.valueToCode(block, 'do', Blockly.JavaScript.ORDER_FUNCTION_CALL) || '\'\'';
-    const break_code = Blockly.JavaScript.valueToCode(block, 'break', Blockly.JavaScript.ORDER_ATOMIC);
-    const OPERATOR3 = "if(";
-    return [OPERATOR + "\n" + do_code + "\n" + OPERATOR3 + break_code + ")" + OPERATOR2_1 + "\n" + "break;" + "\n" + OPERATOR2_2 + "\n" + OPERATOR2_2, Blockly.JavaScript.ORDER_MEMBER];
-};
+// Blockly.JavaScript.loop_if_break = function (block) {
+//     const OPERATOR = "for(;;){";
+//     const OPERATOR2_1 = "{";
+//     const OPERATOR2_2 = "}";
+//     const do_code = Blockly.JavaScript.valueToCode(block, 'do', Blockly.JavaScript.ORDER_FUNCTION_CALL) || '\'\'';
+//     const break_code = Blockly.JavaScript.valueToCode(block, 'break', Blockly.JavaScript.ORDER_ATOMIC);
+//     const OPERATOR3 = "if(";
+//     return [OPERATOR + "\n" + do_code + "\n" + OPERATOR3 + break_code + ")" + OPERATOR2_1 + "\n" + "break;" + "\n" + OPERATOR2_2 + "\n" + OPERATOR2_2, Blockly.JavaScript.ORDER_MEMBER];
+// };
 Blockly.Hat.loop_if_break = function (block) {
-    const order = "※未定義※";
-    return [order, Blockly.Hat.ORDER_MEMBER];
+    //const loop_name = Blockly.Hat.valueToCode()
+    const arg = Blockly.Hat.statementToCode(block, 'arg', Blockly.Hat.ORDER_FUNCTION_CALL);
+    const conditions = Blockly.Hat.statementToCode(block, 'conditions', Blockly.Hat.ORDER_FUNCTION_CALL);
+    const  syori = Blockly.Hat.statementToCode(block, 'syori', Blockly.Hat.ORDER_FUNCTION_CALL);
+    //arg = arg.substring(0,arg.indexOf("^")); //^以降を削除
+    //console.log(arg);
+    //console.log(syori);
+    // 数値の長さを判定し、配列に分割した後にHat形式で出力
+    console.log(arg);
+    const args = arg.split('.');
+    // const inits = arg[1].split('.');
+    const args_length = args.length;
+    //const inits_length = inits.length;
+    //const alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+    let temp_args = '';
+    let temp_inits = '';
+    let m = 0,n = 0;
+    while (2 * m <= args_length - 2) { // 配列の最後のメモリが空白になるので-1で調整
+      temp_args += args[2*m] + ' ';
+      m++;
+    }
+    while (2 * n + 1 <= args_length - 2){
+      temp_inits += args[2*n + 1] + ' ';
+      n++;
+    }
+
+    // let temp_inits = '';
+    // let m = 0;
+    // while(m <= inits_length - 2){
+    //   temp_inits += inits[m];
+    //   m++;
+    // }
+    // console.log(syori);
+    console.log(temp_inits);
+    let order = '';
+    order += 'fix\n' + '(^( loop' + temp_args + '. break )\n';
+    order += 'if (' + conditions + ' ) break ^()\n'; 
+    order += syori + '\n';
+    order += 'loop' + temp_args + '. break )';
+    order += ' ' + temp_inits + '^()';
+
+    return order;
 };
