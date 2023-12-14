@@ -688,15 +688,13 @@ function BoardCount(){
   return count_cell;
 }
 
+// function click_player(){
+//   return new Promise((resolve) => {
+//     const clickHandler = function(this){
+//       resolve({x: this.cellIndex, y: this.parentNode.rowIndex});
 
-
-function click_player(){
-  return new Promise((resolve) => {
-    const clickHandler = function(this){
-      resolve({x: this.cellIndex, y: this.parentNode.rowIndex});
-
-      document.removeEventListener("click", clickHandler);
-    };
-    document.addEventListener("click", clickHandler);
-  })
-}
+//       document.removeEventListener("click", clickHandler);
+//     };
+//     document.addEventListener("click", clickHandler);
+//   })
+// }
