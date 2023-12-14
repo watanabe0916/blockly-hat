@@ -95,10 +95,12 @@ function init() {
   }
   //showTurn();
 }
+window.onload = function(){
+  turnSelect();
+  setTimeout(init(),10000);
+  setTimeout(showTurn(),15000);
+}
 
-turnSelect();
-setTimeout(init(),10000);
-setTimeout(showTurn(),15000);
 //turnSelect();
 
 // 石を描画
