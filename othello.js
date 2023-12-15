@@ -187,7 +187,7 @@ function clicked() {
   //console.log("clicked done");
   //done = 1;
   const color = turn ? BLACK : WHITE;
-  console.log(this);
+  //console.log(this);
   const y = this.parentNode.rowIndex;
   const x = this.cellIndex;
 
