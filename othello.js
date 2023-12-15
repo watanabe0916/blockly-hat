@@ -54,7 +54,7 @@ function Init() {
       tr.appendChild(td);
       td.appendChild(disk);
       td.className = "cell";
-      td.onclick = click_player;
+      td.onclick = clicked;
       
     }
     board.appendChild(tr);
@@ -584,19 +584,32 @@ function opponentPut(){
   return opponentPossibility;
 }
 
-function turnPlayer(){
+async function turnPlayer(){
+  const color = turn ? BLACK : WHITE;
+  try {
+    const clickResult = await clickedPromise();
+
+    const clickedX = clickResult.x;
+    const clickedY = clickResult.y;
+
+    console.log(clickedX,clickedY);
+    firstCheck(x,y,color);
+    
+  } catch (error){
+    console.error(error);
+  }
   // const myturn = turn;
   // while(myturn == turn){
   //   continue;
   // }
-  click_player().then((result) => {
-    const resultx = result.x;
-    const resulty = result.y;
+  // click_player().then((result) => {
+  //   const resultx = result.x;
+  //   const resulty = result.y;
 
-    firstCheck(resultx,resulty,color);
-  }).catch((error) => {
-    console.log("error",error);
-  })
+  //   firstCheck(resultx,resulty,color);
+  // }).catch((error) => {
+  //   console.log("error",error);
+  // })
   // const color = turn ? BLACK : WHITE;
   // click_player().then((clickResult) => {
   //   const clickedx = clickResult.x;
@@ -709,10 +722,13 @@ function BoardCount(){
   return count_cell;
 }
 
-function click_player(){
+function clickedPromise(){
   return new Promise((resolve) => {
     const clickHandler = function(event){
-      resolve({x: event.clientX, y: event.clientY});
+      const clickedCell = event.target;
+      const clickedX = clickedCell.cellIndex;
+      const clickedY = clickedCell.parentNode.rowIndex;
+      resolve({x: clickedX, y: clickedY});
 
       document.removeEventListener("click", clickHandler);
     };
