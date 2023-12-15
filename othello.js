@@ -22,7 +22,7 @@ let done = [];
   cells = Number(e.target.id);
   console.log(Number(e.target.id));
   board.innerHTML = "";
-  init();
+  Init();
   modal.classList.add("hide");
 }*/
 
@@ -31,7 +31,7 @@ function boardnum(num){
   cells = num;
   board.innerHTML = "";
   turn = true;
-  init();
+  Init();
   //turnSelect();
 }
 
@@ -44,7 +44,7 @@ function boardnum(num){
 //   console.log(numWhite.textContent);
 // });
 // 初期化
-function init() {
+function Init() {
   for (let i = 0; i < cells; i++) {
     const tr = document.createElement("tr");
     data[i] = Array(cells).fill(0);
@@ -97,8 +97,8 @@ function init() {
 }
 
 
-//init();
-//showTurn();
+// Init();
+// showTurn();
 
 
 //turnSelect();

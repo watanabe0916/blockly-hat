@@ -578,8 +578,8 @@ Blockly.Hat['showResult'] = function(block) {
 Blockly.defineBlocksWithJsonArray(
 
   [{
-    "type": "init",
-    "message0": "初期盤面表示",
+    "type": "Init",
+    "message0": "初期化",
     "previousStatement": null,
     "nextStatement": null,
     "colour": 230,
@@ -587,10 +587,10 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['init'] = function(block) {
+Blockly.Hat['Init'] = function(block) {
   // TODO: Assemble Hat into code variable.
   var code = 'JavaScript';
-  code += ' '+'"init"';
+  code += ' '+'"Init"';
   code += ' '+'^()\n';
   return code;
 };
@@ -598,7 +598,7 @@ Blockly.Hat['init'] = function(block) {
 Blockly.defineBlocksWithJsonArray(
 
   [{
-    "type": "showturn",
+    "type": "showTurn",
     "message0": "手番など表示",
     "previousStatement": null,
     "nextStatement": null,
@@ -607,10 +607,11 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['showturn'] = function(block) {
+Blockly.Hat['showTurn'] = function(block) {
   // TODO: Assemble Hat into code variable.
-  let code = 'JavaScript';
+  var code = 'JavaScript';
   code += ' '+'"showTurn"';
   code += ' '+'^()\n';
   return code;
 };
+
