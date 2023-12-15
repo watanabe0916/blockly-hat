@@ -578,7 +578,7 @@ Blockly.Hat['showResult'] = function(block) {
 Blockly.defineBlocksWithJsonArray(
 
   [{
-    "type": "Init",
+    "type": "init",
     "message0": "初期盤面表示",
     "previousStatement": null,
     "nextStatement": null,
@@ -587,7 +587,7 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['Init'] = function(block) {
+Blockly.Hat['init'] = function(block) {
   // TODO: Assemble Hat into code variable.
   var code = 'JavaScript';
   code += ' '+'"init"';
