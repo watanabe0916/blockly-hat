@@ -97,8 +97,8 @@ function init() {
 }
 
 
-init();
-showTurn();
+//init();
+//showTurn();
 
 
 //turnSelect();
