@@ -725,16 +725,16 @@ function BoardCount(){
   return count_cell;
 }
 
-function clickedPromise(td){
-  return new Promise((resolve) => {
-    const clickHandler = function(event){
-      const clickedCell = event.target;
-      const clickedX = td.cellIndex;
-      const clickedY = td.parentNode.rowIndex;
-      resolve({x: clickedX, y: clickedY});
+// function clickedPromise(td){
+//   return new Promise((resolve) => {
+//     const clickHandler = function(event){
+//       const clickedCell = event.target;
+//       const clickedX = td.cellIndex;
+//       const clickedY = td.parentNode.rowIndex;
+//       resolve({x: clickedX, y: clickedY});
 
-      td.removeEventListener("click", clickHandler);
-    };
-    td.addEventListener("click", clickHandler);
-  })
-}
+//       td.removeEventListener("click", clickHandler);
+//     };
+//     td.addEventListener("click", clickHandler);
+//   })
+// }
