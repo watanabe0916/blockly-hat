@@ -55,6 +55,7 @@ function Init() {
       td.appendChild(disk);
       td.className = "cell";
       td.onclick = clickedPromise;
+      // td.onclick = clicked;
       
     }
     board.appendChild(tr);
@@ -186,6 +187,7 @@ function clicked() {
   //console.log("clicked done");
   //done = 1;
   const color = turn ? BLACK : WHITE;
+  console.log(this);
   const y = this.parentNode.rowIndex;
   const x = this.cellIndex;
 
@@ -354,6 +356,7 @@ function refInit() {
       td.appendChild(disk);
       td.className = "cell";
       td.onclick = clickedPromise;
+      // td.onclick = clicked;
     }
     board.appendChild(tr);
   }
@@ -545,7 +548,7 @@ function turnSelect(){
     gote.classList.add("hide");
     return false;
   });
-  return;
+  
 }
 
 function returnTurn(){
@@ -587,7 +590,7 @@ function opponentPut(){
 async function turnPlayer(){
   const color = turn ? BLACK : WHITE;
   try {
-    const clickResult = await clickedPromise();
+    const clickResult = await clickedPromise(document.getElementsByClass("cell"));
 
     const clickedX = clickResult.x;
     const clickedY = clickResult.y;
@@ -722,16 +725,16 @@ function BoardCount(){
   return count_cell;
 }
 
-function clickedPromise(){
+function clickedPromise(td){
   return new Promise((resolve) => {
     const clickHandler = function(event){
       const clickedCell = event.target;
-      const clickedX = clickedCell.cellIndex;
-      const clickedY = clickedCell.parentNode.rowIndex;
+      const clickedX = td.cellIndex;
+      const clickedY = td.parentNode.rowIndex;
       resolve({x: clickedX, y: clickedY});
 
-      document.removeEventListener("click", clickHandler);
+      td.removeEventListener("click", clickHandler);
     };
-    document.addEventListener("click", clickHandler);
+    td.addEventListener("click", clickHandler);
   })
 }
