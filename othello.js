@@ -16,7 +16,7 @@ const test = document.getElementById("test");
 const turn_select = document.getElementById("turn_select");
 const sente = document.getElementById("sente");
 const gote = document.getElementById("gote");
-let done = [];
+//let done = [];
 // スタート画面でマスの数が選択された時の処理
 /*function start(e) {
   cells = Number(e.target.id);

@@ -114,6 +114,7 @@ Blockly.defineBlocksWithJsonArray([
   {
     "type": "turn_select",
     "message0": "手番選択",
+    "previousStatement": null,
     "nextStatement": null,
     "colour": 230,
     "tooltip": "",
