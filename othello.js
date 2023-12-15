@@ -97,7 +97,7 @@ function init() {
 }
 
 
-init();
+//init();
 //showTurn();
 
 
