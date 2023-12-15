@@ -54,7 +54,7 @@ function Init() {
       tr.appendChild(td);
       td.appendChild(disk);
       td.className = "cell";
-      td.onclick = clicked;
+      td.onclick = click_player;
       
     }
     board.appendChild(tr);
@@ -585,11 +585,18 @@ function opponentPut(){
 }
 
 function turnPlayer(){
-  const myturn = turn;
-  while(myturn == turn){
-    continue;
-  }
-  
+  // const myturn = turn;
+  // while(myturn == turn){
+  //   continue;
+  // }
+  click_player().then((result) => {
+    const resultx = result.x;
+    const resulty = result.y;
+
+    firstCheck(resultx,resulty,color);
+  }).catch((error) => {
+    console.log("error",error);
+  })
   // const color = turn ? BLACK : WHITE;
   // click_player().then((clickResult) => {
   //   const clickedx = clickResult.x;
@@ -597,7 +604,7 @@ function turnPlayer(){
 
   //   firstCheck(clickedx,clickedy,color);
   // }).catch((error) => {
-  //   window.alert("errorです",error);
+  //   console.log("errorです",error);
   // });
 
   // let put = await clicked_Player();
@@ -702,13 +709,13 @@ function BoardCount(){
   return count_cell;
 }
 
-// function click_player(){
-//   return new Promise((resolve) => {
-//     const clickHandler = function(this){
-//       resolve({x: this.cellIndex, y: this.parentNode.rowIndex});
+function click_player(){
+  return new Promise((resolve) => {
+    const clickHandler = function(event){
+      resolve({x: event.clientX, y: event.clientY});
 
-//       document.removeEventListener("click", clickHandler);
-//     };
-//     document.addEventListener("click", clickHandler);
-//   })
-// }
+      document.removeEventListener("click", clickHandler);
+    };
+    document.addEventListener("click", clickHandler);
+  })
+}
