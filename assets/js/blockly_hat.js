@@ -49,7 +49,7 @@ function runCode() {
   // 追加で定義された関数エリア
   pre.value += "\n\n";
   pre.value += Blockly.Hat.workspaceToCode(workspace_function);
-
+  console.log(pre.value);
   // Hat言語の実行
   HatInterpreter.startCode("Run", pre.value, "main");
 

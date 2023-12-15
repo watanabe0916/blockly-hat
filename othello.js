@@ -98,8 +98,8 @@ function Init() {
 }
 
 
-// Init();
-// showTurn();
+Init();
+showTurn();
 
 
 //turnSelect();
