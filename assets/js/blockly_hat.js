@@ -31,7 +31,7 @@ function showCode() {
   // 追加で定義された関数エリア
   pre.innerHTML += "\n\n";
   pre.innerHTML += Blockly.Hat.workspaceToCode(workspace_function);
-  console.log(pre.innerHTML);
+  // console.log(pre.innerHTML);
 }
 
 function runCode() {
