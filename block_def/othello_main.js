@@ -590,7 +590,7 @@ Blockly.defineBlocksWithJsonArray(
 Blockly.Hat['Init'] = function(block) {
   // TODO: Assemble Hat into code variable.
   var code = 'JavaScript';
-  code += ' '+'"Init"';
+  code += ' '+'"init"';
   code += ' '+'^()\n';
   return code;
 };
