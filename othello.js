@@ -144,9 +144,9 @@ function showTurn() {
   let blacDisk = checkReverse(BLACK);
 
   let whiteDisk = checkReverse(WHITE);
-  if (turn == false){
-    turnCPU();
-  }
+  // if (turn == false){
+  //   turnCPU();
+  // }
 
   if (numWhite + numBlack === cells * cells || (!blacDisk && !whiteDisk)) {
     if (numBlack > numWhite) {
@@ -725,16 +725,16 @@ function BoardCount(){
   return count_cell;
 }
 
-// function clickedPromise(td){
-//   return new Promise((resolve) => {
-//     const clickHandler = function(event){
-//       const clickedCell = event.target;
-//       const clickedX = td.cellIndex;
-//       const clickedY = td.parentNode.rowIndex;
-//       resolve({x: clickedX, y: clickedY});
+function clickedPromise(td){
+  return new Promise((resolve) => {
+    const clickHandler = function(event){
+      const clickedCell = event.target;
+      const clickedX = td.cellIndex;
+      const clickedY = td.parentNode.rowIndex;
+      resolve({x: clickedX, y: clickedY});
 
-//       td.removeEventListener("click", clickHandler);
-//     };
-//     td.addEventListener("click", clickHandler);
-//   })
-// }
+      td.removeEventListener("click", clickHandler);
+    };
+    td.addEventListener("click", clickHandler);
+  })
+}
