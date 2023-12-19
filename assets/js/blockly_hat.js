@@ -37,8 +37,8 @@ function showCode() {
 function runCode() {
   // Hat言語の出力
   Blockly.Hat.INFINITE_LOOP_TRAP = null;
-  //const pre = document.getElementById('terminal');
-  pre.value = ""; //hatコード初期化
+  // const pre = document.getElementById();
+  const pre = ""; //hatコード初期化
   pre.value = "(include \"util.sch\")";
   pre.value += "\n";
   pre.value += "(defineCPS main ^()";
