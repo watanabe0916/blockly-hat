@@ -18,6 +18,8 @@ function showCode() {
   //event.preventDefault();
   Blockly.Hat.INFINITE_LOOP_TRAP = null;
   const pre = document.getElementById('HatCode');
+  const checkblocks = Blockly.Hat.workspaceToCode(workspace);
+  console.log(checkblocks);
   pre.innerHTML = ""; //hatコードエリア初期化
   // main関数エリア
   pre.innerHTML = "(include \"util.sch\")";
@@ -38,6 +40,8 @@ function runCode() {
   // Hat言語の出力
   Blockly.Hat.INFINITE_LOOP_TRAP = null;
   const pre = document.getElementById("HatCode");
+  const checkblocks = Blockly.Hat.workspaceToCode(workspace);
+  console.log(checkblocks);
   //pre = ""; //hatコード初期化
   pre.value = "(include \"util.sch\")";
   pre.value += "\n";
