@@ -54,7 +54,7 @@ function Init() {
       tr.appendChild(td);
       td.appendChild(disk);
       td.className = "cell";
-      // td.onclick = clickedPromise;
+      //td.onclick = clickedPromise;
       td.onclick = clicked;
       
     }
@@ -355,8 +355,8 @@ function refInit() {
       tr.appendChild(td);
       td.appendChild(disk);
       td.className = "cell";
-      // td.onclick = clickedPromise;
-      td.onclick = clicked;
+      td.onclick = clickedPromise;
+      // td.onclick = clicked;
     }
     board.appendChild(tr);
   }
@@ -590,8 +590,8 @@ function opponentPut(){
 async function turnPlayer(){
   const color = turn ? BLACK : WHITE;
   try {
-    const clickResult = await clickedPromise(document.getElementsByClass("cell"));
-
+    const name = document.getElementsByClassName('cell');
+    const clickResult = await clickedPromise(name);
     const clickedX = clickResult.x;
     const clickedY = clickResult.y;
 
@@ -725,16 +725,16 @@ function BoardCount(){
   return count_cell;
 }
 
-function clickedPromise(td){
+function clickedPromise(){
   return new Promise((resolve) => {
     const clickHandler = function(event){
       const clickedCell = event.target;
-      const clickedX = td.cellIndex;
-      const clickedY = td.parentNode.rowIndex;
+      const clickedX = clickedCell.cellIndex;
+      const clickedY = clickedCell.parentNode.rowIndex;
       resolve({x: clickedX, y: clickedY});
 
-      td.removeEventListener("click", clickHandler);
+      event.removeEventListener("click", clickHandler); //エラー：td.addEventListener is not a function
     };
-    td.addEventListener("click", clickHandler);
+    event.addEventListener("click", clickHandler);
   })
 }
