@@ -97,7 +97,8 @@ function Init() {
   //showTurn();
 }
 
-
+turn_select();
+const playerside = await waitforclick();
 Init();
 showTurn();
 
@@ -736,5 +737,12 @@ function clickedPromise(){
       event.removeEventListener("click", clickHandler); //エラー：td.addEventListener is not a function
     };
     event.addEventListener("click", clickHandler);
+  })
+}
+
+function waitforclick(){
+  return new Promise((resolve,reject) => {
+    document.getElementById('sente').onclick = () => resolve(true);
+    document.getElementById('gote').onclick = () => resolve(false);
   })
 }
