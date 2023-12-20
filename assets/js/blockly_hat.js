@@ -17,11 +17,11 @@ const workspace_function = Blockly.inject(
 function showCode() {
   //event.preventDefault();
   Blockly.Hat.INFINITE_LOOP_TRAP = null;
-  //const pre = document.getElementById('HatCode');
-  //console.log()
+  const pre = document.getElementById('HatCode');
+  
   const checkblocks = Blockly.Hat.workspaceToCode(workspace);
   console.log(checkblocks);
-  const pre = ""; //hatコードエリア初期化
+  pre.innerHTML = ""; //hatコードエリア初期化
   // main関数エリア
   pre.innerHTML = "(include \"util.sch\")";
   pre.innerHTML += "\n";
@@ -34,7 +34,7 @@ function showCode() {
   // 追加で定義された関数エリア
   pre.innerHTML += "\n\n";
   pre.innerHTML += Blockly.Hat.workspaceToCode(workspace_function);
-  console.log(pre.value);
+  console.log(pre.innerHTML);
 }
 
 function runCode() {
