@@ -77,6 +77,7 @@ var term=TATerm("terminal");
 function hatPrint(arg){
   if(arg==null) return;
   var first=arg.getFirst( );
+  console.log(first);
   term.print(HatInterpreter.valueString(first));
   hatPrint(arg.getRest( ));
 }
