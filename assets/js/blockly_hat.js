@@ -44,20 +44,20 @@ function runCode() {
   const checkblocks = Blockly.Hat.workspaceToCode(workspace);
   console.log(checkblocks);
   //pre = ""; //hatコード初期化
-  pre.value = "(include \"util.sch\")";
-  pre.value += "\n";
-  pre.value += "(defineCPS main ^()";
-  pre.value += "\n";
-  pre.value += Blockly.Hat.workspaceToCode(workspace);
-  pre.value += "\n";
-  pre.value += "exit 0)";
+  pre.innerHTML = "(include \"util.sch\")";
+  pre.innerHTML += "\n";
+  pre.innerHTML += "(defineCPS main ^()";
+  pre.innerHTML += "\n";
+  pre.innerHTML += Blockly.Hat.workspaceToCode(workspace);
+  pre.innerHTML += "\n";
+  pre.innerHTML += "exit 0)";
 
   // 追加で定義された関数エリア
-  pre.value += "\n\n";
-  pre.value += Blockly.Hat.workspaceToCode(workspace_function);
-  console.log(pre.value);
+  pre.innerHTML += "\n\n";
+  pre.innerHTML += Blockly.Hat.workspaceToCode(workspace_function);
+  console.log(pre.innerHTML);
   // Hat言語の実行
-  HatInterpreter.startCode("Run", pre.value, "main");
+  HatInterpreter.startCode("Run", pre.innerHTML, "main");
 
 }
 //ボタン処理
