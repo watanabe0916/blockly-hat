@@ -56,8 +56,9 @@ function runCode() {
 
 }
 //ボタン処理
-document.getElementById('showCode').addEventListener('click', showCode, false);
-document.getElementById('runCode').addEventListener('click', runCode, false);
+// document.getElementById('showCode').addEventListener('click', showCode, false);
+// document.getElementById('runCode').addEventListener('click', runCode, false);
+
 
 var term=TATerm("terminal");
   function printPrompt( ){
