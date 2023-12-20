@@ -17,10 +17,11 @@ const workspace_function = Blockly.inject(
 function showCode() {
   //event.preventDefault();
   Blockly.Hat.INFINITE_LOOP_TRAP = null;
-  const pre = document.getElementById('HatCode');
+  //const pre = document.getElementById('HatCode');
+  //console.log()
   const checkblocks = Blockly.Hat.workspaceToCode(workspace);
   console.log(checkblocks);
-  pre.innerHTML = ""; //hatコードエリア初期化
+  const pre = ""; //hatコードエリア初期化
   // main関数エリア
   pre.innerHTML = "(include \"util.sch\")";
   pre.innerHTML += "\n";
