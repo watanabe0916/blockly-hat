@@ -15,7 +15,7 @@ const workspace_function = Blockly.inject(
 
   // Hat言語の出力
 function showCode() {
-  event.preventDefault();
+  //event.preventDefault();
   Blockly.Hat.INFINITE_LOOP_TRAP = null;
   const pre = document.getElementById('HatCode');
   pre.innerHTML = ""; //hatコードエリア初期化
