@@ -568,8 +568,8 @@ function turnSelect(){
     sente.classList.add("hide");
     gote.classList.add("hide");
     // usersente = false;  //人間の手番は白
-    let user_sente = false;
-    returnTurnSelect(user_sente);
+    
+    returnTurnSelect(false);
   });
   
 }
@@ -777,12 +777,12 @@ function clickedPromise(elements){
   })
 }
 
-function waitforclick(){
-  return new Promise((resolve,reject) => {
-    document.getElementById('sente').onclick = () => resolve(true);
-    // document.getElementById('gote').onclick = () => resolve(false);
-  });
-}
+// function waitforclick(){
+//   return new Promise((resolve,reject) => {
+//     document.getElementById('sente').onclick = () => resolve(true);
+//     // document.getElementById('gote').onclick = () => resolve(false);
+//   });
+// }
 
 function waitTurnSelect(ret){
   waitingTurnSelectActor = HatInterpreter.getCurrentActor();
@@ -820,3 +820,5 @@ function clicked(){
   // let task=new Task(waitingActor, waitingReturn, [x, y], null, null);
   // TaskQ.push(task);
 }
+
+

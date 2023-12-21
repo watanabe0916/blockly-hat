@@ -124,7 +124,7 @@ Blockly.defineBlocksWithJsonArray([
 
 Blockly.Hat['turn_select'] = function(block) {
   // TODO: Assemble Hat into code variable.
-  let code = "turnSelect ^(userSente)";
+  let code = "turnSelect ^(userSente)\n";
   return code;
 };
 
@@ -461,7 +461,7 @@ Blockly.defineBlocksWithJsonArray(
 );
 Blockly.Hat['turnPlayer'] = function(block) {
   // TODO: Assemble Hat into code variable.
-  var code = 'turnPlayer ^(x y)';
+  var code = 'turnPlayer ^(x y)\n';
   return code;
 };
 
