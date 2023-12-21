@@ -274,6 +274,57 @@ $listの先頭に$elを追加したリストを返す。
   exit 0)
 |#
 
+
+;;;   2022追加分
+(defineCPS node ^(p l f) 
+  f p l)
+
+(defineCPS getp ^(n)
+  n (^(p l)p))
+
+(defineCPS getl ^(n)
+  n (^(p l)l))
+
+(defineCPS reptree ^(f a)
+  node a (map (reptree f)(f a)))
+
+(defineCPS cons ^(x y f)
+  f x y)
+
+(defineCPS car ^ (c)
+  c (^(x y)x))
+
+(defineCPS cdr ^(c)
+  c (^(x y)y))
+
+(defineCPS reduce ^(f x al)
+  if(nil? al) x
+  ( car al ^(a)
+    cdr al ^(l)
+    f a ((reduce f x) l )))
+
+(defineCPS map ^(f)
+  reduce (comp cons f) nil)
+
+(defineCPS comp ^(f g h)
+  g h ^(gh)
+  f gh)
+
+(defineCPS redtree ^(f g a n)
+  f (car n) (redtreeap f g a (cdr n)))
+
+(defineCPS redtreeap ^(f g a c)
+  if (nil? c) a
+  (g (redtree f g a (car c))
+  (redtreeap f g a (cde c))))
+
+
+#|
+空列
+|#
+(defineCPS nil ^(R . return)
+  return true)
+
 #|2023.12.21追加
 (defineCPS turnSelect ^ return
   JavaScript "waitTurnSelect" return ^(dummy)
