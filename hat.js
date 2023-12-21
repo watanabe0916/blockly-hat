@@ -1394,6 +1394,7 @@
 				let task=new Task(actor, ret, results, null, null);
 				TaskQ.push(task);
 			},
+			getCurrentActor: currentActor,
 	
 		};
 	})();

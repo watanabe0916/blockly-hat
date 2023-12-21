@@ -107,7 +107,9 @@ function Init() {
   //showTurn();
 }
 // console.log("turnselect前");
+//
 // turnSelect();
+//
 // console.log("turnselect done");
 
 Init();
