@@ -106,9 +106,9 @@ function Init() {
   }
   //showTurn();
 }
-console.log("turnselect前");
-turnSelect();
-console.log("turnselect done");
+// console.log("turnselect前");
+// turnSelect();
+// console.log("turnselect done");
 
 Init();
 console.log("Init done");
@@ -782,7 +782,7 @@ function waitforclick(){
 }
 
 function waitTurnSelect(ret){
-  waitingTurnSelectActor = currentActor();
+  waitingTurnSelectActor = HatInterpreter.currentActor();
   waitingTurnSelectReturn = ret;
 }
 
@@ -794,7 +794,7 @@ function returnTurnSelect(user_sente){
 }
 
 function waitClick(ret){
-  waitingActor = currentActor( );
+  waitingActor = HatInterpreter.currentActor( );
   waitingReturn = ret;
 }
 
