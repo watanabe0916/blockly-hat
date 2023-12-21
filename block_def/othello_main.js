@@ -600,7 +600,7 @@ Blockly.defineBlocksWithJsonArray(
 
   [{
     "type": "showTurn",
-    "message0": "手番など表示",
+    "message0": "手番や石の数を表示",
     "previousStatement": null,
     "nextStatement": null,
     "colour": 230,
@@ -616,3 +616,22 @@ Blockly.Hat['showTurn'] = function(block) {
   return code;
 };
 
+//CPUの手番ならば
+Blockly.defineBlocksWithJsonArray(
+
+  [{
+    "type": "CPUsTurn",
+    "message0": "CPUの手番",
+    "output": null,
+    "colour": 230,
+    "tooltip": "",
+    "helpUrl": ""
+  }]
+);
+Blockly.Hat['CPUsTurn'] = function(block) {
+  // TODO: Assemble Hat into code variable.
+  let code = 'JavaScript';
+  code += ' '+'"CPUsTurn"';
+  //code += ' '+'^(opponentPossibility)\n';
+  return code;
+};

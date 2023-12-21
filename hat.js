@@ -1390,6 +1390,11 @@
 				console.log(obj);
 				return null;
 			},
+			startTask: function(actor, ret, results){
+				let task=new Task(actor, ret, results, null, null);
+				TaskQ.push(task);
+			},
+	
 		};
 	})();
 	

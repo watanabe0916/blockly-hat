@@ -273,3 +273,13 @@ $listの先頭に$elを追加したリストを返す。
   print("value=" value "\n")^()
   exit 0)
 |#
+
+#|2023.12.21追加
+(defineCPS turnSelect ^ return
+  JavaScript "waitTurnSelect" return ^(dummy)
+  end)
+
+(defineCPS turnPlayer ^ return
+  JavaScript "waitClick" return ^(dummy)
+  end)
+

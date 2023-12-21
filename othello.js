@@ -16,6 +16,16 @@ const test = document.getElementById("test");
 const turn_select = document.getElementById("turn_select");
 const sente = document.getElementById("sente");
 const gote = document.getElementById("gote");
+
+let waitingTurnSelectActor;
+let waitingTurnSelectReturn;
+
+let waitingActor; // クリックを待っているアクター
+let waitingReturn; // クリックを待っている戻り先
+let userSente; // undefined, true, or false
+
+
+// let usersente = 1; //人間の手番 先手ボタンを押したらtrue, 後手ボタンを押したらfalseが入るグローバル変数
 //let done = [];
 // スタート画面でマスの数が選択された時の処理
 /*function start(e) {
@@ -55,7 +65,7 @@ function Init() {
       td.appendChild(disk);
       td.className = "cell";
       //td.onclick = clickedPromise;
-      td.onclick = clicked;
+       td.onclick = clicked;
       
     }
     board.appendChild(tr);
@@ -96,12 +106,16 @@ function Init() {
   }
   //showTurn();
 }
+console.log("turnselect前");
+turnSelect();
+console.log("turnselect done");
 
-turn_select();
-const playerside = await waitforclick();
 Init();
+console.log("Init done");
+console.log("aaa");
 showTurn();
-
+console.log("showTurn done");
+//await waitforclick();
 
 //turnSelect();
 
@@ -184,16 +198,20 @@ function showTurn() {
 }
 
 // マスがクリックされた時の処理
-function clicked() {
-  //console.log("clicked done");
-  //done = 1;
-  const color = turn ? BLACK : WHITE;
-  //console.log(this);
-  const y = this.parentNode.rowIndex;
-  const x = this.cellIndex;
+// function clicked() {
+//   //console.log("clicked done");
+//   //done = 1;
+//   if (usersente == 1){
+//     window.alert("先手か後手かを選択してください");
+//     return;
+//   }
+//   const color = turn ? BLACK : WHITE;
+//   //console.log(this);
+//   const y = this.parentNode.rowIndex;
+//   const x = this.cellIndex;
 
-  firstCheck(x,y,color);
-}
+//   firstCheck(x,y,color);
+// }
 //マスにおけるかチェック
 function firstCheck(x,y,color){
   if (data[y][x] !== 0) {
@@ -540,14 +558,15 @@ function turnSelect(){
     console.log("sente");
     sente.classList.add("hide");
     gote.classList.add("hide");
-    
-    return true;
+    // usersente = true;//人間の手番は黒
+    returnTurnSelect(true);
   });
   gote.addEventListener('click',function(){
     console.log("gote");
     sente.classList.add("hide");
     gote.classList.add("hide");
-    return false;
+    // usersente = false;  //人間の手番は白
+    returnTurnSelect(false);
   });
   
 }
@@ -589,10 +608,13 @@ function opponentPut(){
 }
 
 async function turnPlayer(){
+  
   const color = turn ? BLACK : WHITE;
+  const elements = document.getElementsByClassName('cell');
   try {
-    const name = document.getElementsByClassName('cell');
-    const clickResult = await clickedPromise(name);
+    
+    let clickResult = await clickedPromise(elements);
+    
     const clickedX = clickResult.x;
     const clickedY = clickResult.y;
 
@@ -726,23 +748,72 @@ function BoardCount(){
   return count_cell;
 }
 
-function clickedPromise(){
+function clickedPromise(elements){
   return new Promise((resolve) => {
-    const clickHandler = function(event){
-      const clickedCell = event.target;
-      const clickedX = clickedCell.cellIndex;
-      const clickedY = clickedCell.parentNode.rowIndex;
+    const clickHandler = function(){
+      //const clickedCell = event.target;
+      
+      
+      const clickedX = elements.cellIndex;
+      
+      const clickedY = elements.parentNode.rowIndex;
       resolve({x: clickedX, y: clickedY});
-
-      event.removeEventListener("click", clickHandler); //エラー：td.addEventListener is not a function
+      
+      //elementsの中身はgetElementsbyClassnameで呼び出したので配列のようになっている。
+      //しかしEventlistenerは１つの要素にしか適用できないので要修正
+      elements.removeEventListener("click", clickHandler); 
+      //document.removeEventListener("click", clickHandler);
+      
+      
     };
-    event.addEventListener("click", clickHandler);
+    
+    elements.addEventListener("click", clickHandler); //addEventListener is not a function
+    //document.addEventListener("click", clickHandler);
+    
+  
   })
 }
 
 function waitforclick(){
   return new Promise((resolve,reject) => {
     document.getElementById('sente').onclick = () => resolve(true);
-    document.getElementById('gote').onclick = () => resolve(false);
-  })
+    // document.getElementById('gote').onclick = () => resolve(false);
+  });
+}
+
+function waitTurnSelect(ret){
+  waitingTurnSelectActor = currentActor();
+  waitingTurnSelectReturn = ret;
+}
+
+function returnTurnSelect(user_sente){
+  userSente = user_sente;
+  HatInterpreter.startTask(waitingTurnSelectActor, waitingTurnSelectReturn, [user_sente]);
+  // let task=new Task(waitingTurnSelectActor, waitingTurnSelectReturn, [userSente], null, null);
+  // TaskQ.push(task);
+}
+
+function waitClick(ret){
+  waitingActor = currentActor( );
+  waitingReturn = ret;
+}
+
+function isUserTurn(){
+  if(userSente == true) return turn;
+  if(userSente == false) return !turn;
+  return false;
+}
+
+function clicked(){
+  if(!isUserTurn()) return;
+  // const color = ;
+  const color = turn ? BLACK : WHITE;
+  // const x = this. ... .x;
+  // const y = this. ... .y;
+  const y = this.parentNode.rowIndex;
+  const x = this.cellIndex;
+  firstCheck(x, y, color);
+  HatInterpreter.startTask(waitingActor, waitingReturn, [x, y]);
+  // let task=new Task(waitingActor, waitingReturn, [x, y], null, null);
+  // TaskQ.push(task);
 }
