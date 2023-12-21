@@ -784,7 +784,7 @@ function waitforclick(){
 }
 
 function waitTurnSelect(ret){
-  waitingTurnSelectActor = HatInterpreter.currentActor();
+  waitingTurnSelectActor = HatInterpreter.getCurrentActor();
   waitingTurnSelectReturn = ret;
 }
 
@@ -796,7 +796,7 @@ function returnTurnSelect(user_sente){
 }
 
 function waitClick(ret){
-  waitingActor = HatInterpreter.currentActor( );
+  waitingActor = HatInterpreter.getCurrentActor( );
   waitingReturn = ret;
 }
 
