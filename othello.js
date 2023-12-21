@@ -106,11 +106,11 @@ function Init() {
   }
   //showTurn();
 }
-// console.log("turnselect前");
-//
-// turnSelect();
-//
-// console.log("turnselect done");
+console.log("turnselect前");
+
+turnSelect();
+
+console.log("turnselect done");
 
 Init();
 console.log("Init done");
