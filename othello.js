@@ -568,7 +568,8 @@ function turnSelect(){
     sente.classList.add("hide");
     gote.classList.add("hide");
     // usersente = false;  //人間の手番は白
-    returnTurnSelect(false);
+    let user_sente = false;
+    returnTurnSelect(user_sente);
   });
   
 }
