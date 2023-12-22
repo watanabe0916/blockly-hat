@@ -1291,8 +1291,8 @@
 		  command: コマンド
 		*/
 		return{
-			True: new HatVar("#t", new Source(__FILE__, __LINE__)),
-			False: new HatVar("#f", new Source(__FILE__, __LINE__)),
+			True: new HatVar("true", new Source(__FILE__, __LINE__)),
+			False: new HatVar("false", new Source(__FILE__, __LINE__)),
 			emptySeq: emptySeq,
 			makePair: makePair,
 			/* ソースファイルpathを読み込み、関数funcを実行する。*/

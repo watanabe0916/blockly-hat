@@ -563,6 +563,7 @@ function turnSelect(){
     // usersente = true;//人間の手番は黒
     
     returnTurnSelect(HatInterpreter.True);
+    //returnTurnSelect(true);
   });
   gote.addEventListener('click',function(){
     console.log("gote");
