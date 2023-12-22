@@ -562,7 +562,7 @@ function turnSelect(){
     gote.classList.add("hide");
     // usersente = true;//人間の手番は黒
     
-    returnTurnSelect(1);
+    returnTurnSelect(HatInterpreter.True);
   });
   gote.addEventListener('click',function(){
     console.log("gote");
@@ -570,7 +570,7 @@ function turnSelect(){
     gote.classList.add("hide");
     // usersente = false;  //人間の手番は白
     
-    returnTurnSelect(true);
+    returnTurnSelect(HatInterpreter.False);
   });
   
 }
