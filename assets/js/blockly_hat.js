@@ -82,3 +82,9 @@ function hatPrint(arg){
   term.print(HatInterpreter.valueString(first));
   hatPrint(arg.getRest( ));
 }
+
+function hatExit(status){
+  exit_status=status;
+  HatInterpreter.stop();
+}
+
