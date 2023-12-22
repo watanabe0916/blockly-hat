@@ -1266,7 +1266,7 @@
 		}
 
 		function hatExit(){
-
+			console.log("hatExit done");
 		}
 		
 		/** モジュール内変数 **/
