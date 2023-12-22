@@ -1264,6 +1264,10 @@
 			if(obj1 instanceof List) return obj1.equals(obj2);
 			return obj1==obj2;
 		}
+
+		function hatExit(){
+
+		}
 		
 		/** モジュール内変数 **/
 		let tmpVar=new HatVar("__TMP__", new Source(__FILE__, __LINE__));
