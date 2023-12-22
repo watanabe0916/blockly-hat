@@ -562,8 +562,8 @@ function turnSelect(){
     gote.classList.add("hide");
     // usersente = true;//人間の手番は黒
     
-    returnTurnSelect(HatInterpreter.True);
-    //returnTurnSelect(true);
+    // returnTurnSelect(HatInterpreter.True);
+    returnTurnSelect(true);
   });
   gote.addEventListener('click',function(){
     console.log("gote");
@@ -571,7 +571,8 @@ function turnSelect(){
     gote.classList.add("hide");
     // usersente = false;  //人間の手番は白
     
-    returnTurnSelect(HatInterpreter.False);
+    // returnTurnSelect(HatInterpreter.False);
+    returnTurnSelect(false);
   });
   
 }
@@ -793,7 +794,7 @@ function waitTurnSelect(ret){
 
 function returnTurnSelect(user_sente){
   userSente = user_sente;
-  HatInterpreter.startTask(waitingTurnSelectActor, waitingTurnSelectReturn, [user_sente]);
+  HatInterpreter.startTask(waitingTurnSelectActor, waitingTurnSelectReturn, [user_sente? HatInterpreter.True : HatInterpreter.False]);
   // let task=new Task(waitingTurnSelectActor, waitingTurnSelectReturn, [userSente], null, null);
   // TaskQ.push(task);
 }
