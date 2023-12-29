@@ -102,7 +102,7 @@ Blockly.Hat.loop = function (block) {
     const do_order = Blockly.Hat.statementToCode(block, 'do', Blockly.Hat.ORDER_FUNCTION_CALL);
     const OPERATOR = "fix";
     const OPERATOR2 = "(^(loop i . break)";
-    const OPERATOR3 = "i + 1 ^(i+1)";
+    const OPERATOR3 = "+ i 1 ^(i+1)";
     const break_order_left = "if(not (<= i+1 ";
     const break_order_right = ")) break"; 
     const OPERATOR4 = "loop i+1 . break";
