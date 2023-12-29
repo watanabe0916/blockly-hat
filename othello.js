@@ -65,7 +65,7 @@ function Init() {
       td.appendChild(disk);
       td.className = "cell";
       //td.onclick = clickedPromise;
-       td.onclick = clicked;
+      td.onclick = clicked;
       
     }
     board.appendChild(tr);
@@ -376,7 +376,7 @@ function refInit() {
       tr.appendChild(td);
       td.appendChild(disk);
       td.className = "cell";
-      td.onclick = clickedPromise;
+      td.onclick = clicked;
       // td.onclick = clicked;
     }
     board.appendChild(tr);
