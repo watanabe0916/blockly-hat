@@ -683,6 +683,7 @@ function turnCPU(){
   console.log("turnChange done");
   showTurn();
   console.log("showTurn done");
+  return;
 }
 
 function skip(){
