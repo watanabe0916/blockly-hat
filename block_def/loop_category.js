@@ -254,7 +254,7 @@ Blockly.Hat.loop_if_break = function (block) {
       n++;
     }
 
-    temp_args = temp_args.slice(2);
+    temp_args = temp_args.slice(2);//手前の空白を消す
 
     // let temp_inits = '';
     // let m = 0;
@@ -268,7 +268,7 @@ Blockly.Hat.loop_if_break = function (block) {
     order += 'fix\n' + '(^( loop ' + temp_args + '. break )\n';
     order += 'if (' + conditions + ' ) break ^()\n';
     order += syori + '\n';
-    order += 'loop' + ' ' + 'new' + temp_args + '. break )';
+    order += 'loop' + ' ' + temp_args + '. break )';
     order += ' ' + temp_inits + '^()\n';
 
     return order;
