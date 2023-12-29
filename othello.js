@@ -837,4 +837,5 @@ function TestLoopOutCondition(){
 let testloopvalue = 0;
 function TestLoopVariable(){
   testloopvalue += 1; 
+  return testloopvalue;
 }
