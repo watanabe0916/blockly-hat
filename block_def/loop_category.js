@@ -266,7 +266,7 @@ Blockly.Hat.loop_if_break = function (block) {
     order += 'fix\n' + '(^( loop' + temp_args + '. break )\n';
     order += 'if (' + conditions + ' ) break ^()\n';
     order += syori + '\n';
-    order += 'loop' + ' '+'+' + ' ' + temp_args + ' ' + '1' + '. break )';
+    order += 'loop' + ' ('+'+' + ' ' + temp_args + ' ' + '1 )' + '. break )';
     order += ' ' + temp_inits + '^()\n';
 
     return order;
