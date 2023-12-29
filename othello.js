@@ -675,10 +675,14 @@ async function turnPlayer(){
 
 function turnCPU(){
   let candidates = moves(data);
-  //firstCheck(candidates[0],turn);
+  
+  //firstCheck(candidates[i],turn);
   printBoard(candidates[0]);
+  console.log("printBoard done");
   turnChange();
+  console.log("turnChange done");
   showTurn();
+  console.log("showTurn done");
 }
 
 function skip(){
