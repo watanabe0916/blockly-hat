@@ -440,8 +440,6 @@ Blockly.defineBlocksWithJsonArray(
 Blockly.Hat['position'] = function(block) {
   let code = 'JavaScript';
   code += ' '+'"returnPosition"';
-  //let code = 'JavaScript' + '"' + '(function()';
-  //code += '{ returnPosition();})"\n';
   code += ' '+'^(data)\n';
   return code;
 };
