@@ -824,5 +824,17 @@ function clicked(){
   // TaskQ.push(task);
 }
 
+function TestLoopOutCondition(){
+  let x = TestLoopVariable();
+  if (x > 3){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
 
-
+let testloopvalue = 0;
+function TestLoopVariable(){
+  testloopvalue += 1; 
+}

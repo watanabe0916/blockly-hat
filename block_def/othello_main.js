@@ -628,3 +628,22 @@ Blockly.Hat['CPUsTurn'] = function(block) {
   //code += ' '+'^(opponentPossibility)\n';
   return code;
 };
+
+Blockly.defineBlocksWithJsonArray(
+
+  [{
+    "type": "TestLoopOutCondition",
+    "message0": "テスト用ループ条件",
+    "output": null,
+    "colour": 230,
+    "tooltip": "",
+    "helpUrl": ""
+  }]
+);
+Blockly.Hat['TestLoopOutCondition'] = function(block) {
+  // TODO: Assemble Hat into code variable.
+  let code = 'JavaScript';
+  code += ' '+'"TestLoopOutCondition"';
+  //code += ' '+'^(opponentPossibility)\n';
+  return code;
+};
