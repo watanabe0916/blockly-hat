@@ -674,7 +674,7 @@ function opponentPut(){
 // }
 
 function turnCPU(){
-  let newp;
+  // let newp;
   let candidates = moves(data);
   
   //firstCheck(candidates[i],turn);
@@ -685,7 +685,7 @@ function turnCPU(){
   showTurn();
   console.log("showTurn done");
 
-  return newp;
+  return;
 }
 
 function skip(){

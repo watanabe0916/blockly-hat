@@ -480,7 +480,7 @@ Blockly.Hat['turnCPU'] = function(block) {
   // TODO: Assemble Hat into code variable.
   var code = 'JavaScript';
   code += ' '+'"turnCPU"';
-  code += ' '+'^()\n';
+  code += ' '+'^(dummy)\n';
   return code;
 };
 
