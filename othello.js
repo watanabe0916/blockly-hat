@@ -587,9 +587,9 @@ function finishGame(){
   let opponentPossibility = opponentPut();
   if(cnt[0] + cnt[1] === cells * cells || (!turnPossibility && !opponentPossibility)){
     
-    return false; //ゲームの終了条件を満たした
+    return true; //ゲームの終了条件を満たした
   } else {
-    return true; //ゲームの終了条件を満たしていない
+    return false; //ゲームの終了条件を満たしていない
   }
 }
 
@@ -613,23 +613,23 @@ function opponentPut(){
   return opponentPossibility;
 }
 
-async function turnPlayer(){
+// async function turnPlayer(){
   
-  const color = turn ? BLACK : WHITE;
-  const elements = document.getElementsByClassName('cell');
-  try {
+//   const color = turn ? BLACK : WHITE;
+//   const elements = document.getElementsByClassName('cell');
+//   try {
     
-    let clickResult = await clickedPromise(elements);
+//     let clickResult = await clickedPromise(elements);
     
-    const clickedX = clickResult.x;
-    const clickedY = clickResult.y;
+//     const clickedX = clickResult.x;
+//     const clickedY = clickResult.y;
 
-    console.log(clickedX,clickedY);
-    firstCheck(x,y,color);
+//     console.log(clickedX,clickedY);
+//     firstCheck(x,y,color);
     
-  } catch (error){
-    console.error(error);
-  }
+//   } catch (error){
+//     console.error(error);
+//   }
   // const myturn = turn;
   // while(myturn == turn){
   //   continue;
@@ -671,9 +671,10 @@ async function turnPlayer(){
   // td.onclick = clicked;
   // console.log(td);
   // showTurn();
-}
+// }
 
 function turnCPU(){
+  let newp;
   let candidates = moves(data);
   
   //firstCheck(candidates[i],turn);
@@ -683,7 +684,8 @@ function turnCPU(){
   console.log("turnChange done");
   showTurn();
   console.log("showTurn done");
-  return;
+
+  return newp;
 }
 
 function skip(){
@@ -843,4 +845,13 @@ let testloopvalue = 0;
 function TestLoopVariable(){
   testloopvalue += 1; 
   return testloopvalue;
+}
+
+let printtest = "テスト";
+function PrintTest(testcnt){
+  for (let i = 0; i < testcnt; i++){
+    printtest += printtest;
+  }
+  
+  return printtest;
 }

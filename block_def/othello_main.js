@@ -647,3 +647,24 @@ Blockly.Hat['TestLoopOutCondition'] = function(block) {
   //code += ' '+'^(opponentPossibility)\n';
   return code;
 };
+
+Blockly.defineBlocksWithJsonArray(
+
+  [{
+    "type": "PrintTest",
+    "message0": "表示テスト",
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 230,
+    "tooltip": "",
+    "helpUrl": ""
+  }]
+);
+Blockly.Hat['PrintTest'] = function(block) {
+  // TODO: Assemble Hat into code variable.
+  var code = 'JavaScript';
+  code += ' '+'"PrintTest"';
+  code += ' '+'testcnt';
+  code += ' '+'^(printtest)\n';
+  return code;
+};
