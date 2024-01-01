@@ -24,8 +24,8 @@ Hat言語のみで定義された関数群
 
 ( defineCPS nop ^ return return )
 
-(defineCPS if ^(condition then)
-  condition then ( ) ^(action)
+(defineCPS if ^(condition then else)
+  condition then else ^(action)
   action)
 
 ( defineCPS unless ^(condition action . return)
