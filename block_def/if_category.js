@@ -105,7 +105,7 @@ Blockly.Hat.if_else = function (block) {
     if_conditions = if_conditions.replace(split,"");
     //console.log(if_conditions);
 
-    return  "if" + "(" + if_conditions + ")\n(\n" + if_order + ")\n(\n" + else_order + "\n)";
+    return  "if" + "(" + if_conditions + ")\n(\n" + if_order + ")\n(\n" + else_order + "\n) ^()";
 };
 
 
