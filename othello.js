@@ -712,12 +712,12 @@ function showResult(){
   }
   
   if (numBlack > numWhite) {
-    document.getElementById("numBlack").textContent = numBlack + numEmpty;
+    document.getElementById("numBlack").textContent = numBlack;
     h2.textContent = "黒の勝ち!!";
     restartBtn();
     //showAnime();
   } else if (numBlack < numWhite) {
-    document.getElementById("numWhite").textContent = numWhite + numEmpty;
+    document.getElementById("numWhite").textContent = numWhite;
     h2.textContent = "白の勝ち!!";
     restartBtn();
     //showAnime();
