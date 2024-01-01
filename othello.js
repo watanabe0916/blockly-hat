@@ -65,7 +65,7 @@ function Init() {
       td.appendChild(disk);
       td.className = "cell";
       //td.onclick = clickedPromise;
-       td.onclick = clicked;
+      td.onclick = clicked;
       
     }
     board.appendChild(tr);
@@ -376,7 +376,7 @@ function refInit() {
       tr.appendChild(td);
       td.appendChild(disk);
       td.className = "cell";
-      td.onclick = clickedPromise;
+      td.onclick = clicked;
       // td.onclick = clicked;
     }
     board.appendChild(tr);
@@ -587,9 +587,9 @@ function finishGame(){
   let opponentPossibility = opponentPut();
   if(cnt[0] + cnt[1] === cells * cells || (!turnPossibility && !opponentPossibility)){
     
-    return false; //ゲームの終了条件を満たした
+    return true; //ゲームの終了条件を満たした
   } else {
-    return true; //ゲームの終了条件を満たしていない
+    return false; //ゲームの終了条件を満たしていない
   }
 }
 
@@ -613,23 +613,23 @@ function opponentPut(){
   return opponentPossibility;
 }
 
-async function turnPlayer(){
+// async function turnPlayer(){
   
-  const color = turn ? BLACK : WHITE;
-  const elements = document.getElementsByClassName('cell');
-  try {
+//   const color = turn ? BLACK : WHITE;
+//   const elements = document.getElementsByClassName('cell');
+//   try {
     
-    let clickResult = await clickedPromise(elements);
+//     let clickResult = await clickedPromise(elements);
     
-    const clickedX = clickResult.x;
-    const clickedY = clickResult.y;
+//     const clickedX = clickResult.x;
+//     const clickedY = clickResult.y;
 
-    console.log(clickedX,clickedY);
-    firstCheck(x,y,color);
+//     console.log(clickedX,clickedY);
+//     firstCheck(x,y,color);
     
-  } catch (error){
-    console.error(error);
-  }
+//   } catch (error){
+//     console.error(error);
+//   }
   // const myturn = turn;
   // while(myturn == turn){
   //   continue;
@@ -671,14 +671,21 @@ async function turnPlayer(){
   // td.onclick = clicked;
   // console.log(td);
   // showTurn();
-}
+// }
 
 function turnCPU(){
+  // let newp;
   let candidates = moves(data);
-  //firstCheck(candidates[0],turn);
+  
+  //firstCheck(candidates[i],turn);
   printBoard(candidates[0]);
+  console.log("printBoard done");
   turnChange();
+  console.log("turnChange done");
   showTurn();
+  console.log("showTurn done");
+
+  return;
 }
 
 function skip(){
@@ -824,5 +831,27 @@ function clicked(){
   // TaskQ.push(task);
 }
 
+function TestLoopOutCondition(){
+  let x = TestLoopVariable();
+  if (x > 3){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
 
+let testloopvalue = 0;
+function TestLoopVariable(){
+  testloopvalue += 1; 
+  return testloopvalue;
+}
 
+let printtest = "テスト";
+function PrintTest(testcnt){
+  for (let i = 0; i < testcnt; i++){
+    printtest += printtest;
+  }
+  
+  return printtest;
+}

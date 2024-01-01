@@ -102,7 +102,7 @@ Blockly.Hat.loop = function (block) {
     const do_order = Blockly.Hat.statementToCode(block, 'do', Blockly.Hat.ORDER_FUNCTION_CALL);
     const OPERATOR = "fix";
     const OPERATOR2 = "(^(loop i . break)";
-    const OPERATOR3 = "i + 1 ^(i+1)";
+    const OPERATOR3 = "+ i 1 ^(i+1)";
     const break_order_left = "if(> i+1 ";
     const break_order_right = ") break"; 
     const OPERATOR4 = "loop i+1 . break";
@@ -190,7 +190,7 @@ Blockly.Blocks.loop_if_break = {
     init() {
         this.jsonInit({
             type: "block_type",
-            message0: "繰り返し(while) %1 更新変数 %2 繰り返し条件 %3 処理 %4",
+            message0: "繰り返し(while) %1 更新変数 %2 終了条件 %3 処理 %4",
             args0: [{
                     type: "input_dummy",
                     //name: "value",
@@ -254,6 +254,8 @@ Blockly.Hat.loop_if_break = function (block) {
       n++;
     }
 
+    temp_args = temp_args.slice(2);//手前の空白を消す
+
     // let temp_inits = '';
     // let m = 0;
     // while(m <= inits_length - 2){
@@ -263,10 +265,10 @@ Blockly.Hat.loop_if_break = function (block) {
     // console.log(syori);
     console.log(temp_inits);
     let order = '';
-    order += 'fix\n' + '(^( loop' + temp_args + '. break )\n';
-    order += 'if (' + conditions + ' ) break ^()\n'; 
+    order += 'fix\n' + '(^( loop ' + temp_args + '. break )\n';
+    order += 'if (' + conditions + ' ) break\n';
     order += syori + '\n';
-    order += 'loop' + temp_args + '. break )';
+    order += 'loop' + ' ' + temp_args + '. break )';
     order += ' ' + temp_inits + '^()\n';
 
     return order;
