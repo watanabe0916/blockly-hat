@@ -106,7 +106,7 @@ Blockly.Hat.if_else = function (block) {
     //console.log(if_conditions);
     let if_order_last = if_order.slice(if_order.indexOf("^"),if_order.indexOf(")")+1);
     if_order = if_order.replace(if_order_last,"");
-    let else_order_last = if_else.slice(if_else.indexOf("^"),if_else.indexOf(")")+1);
+    let else_order_last = else_order.slice(else_order.indexOf("^"),else_order.indexOf(")")+1);
     else_order = else_order.replace(else_order_last,"");
 
     return  "if" + "(" + if_conditions + ")\n(\n" + if_order + ")\n(\n" + else_order + "\n) ^()";
