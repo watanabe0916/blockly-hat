@@ -597,8 +597,10 @@ function turnPut(){
   let turnPossibility;
   if (turn) {
     turnPossibility = checkReverse(BLACK);
+    console.log(turnPossibility);
   } else {
     turnPossibility = checkReverse(WHITE);
+    console.log(turnPossibility);
   }
   return turnPossibility;
 }
@@ -607,8 +609,10 @@ function opponentPut(){
   let opponentPossibility;
   if (turn) {
     opponentPossibility = checkReverse(WHITE);
+    console.log(opponentPossibility);
   } else {
     opponentPossibility = checkReverse(BLACK);
+    console.log(opponentPossibility);
   }
   return opponentPossibility;
 }
