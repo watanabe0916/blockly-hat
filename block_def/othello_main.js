@@ -102,6 +102,7 @@ Blockly.defineBlocksWithJsonArray(
 );
 Blockly.Hat['break'] = function(block) {
   // TODO: Assemble Hat into code variable.
+  
   let code = 'break';
   return code;
 };
