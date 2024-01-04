@@ -98,18 +98,20 @@ Blockly.Hat.if_else = function (block) {
     let if_conditions = Blockly.Hat.statementToCode(block, 'if_conditions', Blockly.Hat.ORDER_FUNCTION_CALL);
     let if_order = Blockly.Hat.statementToCode(block, 'if', Blockly.Hat.ORDER_FUNCTION_CALL);
     let else_order = Blockly.Hat.statementToCode(block, 'else', Blockly.Hat.ORDER_FUNCTION_CALL);
-    let split = if_conditions.slice(if_conditions.indexOf("^"),if_conditions.indexOf(")")+1);
+    let split = if_conditions.slice();
     //console.log(split);
     //let reg = new RegExp(split,"gi");
     //console.log(reg);
     if_conditions = if_conditions.replace(split,"");
     //console.log(if_conditions);
-    let if_order_last = if_order.slice(if_order.indexOf("^"),if_order.indexOf(")")+1);
-    if_order = if_order.replace(if_order_last,"");
-    let else_order_last = else_order.slice(else_order.indexOf("^"),else_order.indexOf(")")+1);
-    else_order = else_order.replace(else_order_last,"");
+    let if_order_last = if_order.lastIndexOf("^");
+    console.log("if_order_last = "+ if_order_last);
+    if_order = if_order.slice(0,if_order_last);
+    let else_order_last = else_order.lastIndexOf("^");
+    else_order = else_order.slice(0,else_order_last);
+    console.log("else_order_last = "+ else_order_last);
 
-    return  "if" + "(" + if_conditions + ")\n(\n" + if_order + ")\n(\n" + else_order + "\n) ^()";
+    return  "if" + "(" + if_conditions + ")\n(\n" + if_order + ")\n(\n" + else_order + "\n) " + "^()";
 };
 
 
