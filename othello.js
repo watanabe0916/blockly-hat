@@ -578,7 +578,7 @@ function turnSelect(){
 }
 
 function returnTurn(){
-  return turn;
+  return turn? HatInterpreter.True : HatInterpreter.False;
 }
 
 function finishGame(){
