@@ -96,14 +96,18 @@ Blockly.Blocks.if_else = {
 
 Blockly.Hat.if_else = function (block) {
     let if_conditions = Blockly.Hat.statementToCode(block, 'if_conditions', Blockly.Hat.ORDER_FUNCTION_CALL);
-    const if_order = Blockly.Hat.statementToCode(block, 'if', Blockly.Hat.ORDER_FUNCTION_CALL);
-    const else_order = Blockly.Hat.statementToCode(block, 'else', Blockly.Hat.ORDER_FUNCTION_CALL);
+    let if_order = Blockly.Hat.statementToCode(block, 'if', Blockly.Hat.ORDER_FUNCTION_CALL);
+    let else_order = Blockly.Hat.statementToCode(block, 'else', Blockly.Hat.ORDER_FUNCTION_CALL);
     let split = if_conditions.slice(if_conditions.indexOf("^"),if_conditions.indexOf(")")+1);
     //console.log(split);
     //let reg = new RegExp(split,"gi");
     //console.log(reg);
     if_conditions = if_conditions.replace(split,"");
     //console.log(if_conditions);
+    let if_order_last = if_order.slice(if_order.indexOf("^"),if_order.indexOf(")")+1);
+    if_order = if_order.replace(if_order_last,"");
+    let else_order_last = if_order.slice(if_order.indexOf("^"),if_order.indexOf(")")+1);
+    else_order = else_order.replace(else_order_last,"");
 
     return  "if" + "(" + if_conditions + ")\n(\n" + if_order + ")\n(\n" + else_order + "\n) ^()";
 };
