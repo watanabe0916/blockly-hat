@@ -6,7 +6,7 @@ const BLACK = 1,
  WHITE = -1;
 let data = [];
 let hatData = [];
-let turn = true; //true = 黒, false = 白
+let turn = false; //true = 黒, false = 白
 const board = document.getElementById("board");
 const h2 = document.querySelector("h2");
 const counter = document.getElementById("counter");
