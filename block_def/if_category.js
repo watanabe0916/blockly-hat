@@ -98,11 +98,11 @@ Blockly.Hat.if_else = function (block) {
     let if_conditions = Blockly.Hat.statementToCode(block, 'if_conditions', Blockly.Hat.ORDER_FUNCTION_CALL);
     let if_order = Blockly.Hat.statementToCode(block, 'if', Blockly.Hat.ORDER_FUNCTION_CALL);
     let else_order = Blockly.Hat.statementToCode(block, 'else', Blockly.Hat.ORDER_FUNCTION_CALL);
-    let split = if_conditions.slice();
+    //let split = if_conditions.slice();
     //console.log(split);
     //let reg = new RegExp(split,"gi");
     //console.log(reg);
-    if_conditions = if_conditions.replace(split,"");
+    //if_conditions = if_conditions.replace(split,"");
     //console.log(if_conditions);
 
     //真の処理文の最後の^()を取り除く。また、^()内の変数があれば取り出す。
