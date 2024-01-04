@@ -158,45 +158,45 @@ function showTurn() {
   document.getElementById("numBlack").textContent = numBlack;
   document.getElementById("numWhite").textContent = numWhite;
 
-  let blacDisk = checkReverse(BLACK);
+  // let blacDisk = checkReverse(BLACK);
 
-  let whiteDisk = checkReverse(WHITE);
-  // if (turn == false){
-  //   turnCPU();
+  // let whiteDisk = checkReverse(WHITE);
+  // // if (turn == false){
+  // //   turnCPU();
+  // // }
+
+  // if (numWhite + numBlack === cells * cells || (!blacDisk && !whiteDisk)) {
+  //   if (numBlack > numWhite) {
+  //     document.getElementById("numBlack").textContent = numBlack + numEmpty;
+  //     h2.textContent = "黒の勝ち!!";
+  //     restartBtn();
+  //     //showAnime();
+  //   } else if (numBlack < numWhite) {
+  //     document.getElementById("numWhite").textContent = numWhite + numEmpty;
+  //     h2.textContent = "白の勝ち!!";
+  //     restartBtn();
+  //     //showAnime();
+  //   } else {
+  //     h2.textContent = "引き分け";
+  //     restartBtn();
+  //     //showAnime();
+  //   }
+  //   return;
   // }
-
-  if (numWhite + numBlack === cells * cells || (!blacDisk && !whiteDisk)) {
-    if (numBlack > numWhite) {
-      document.getElementById("numBlack").textContent = numBlack + numEmpty;
-      h2.textContent = "黒の勝ち!!";
-      restartBtn();
-      //showAnime();
-    } else if (numBlack < numWhite) {
-      document.getElementById("numWhite").textContent = numWhite + numEmpty;
-      h2.textContent = "白の勝ち!!";
-      restartBtn();
-      //showAnime();
-    } else {
-      h2.textContent = "引き分け";
-      restartBtn();
-      //showAnime();
-    }
-    return;
-  }
-  if (!blacDisk && turn) {
-    h2.textContent = "黒スキップ";
-    //showAnime();
-    turnChange;
-    setTimeout(showTurn, 2000);
-    return;
-  }
-  if (!whiteDisk && !turn) {
-    h2.textContent = "白スキップ";
-    //showAnime();
-    turnChange;
-    setTimeout(showTurn, 2000);
-    return;
-  }
+  // if (!blacDisk && turn) {
+  //   h2.textContent = "黒スキップ";
+  //   //showAnime();
+  //   turnChange;
+  //   setTimeout(showTurn, 2000);
+  //   return;
+  // }
+  // if (!whiteDisk && !turn) {
+  //   h2.textContent = "白スキップ";
+  //   //showAnime();
+  //   turnChange;
+  //   setTimeout(showTurn, 2000);
+  //   return;
+  // }
 }
 
 // マスがクリックされた時の処理
