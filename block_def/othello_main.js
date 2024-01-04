@@ -83,7 +83,7 @@ Blockly.Hat['printboard'] = function(block) {
   // TODO: Assemble Hat into code variable.
   let code = 'JavaScript';
   code += ' '+'"printBoard"';
-  code += ' '+'^()\n';
+  code += ' '+'^(dummy)\n';
   return code;
 };
 
@@ -520,7 +520,7 @@ Blockly.Hat['turnChange'] = function(block) {
   // TODO: Assemble Hat into code variable.
   var code = 'JavaScript';
   code += ' '+'"turnChange"';
-  code += ' '+'^()\n';
+  code += ' '+'^(dummy)\n';
   return code;
 };
 
@@ -542,7 +542,7 @@ Blockly.Hat['skip'] = function(block) {
   // TODO: Assemble Hat into code variable.
   var code = 'JavaScript';
   code += ' '+'"skip"';
-  code += ' '+'^()\n';
+  code += ' '+'^(dummy)\n';
   return code;
 };
 
@@ -563,7 +563,7 @@ Blockly.Hat['showResult'] = function(block) {
   // TODO: Assemble Hat into code variable.
   var code = 'JavaScript';
   code += ' '+'"showResult"';
-  code += ' '+'^()\n';
+  code += ' '+'^(dummy)\n';
   return code;
 };
 
@@ -583,7 +583,7 @@ Blockly.Hat['Init'] = function(block) {
   // TODO: Assemble Hat into code variable.
   var code = 'JavaScript';
   code += ' '+'"Init"';
-  code += ' '+'^()\n';
+  code += ' '+'^(dummy)\n';
   return code;
 };
 
@@ -603,7 +603,7 @@ Blockly.Hat['showTurn'] = function(block) {
   // TODO: Assemble Hat into code variable.
   var code = 'JavaScript';
   code += ' '+'"showTurn"';
-  code += ' '+'^()\n';
+  code += ' '+'^(dummy)\n';
   return code;
 };
 

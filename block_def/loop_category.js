@@ -165,7 +165,7 @@ Blockly.Hat.condition_loop = function (block) {
 
     // 数値の長さを判定し、配列に分割した後にHat形式で出力
     const nums = arg.split('.');
-    const nums_length = nums.length
+    const nums_length = nums.length;
 
     // 入力された数値の整列
     let temporary_num = '';
