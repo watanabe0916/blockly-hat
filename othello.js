@@ -855,3 +855,9 @@ function PrintTest(testcnt){
   
   return printtest;
 }
+
+//現在手番がユーザの手番であるか確認
+function userTurncheck(){
+  if(userSente == turn) return true;
+  return false;
+}

@@ -102,7 +102,7 @@ Blockly.defineBlocksWithJsonArray(
 );
 Blockly.Hat['break'] = function(block) {
   // TODO: Assemble Hat into code variable.
-  
+
   let code = 'break';
   return code;
 };
@@ -665,5 +665,24 @@ Blockly.Hat['PrintTest'] = function(block) {
   code += ' '+'"PrintTest"';
   code += ' '+'testcnt';
   code += ' '+'^(printtest)\n';
+  return code;
+};
+
+Blockly.defineBlocksWithJsonArray(
+
+  [{
+    "type": "userTurncheck",
+    "message0": "現在の手番がユーザの手番である",
+    "output": null,
+    "colour": 230,
+    "tooltip": "",
+    "helpUrl": ""
+  }]
+);
+Blockly.Hat['userTurncheck'] = function(block) {
+  // TODO: Assemble Hat into code variable.
+  let code = 'JavaScript';
+  code += ' '+'"userTurncheck"';
+  //code += ' '+'^(opponentPossibility)\n';
   return code;
 };
