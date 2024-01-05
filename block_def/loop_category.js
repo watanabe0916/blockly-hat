@@ -107,7 +107,7 @@ Blockly.Hat.loop = function (block) {
     const break_order_right = ") break"; 
     const OPERATOR4 = "loop i+1 . break";
     
-    return OPERATOR + "\n" + OPERATOR2 + "\n" + OPERATOR3 + "\n" + break_order_left + num + break_order_right + "\n" + "(" + do_order + "^()" + "\n" + OPERATOR4 + "\n" + ")" + "\n" + ") 0";
+    return OPERATOR + "\n" + OPERATOR2 + "\n" + OPERATOR3 + "\n" + break_order_left + num + break_order_right + "\n" + "(" + do_order + "\n" + OPERATOR4 + "\n" + ")" + "\n" + ") 0";
 };
 
 
