@@ -334,3 +334,7 @@ $listの先頭に$elを追加したリストを返す。
   JavaScript "waitClick" return ^(dummy)
   end)
 
+(defineCPS turnCPU ^ return
+  JavaScript "turnCPU" ^(dummy)
+  return)
+
