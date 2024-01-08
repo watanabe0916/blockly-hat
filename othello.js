@@ -137,8 +137,8 @@ function showTurn() {
   h2.textContent = turn ? "黒の番です" : "白の番です";
   let nums = BoardCount();
   let numWhite = nums[0],
-  numBlack = nums[1],
-  numEmpty = nums[2];
+  numBlack = nums[1];
+  // numEmpty = nums[2];
 
   //盤面の石の数を数える
   // for (let x = 0; x < cells; x++) {
@@ -222,6 +222,7 @@ function firstCheck(x,y,color){
   const result = checkPut(x, y, color,data);
   if (result.length > 0) {
     result.forEach((value) => {
+      console.log(value[0],value[1]);
       putDisc(value[0], value[1], color);
     });
     turnChange();
@@ -765,31 +766,31 @@ function BoardCount(){
   return count_cell;
 }
 
-function clickedPromise(elements){
-  return new Promise((resolve) => {
-    const clickHandler = function(){
-      //const clickedCell = event.target;
+// function clickedPromise(elements){
+//   return new Promise((resolve) => {
+//     const clickHandler = function(){
+//       //const clickedCell = event.target;
       
       
-      const clickedX = elements.cellIndex;
+//       const clickedX = elements.cellIndex;
       
-      const clickedY = elements.parentNode.rowIndex;
-      resolve({x: clickedX, y: clickedY});
+//       const clickedY = elements.parentNode.rowIndex;
+//       resolve({x: clickedX, y: clickedY});
       
-      //elementsの中身はgetElementsbyClassnameで呼び出したので配列のようになっている。
-      //しかしEventlistenerは１つの要素にしか適用できないので要修正
-      elements.removeEventListener("click", clickHandler); 
-      //document.removeEventListener("click", clickHandler);
+//       //elementsの中身はgetElementsbyClassnameで呼び出したので配列のようになっている。
+//       //しかしEventlistenerは１つの要素にしか適用できないので要修正
+//       elements.removeEventListener("click", clickHandler); 
+//       //document.removeEventListener("click", clickHandler);
       
       
-    };
+//     };
     
-    elements.addEventListener("click", clickHandler); //addEventListener is not a function
-    //document.addEventListener("click", clickHandler);
+//     elements.addEventListener("click", clickHandler); //addEventListener is not a function
+//     //document.addEventListener("click", clickHandler);
     
   
-  })
-}
+//   })
+// }
 
 // function waitforclick(){
 //   return new Promise((resolve,reject) => {
@@ -865,3 +866,17 @@ function userTurncheck(){
   if(userSente == turn) return true;
   return false;
 }
+
+function firstcheck2(x,y,color){
+  if (data[y][x] !== 0) {
+    return;
+  }
+  const result = checkPut(x, y, color,data);
+  if (result.length > 0) {
+    result.forEach((value) => {
+      putDisc(value[0], value[1], color);
+    });
+    turnChange();
+  }
+  showTurn();
+};
