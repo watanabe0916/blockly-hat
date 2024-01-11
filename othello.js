@@ -683,7 +683,7 @@ function turnCPU(){
   let candidates = moves(data);
   
   //firstCheck(candidates[i],turn);
-  printBoard(candidates[0]);
+  printBoard(candidates[Math.floor(Math.random()*candidates.length)]);
   console.log("printBoard done");
   turnChange();
   console.log("turnChange done");
