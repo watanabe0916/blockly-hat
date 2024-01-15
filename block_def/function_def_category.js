@@ -156,8 +156,8 @@ Blockly.Hat.def_func = function (block) {
 
     let return_code = ""    
     if (block.getFieldValue('return') != ""){
-        return_code += ". "
-        return_code += block.getFieldValue('return')
+        return_code += ". ";
+        return_code += block.getFieldValue('return');
     }
     mode = 1 ;
     const do_code = Blockly.Hat.statementToCode(block, 'do', Blockly.Hat.ORDER_FUNCTION_CALL);

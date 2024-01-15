@@ -10,7 +10,7 @@ Blockly.defineBlocksWithJsonArray(
 
   [{
     "type": "finishGame",
-    "message0": "ゲームの終了条件を満たすまで",
+    "message0": "ゲームの終了条件を満たす",
     "output": null,
     "colour": 230,
     "tooltip": "",
