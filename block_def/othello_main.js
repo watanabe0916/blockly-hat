@@ -104,6 +104,7 @@ Blockly.Hat['break'] = function(block) {
   // TODO: Assemble Hat into code variable.
 
   let code = 'break';
+  code += ' '+'^()';
   return code;
 };
 
