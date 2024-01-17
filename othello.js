@@ -885,7 +885,7 @@ function CPUput (p){
   let candidates = moves(p);
   
   //firstCheck(candidates[i],turn);
-  nextp = candidates[Math.floor(Math.random()*candidates.length)];
+  let nextp = candidates[Math.floor(Math.random()*candidates.length)];
   // console.log("printBoard done");
   // turnChange();
   // console.log("turnChange done");
