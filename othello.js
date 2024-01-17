@@ -880,3 +880,17 @@ function firstcheck2(x,y,color){
   }
   showTurn();
 };
+
+function CPUput (p){
+  let candidates = moves(p);
+  
+  //firstCheck(candidates[i],turn);
+  nextp = candidates[Math.floor(Math.random()*candidates.length)];
+  // console.log("printBoard done");
+  // turnChange();
+  // console.log("turnChange done");
+  // showTurn();
+  // console.log("showTurn done");
+
+  return nextp;
+}
