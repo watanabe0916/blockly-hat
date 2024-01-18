@@ -107,8 +107,8 @@ Blockly.Hat.if_else = function (block) {
 
     //真の処理文の最後の^()を取り除く。また、^()内の変数があれば取り出す。
     let if_order_last = if_order.lastIndexOf("^");
-    // let if_order_return = if_order.slice(if_order_last + 2, if_order.lastIndexOf(")"));
-    // if(if_order_return == "dummy"){if_order_return = "";}
+    let if_order_return = if_order.slice(if_order_last + 2, if_order.lastIndexOf(")"));
+    if(if_order_return == "dummy"){if_order_return = "";}
     console.log("if_order_last = "+ if_order_last);
     if_order = if_order.slice(0,if_order_last);
 
@@ -120,7 +120,7 @@ Blockly.Hat.if_else = function (block) {
     
     console.log("else_order_last = "+ else_order_last);
 
-    return  "if" + "(" + if_conditions + ")\n(\n" + if_order + "\n)\n(\n" + else_order + "\n) " + "^()\n";
+    return  "if" + "(" + if_conditions + ")\n(\n" + if_order + "\n)\n(\n" + else_order + "\n) " + "^("+ if_order_return + ")\n";
 };
 
 
