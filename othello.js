@@ -830,7 +830,7 @@ function clicked(){
   // const y = this. ... .y;
   const y = this.parentNode.rowIndex;
   const x = this.cellIndex;
-  firstCheck(x, y, color);
+  firstCheck2(x, y, color);
   let nextp = data;
 
   HatInterpreter.startTask(waitingActor, waitingReturn, nextp);
@@ -876,11 +876,11 @@ function firstcheck2(x,y,color){
   const result = checkPut(x, y, color,data);
   if (result.length > 0) {
     result.forEach((value) => {
-      putDisc(value[0], value[1], color);
+      afterdata(value[0], value[1], color);
     });
     turnChange();
   }
-  showTurn();
+  //showTurn();
 };
 
 function CPUput (p){
