@@ -428,7 +428,7 @@ Blockly.defineBlocksWithJsonArray(
 [{
   "type": "position",
   "message0": "現在の盤面",
-  "inputsInline": true,
+  //"inputsInline": true,
   "previousStatement": null,
   "nextStatement": null,
   "output": null,
@@ -460,6 +460,7 @@ Blockly.defineBlocksWithJsonArray(
 Blockly.Hat['turnPlayer'] = function(block) {
   // TODO: Assemble Hat into code variable.
   var code = 'turnPlayer ^(x y)\n';
+  var code = 'turnPlayer ^(nextp)\n';
   return code;
 };
 
@@ -683,5 +684,47 @@ Blockly.Hat['userTurncheck'] = function(block) {
   let code = 'JavaScript';
   code += ' '+'"userTurncheck"';
   //code += ' '+'^(opponentPossibility)\n';
+  return code;
+};
+
+Blockly.defineBlocksWithJsonArray(
+
+  [{
+    "type": "CPU_Put",
+    "message0": "(更新変数利用)CPUの操作",
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 230,
+    "tooltip": "",
+    "helpUrl": ""
+  }]
+);
+Blockly.Hat['CPU_Put'] = function(block) {
+  // TODO: Assemble Hat into code variable.
+  var code = 'JavaScript';
+  code += ' '+'"CPUput"';
+  code += ' '+'p';
+  code += ' '+'^(nextp)\n';
+  return code;
+};
+
+Blockly.defineBlocksWithJsonArray(
+
+  [{
+    "type": "test_printBoard",
+    "message0": "(引数あり)盤面表示",
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 230,
+    "tooltip": "",
+    "helpUrl": ""
+  }]
+);
+Blockly.Hat['test_printBoard'] = function(block) {
+  // TODO: Assemble Hat into code variable.
+  var code = 'JavaScript';
+  code += ' '+'"test_printBoard"';
+  code += ' '+'p';
+  code += ' '+'^(dummy)\n';
   return code;
 };

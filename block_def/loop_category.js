@@ -246,7 +246,7 @@ Blockly.Hat.loop_if_break = function (block) {
     let temp_inits = '';
     let m = 0,n = 0;
     while (2 * m <= args_length - 2) { // 配列の最後のメモリが空白になるので-1で調整
-      temp_args += args[2*m] + ' ';
+      temp_args += 'next'+ args[2*m] + ' ';
       m++;
     }
     while (2 * n + 1 <= args_length - 2){

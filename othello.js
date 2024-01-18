@@ -584,9 +584,9 @@ function returnTurn(){
 
 function finishGame(){
   let cnt = BoardCount();
-  let turnPossibility = turnPut();
-  let opponentPossibility = opponentPut();
-  if(cnt[0] + cnt[1] === cells * cells || (!turnPossibility && !opponentPossibility)){
+  // let turnPossibility = turnPut();
+  // let opponentPossibility = opponentPut();
+  if(cnt[0] + cnt[1] === cells * cells){
     
     return true; //ゲームの終了条件を満たした
   } else {
@@ -694,7 +694,7 @@ function turnCPU(){
 }
 
 function skip(){
-  h2.textContent = turn ? "白スキップ" : "黒スキップ";
+  h2.textContent = turn ? "黒スキップ" : "白スキップ";
   showTurn();
 }
 
@@ -831,7 +831,9 @@ function clicked(){
   const y = this.parentNode.rowIndex;
   const x = this.cellIndex;
   firstCheck(x, y, color);
-  HatInterpreter.startTask(waitingActor, waitingReturn, [x, y]);
+  let nextp = data;
+
+  HatInterpreter.startTask(waitingActor, waitingReturn, nextp);
   // let task=new Task(waitingActor, waitingReturn, [x, y], null, null);
   // TaskQ.push(task);
 }
@@ -891,6 +893,43 @@ function CPUput (p){
   // console.log("turnChange done");
   // showTurn();
   // console.log("showTurn done");
+  turnChange();
+  console.log("turnChange done");
 
   return nextp;
+}
+
+
+function test_printBoard(refData){
+  //console.log("done");
+  cells = refData.length;
+  board.innerHTML = "";
+  let numBlack = 0;
+  let numWhite = 0;
+  refInit();
+
+  // if(refTurn === BLACK){
+  //   turn = true; 
+  // }else{
+  //   turn = false;
+  // }
+
+  for(let x = 0;x < cells;x++){
+    for(let y = 0;y < cells;y++){
+      if(refData[y][x] === 1){ //黒の場合
+        putDisc(x,y,BLACK);
+        numBlack++;
+      }else if(refData[y][x] === -1){  //白の場合
+        putDisc(x,y,WHITE);
+        numWhite++;
+      }
+    }
+  }
+  //turn = !turn;
+  //console.log(turn);
+  showTurn();
+}
+
+function afterdata(x, y, color) {
+  data[y][x] = color;
 }
