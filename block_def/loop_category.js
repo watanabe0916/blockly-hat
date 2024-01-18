@@ -246,15 +246,24 @@ Blockly.Hat.loop_if_break = function (block) {
     let temp_inits = '';
     let m = 0,n = 0;
     while (2 * m <= args_length - 2) { // 配列の最後のメモリが空白になるので-1で調整
-      temp_args += 'next'+ args[2*m] + ' ';
+      temp_args += args[2*m] + ' ';
       m++;
     }
+  
     while (2 * n + 1 <= args_length - 2){
       temp_inits += args[2*n + 1] + ' ';
       n++;
     }
 
     temp_args = temp_args.slice(2);//手前の空白を消す
+    let tmp_tmp_args = temp_args.split(' ');
+    let next_tmp_tmp_args = '';
+    let l=0;
+
+    while(l <= tmp_tmp_args.length - 2){
+      next_tmp_tmp_args += 'next' + tmp_tmp_args[l] + ' ';
+      l++;
+    }
 
     // let temp_inits = '';
     // let m = 0;
@@ -269,7 +278,7 @@ Blockly.Hat.loop_if_break = function (block) {
     order += 'if (' + conditions + ' ) break\n';
     order += '(\n';
     order += syori + '\n';
-    order += 'loop' + ' ' + temp_args + '. break )\n';
+    order += 'loop' + ' ' + next_tmp_tmp_args + '. break )\n';
     order += ') ' + temp_inits + '^() \n';
 
     return order;
