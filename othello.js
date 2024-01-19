@@ -830,10 +830,11 @@ function clicked(){
   // const y = this. ... .y;
   const y = this.parentNode.rowIndex;
   const x = this.cellIndex;
-  firstCheck2(x, y, color);
-  let nextp = data;
+  firstcheck(x,y,color);
+  // firstCheck2(x, y, color);
+  // let nextp = data;
 
-  HatInterpreter.startTask(waitingActor, waitingReturn, nextp);
+  HatInterpreter.startTask(waitingActor, waitingReturn, [x,y]);
   // let task=new Task(waitingActor, waitingReturn, [x, y], null, null);
   // TaskQ.push(task);
 }
