@@ -256,14 +256,14 @@ Blockly.Hat.loop_if_break = function (block) {
     }
 
     temp_args = temp_args.slice(2);//手前の空白を消す
-    let tmp_tmp_args = temp_args.split(' ');
-    let next_tmp_tmp_args = '';
-    let l=0;
+    // let tmp_tmp_args = temp_args.split(' ');
+    // let next_tmp_tmp_args = '';
+    // let l=0;
 
-    while(l <= tmp_tmp_args.length - 2){
-      next_tmp_tmp_args += 'next' + tmp_tmp_args[l] + ' ';
-      l++;
-    }
+    // while(l <= tmp_tmp_args.length - 2){
+    //   next_tmp_tmp_args += 'next' + tmp_tmp_args[l] + ' ';
+    //   l++;
+    // }
 
     // let temp_inits = '';
     // let m = 0;
@@ -278,7 +278,7 @@ Blockly.Hat.loop_if_break = function (block) {
     order += 'if (' + conditions + ' ) break\n';
     order += '(\n';
     order += syori + '\n';
-    order += 'loop' + ' ' + tmp_args + '. break )\n';
+    order += 'loop' + ' ' + temp_args + '. break )\n';
     order += ') ' + temp_inits + '^() \n';
 
     return order;
