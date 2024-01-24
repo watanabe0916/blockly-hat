@@ -830,7 +830,7 @@ function clicked(){
   // const y = this. ... .y;
   const y = this.parentNode.rowIndex;
   const x = this.cellIndex;
-  firstcheck(x,y,color);
+  firstCheck(x,y,color);
   // firstCheck2(x, y, color);
   // let nextp = data;
 
