@@ -120,7 +120,7 @@ Blockly.Hat.if_else = function (block) {
     
     console.log("else_order_last = "+ else_order_last);
 
-    return  "if" + "(" + if_conditions + ")\n(\n" + if_order + "\n)\n(\n" + else_order + "\n) " + "^("+ if_order_return + ")\n";
+    return  "if" + "(" + if_conditions + ")\n(\n" + if_order + "\n)\n(\n" + else_order + "\n) " + "^()\n";
 };
 
 
