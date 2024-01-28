@@ -584,9 +584,9 @@ function returnTurn(){
 
 function finishGame(){
   let cnt = BoardCount();
-  // let turnPossibility = turnPut();
-  // let opponentPossibility = opponentPut();
-  if(cnt[0] + cnt[1] === cells * cells){
+  let turnPossibility = turnPut();
+  let opponentPossibility = opponentPut();
+  if(cnt[0] + cnt[1] === cells * cells || !turnPossibility && !opponentPossibility){
     
     return true; //ゲームの終了条件を満たした
   } else {
