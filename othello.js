@@ -700,7 +700,6 @@ function skip(){
 
 function turnChange(){
   turn = !turn;
-  skip();
 }
 
 function showResult(){
