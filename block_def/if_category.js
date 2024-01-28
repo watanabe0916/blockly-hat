@@ -118,7 +118,7 @@ Blockly.Hat.if_else = function (block) {
     // if(else_order_return == "dummy"){else_order_return = "";}
     else_order = else_order.slice(0,else_order_last);
     
-    console.log("else_order_last = "+ else_order_last);
+    // console.log("else_order_last = "+ else_order_last);
 
     return  "if" + "(" + if_conditions + ")\n(\n" + if_order + "\n)\n(\n" + else_order + "\n) " + "^()\n";
 };

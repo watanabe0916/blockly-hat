@@ -694,13 +694,13 @@ function turnCPU(){
 }
 
 function skip(){
-  h2.textContent = turn ? "黒スキップ" : "白スキップ";
+  h2.textContent = turn ? "白スキップ":"黒スキップ";
   showTurn();
 }
 
 function turnChange(){
   turn = !turn;
-  
+  skip();
 }
 
 function showResult(){
