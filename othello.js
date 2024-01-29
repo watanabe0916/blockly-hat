@@ -227,7 +227,7 @@ function firstCheck(x,y,color){
     });
     turnChange();
   }
-  showTurn();
+  // showTurn();
 };
 
 // 置いたマスの周囲8方向をチェック
@@ -687,8 +687,8 @@ function turnCPU(){
   console.log("printBoard done");
   turnChange();
   console.log("turnChange done");
-  showTurn();
-  console.log("showTurn done");
+  // showTurn();
+  // console.log("showTurn done");
 
   return;
 }
@@ -700,6 +700,7 @@ function skip(){
 
 function turnChange(){
   turn = !turn;
+  showTurn();
 }
 
 function showResult(){
