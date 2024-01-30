@@ -686,7 +686,7 @@ function turnCPU(){
   printBoard(candidates[Math.floor(Math.random()*candidates.length)]);
   console.log("printBoard done");
   turnChange();
-  console.log("turnChange done");
+  //console.log("turnChange done");
   // showTurn();
   // console.log("showTurn done");
 
@@ -700,6 +700,7 @@ function skip(){
 
 function turnChange(){
   turn = !turn;
+  console.log("turnchange done :次は" + turn + "\n");
   showTurn();
 }
 
