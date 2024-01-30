@@ -519,9 +519,7 @@ Blockly.defineBlocksWithJsonArray(
 );
 Blockly.Hat['turnChange'] = function(block) {
   // TODO: Assemble Hat into code variable.
-  var code = 'JavaScript';
-  code += ' '+'"turnChange"';
-  code += ' '+'^(dummy)\n';
+  var code = 'turnChange ^(dummy)';
   return code;
 };
 

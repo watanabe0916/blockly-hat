@@ -339,3 +339,6 @@ $listの先頭に$elを追加したリストを返す。
   JavaScript "turnCPU" ^(dummy)
   return)
 
+(defineCPS turnChange ^ return
+  JavaScript "turnChange" ^(dummy)
+  return)
