@@ -578,10 +578,12 @@ function turnSelect(){
   
 }
 
+//現在の手番の情報を返す
 function returnTurn(){
   return turn;
 }
 
+//ゲームの終了条件を満たすか判定
 function finishGame(){
   let cnt = BoardCount();
   let turnPossibility = turnPut();
@@ -594,6 +596,7 @@ function finishGame(){
   }
 }
 
+//現在手番時に石を置く場所があるかチェック
 function turnPut(){
   let turnPossibility;
   if (turn) {
@@ -606,6 +609,7 @@ function turnPut(){
   return turnPossibility;
 }
 
+//相手の手番時に石を置く場所があるかチェック
 function opponentPut(){
   let opponentPossibility;
   if (turn) {
@@ -618,68 +622,10 @@ function opponentPut(){
   return opponentPossibility;
 }
 
-// async function turnPlayer(){
-  
-//   const color = turn ? BLACK : WHITE;
-//   const elements = document.getElementsByClassName('cell');
-//   try {
-    
-//     let clickResult = await clickedPromise(elements);
-    
-//     const clickedX = clickResult.x;
-//     const clickedY = clickResult.y;
-
-//     console.log(clickedX,clickedY);
-//     firstCheck(x,y,color);
-    
-//   } catch (error){
-//     console.error(error);
-//   }
-  // const myturn = turn;
-  // while(myturn == turn){
-  //   continue;
-  // }
-  // click_player().then((result) => {
-  //   const resultx = result.x;
-  //   const resulty = result.y;
-
-  //   firstCheck(resultx,resulty,color);
-  // }).catch((error) => {
-  //   console.log("error",error);
-  // })
-  // const color = turn ? BLACK : WHITE;
-  // click_player().then((clickResult) => {
-  //   const clickedx = clickResult.x;
-  //   const clickedy = clickResult.y;
-
-  //   firstCheck(clickedx,clickedy,color);
-  // }).catch((error) => {
-  //   console.log("errorです",error);
-  // });
-
-  // let put = await clicked_Player();
-  
-
-
-  // let currentTurn = turn;
-  // while (turn == currentTurn){
-  // }
-  // const color = turn ? BLACK : WHITE;
-  // const y = this.parentNode.rowIndex;
-  // const x = this.cellIndex;
-
-  // firstCheck(x,y,color);
-  
-  // const td = document.getElementsByTagName("td");
-  // console.log(td);
-  
-  // td.onclick = clicked;
-  // console.log(td);
-  // showTurn();
-// }
-
+//CPUの暫定的な処理(暫定CPU)
+//次の一手で取り得る盤面のリストからランダムに1つ選択
+//戻り値の有無や処理内容を編集してもらって構わない
 function turnCPU(){
-  // let newp;
   let candidates = moves(data);
   
   //firstCheck(candidates[i],turn);
@@ -687,23 +633,24 @@ function turnCPU(){
   console.log("printBoard done");
   turnChange();
   //console.log("turnChange done");
-  // showTurn();
-  // console.log("showTurn done");
 
   return;
 }
 
+//スキップ表示
 function skip(){
   h2.textContent = turn ? "白スキップ":"黒スキップ";
   showTurn();
 }
 
+//手番を交代する
 function turnChange(){
   turn = !turn;
   console.log("turnchange done :次は" + turn + "\n");
   showTurn();
 }
 
+//ゲーム終了後、勝敗を表示
 function showResult(){
   let numWhite = 0,
   numBlack = 0, 
@@ -767,39 +714,7 @@ function BoardCount(){
   return count_cell;
 }
 
-// function clickedPromise(elements){
-//   return new Promise((resolve) => {
-//     const clickHandler = function(){
-//       //const clickedCell = event.target;
-      
-      
-//       const clickedX = elements.cellIndex;
-      
-//       const clickedY = elements.parentNode.rowIndex;
-//       resolve({x: clickedX, y: clickedY});
-      
-//       //elementsの中身はgetElementsbyClassnameで呼び出したので配列のようになっている。
-//       //しかしEventlistenerは１つの要素にしか適用できないので要修正
-//       elements.removeEventListener("click", clickHandler); 
-//       //document.removeEventListener("click", clickHandler);
-      
-      
-//     };
-    
-//     elements.addEventListener("click", clickHandler); //addEventListener is not a function
-//     //document.addEventListener("click", clickHandler);
-    
-  
-//   })
-// }
-
-// function waitforclick(){
-//   return new Promise((resolve,reject) => {
-//     document.getElementById('sente').onclick = () => resolve(true);
-//     // document.getElementById('gote').onclick = () => resolve(false);
-//   });
-// }
-
+//util.sch 330行目で呼び出される関数
 function waitTurnSelect(ret){
   waitingTurnSelectActor = HatInterpreter.getCurrentActor();
   waitingTurnSelectReturn = ret;
@@ -808,38 +723,36 @@ function waitTurnSelect(ret){
 function returnTurnSelect(user_sente){
   userSente = user_sente;
   HatInterpreter.startTask(waitingTurnSelectActor, waitingTurnSelectReturn, [user_sente? HatInterpreter.True : HatInterpreter.False]);
-  // let task=new Task(waitingTurnSelectActor, waitingTurnSelectReturn, [userSente], null, null);
-  // TaskQ.push(task);
+
 }
 
+//util.sch 334行目で呼び出される関数
 function waitClick(ret){
   waitingActor = HatInterpreter.getCurrentActor( );
   waitingReturn = ret;
 }
 
+//人間のプレイヤーが手番を選択したかどうかをチェック
 function isUserTurn(){
   if(userSente == true) return turn;
   if(userSente == false) return !turn;
   return false;
 }
 
+//盤面をクリックしたときの処理
 function clicked(){
   if(!isUserTurn()) return;
-  // const color = ;
+  
   const color = turn ? BLACK : WHITE;
-  // const x = this. ... .x;
-  // const y = this. ... .y;
+  
   const y = this.parentNode.rowIndex;
   const x = this.cellIndex;
   firstCheck(x,y,color);
-  // firstCheck2(x, y, color);
-  // let nextp = data;
 
   HatInterpreter.startTask(waitingActor, waitingReturn, [x,y]);
-  // let task=new Task(waitingActor, waitingReturn, [x, y], null, null);
-  // TaskQ.push(task);
 }
 
+//反復構造ブロックテスト用ブロックの処理定義
 function TestLoopOutCondition(){
   let x = TestLoopVariable();
   if (x > 3){
@@ -871,6 +784,7 @@ function userTurncheck(){
   return false;
 }
 
+//関数firstcheckの作りかけ
 function firstcheck2(x,y,color){
   if (data[y][x] !== 0) {
     return;
@@ -885,6 +799,7 @@ function firstcheck2(x,y,color){
   //showTurn();
 };
 
+//次の一手を打った新しい盤面情報を戻り値にもつ暫定CPUの作りかけ
 function CPUput (p){
   let candidates = moves(p);
   
@@ -901,7 +816,7 @@ function CPUput (p){
   return nextp;
 }
 
-
+//関数printBoardの複製
 function test_printBoard(refData){
   //console.log("done");
   cells = refData.length;

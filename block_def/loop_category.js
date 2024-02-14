@@ -240,8 +240,7 @@ Blockly.Hat.loop_if_break = function (block) {
     const args = arg.split('.');
     // const inits = arg[1].split('.');
     const args_length = args.length;
-    //const inits_length = inits.length;
-    //const alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+    
     let temp_args = '';
     let temp_inits = '';
     let m = 0,n = 0;
@@ -280,6 +279,7 @@ Blockly.Hat.loop_if_break = function (block) {
     order += syori + '\n';
     order += 'loop' + ' ' + temp_args + '. break )\n';
     order += ') ' + temp_inits + '^() \n';
+  
 
     return order;
 };

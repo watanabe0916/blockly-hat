@@ -464,7 +464,7 @@ Blockly.Hat['turnPlayer'] = function(block) {
   return code;
 };
 
-//CPUの操作
+//CPUの操作(暫定CPU)
 Blockly.defineBlocksWithJsonArray(
 
   [{
