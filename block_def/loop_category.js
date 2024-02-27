@@ -182,6 +182,7 @@ Blockly.Hat.condition_loop = function (block) {
 
 
 //while&break
+//反復構造ブロック
 Blockly.Blocks.loop_if_break = {
     /**
      * Block for shuffle characters.
