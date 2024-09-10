@@ -850,3 +850,253 @@ function test_printBoard(refData){
 function afterdata(x, y, color) {
   data[y][x] = color;
 }
+
+
+//三手先の盤面を返す
+function thirdboard(data){
+  let next = moves(data)
+  let second =[];
+  let third=[];
+  turn=!turn;
+  for (let i =0 ; i<next.length; i++){
+      second.push(moves(next[i]));
+      turn=turn;
+      for (let j=0 ; j<second[i].length; j++){
+          third.push(moves(second[i][j]));
+      }
+  }
+  // console.log(next);
+  // console.log(second);
+  //console.log(third);
+  return third
+}
+
+
+
+
+
+//スコアを返す(mikannsei)
+function boardscore(data){
+  const COLOR = turn ? BLACK : WHITE;
+  //次に置く候補
+  if(data.length != cells){
+    window.alert("配列のサイズを確認してください");
+    return;
+  }
+  //置いた後の盤面の情報
+  let score = [];
+  let score2=[];
+  for (let x = 0; x < cells; x++) {
+    for (let y = 0; y < cells; y++) {
+      const result = checkPut(x, y, COLOR,data);
+      //console.log(result);
+        if (result.length > 0) {
+        score.push(result);
+        score2.push(evaluate8[x][y]);
+        //console.log(x,y);
+        //console.log(evaluate8[x][y]);
+        }
+      };
+    }
+    return score2;
+  }
+
+
+//三手先までのmini-max
+function minimax(data){
+  let next = moves(data)
+  let second =[];
+  let third=[];
+  let thirdscore=[];
+  let resecond=[];
+  let rethird=[];
+  let lastscore=[];
+  let k=0;
+  turn=!turn;
+  for (let i =0 ; i<next.length; i++){
+      second.push(moves(next[i]));
+      k=0;
+      turn=turn;
+      for (let j=0 ; j<second[i].length; j++){
+          third.push(moves(second[i][j]));
+          thirdscore.push(boardscore(second[i][j]));
+          rethird.push(max(boardscore(second[i][j])));
+          //console.log(thirdscore);
+          //console.log(rethird);
+          thirdscore=[];
+          //third=[];
+          //console.log(thirdscore);
+          //console.log(max(thirdscore));
+          //ここまでは完成（三手先の盤面のスコアを返している）
+          //rethird.push(thirdscore);
+          //console.log(rethird);
+          // thirdscore=[];
+          if (rethird.length === second[i].length){
+            //console.log(maxthird);
+            //console.log(rethird);
+            //console.log(min(rethird));
+            resecond.push(min(rethird));
+            console.log(rethird);
+            rethird=[];
+          //   resecond.push(min(rethird));
+          // //console.log(resecond);
+          //   rethird=[];  
+           }  
+
+          
+        }
+        //console.log(i);
+        // console.log(max(thirdscore[k]));
+        // k=k+1;
+        //console.log(thirdscore);
+        //console.log(second[i].length);
+        //thirdscore=[];
+        //console.log(third)
+        //thirdscore=[];
+        //thirdscore=[];
+  }
+  //console.log(resecond);
+  // console.log(next);
+  // console.log(second);
+  //console.log(third);
+  for (let x = 0; x < cells; x++) {
+    for (let y = 0; y < cells; y++) {
+      if (evaluate8[x][y]===max(resecond)){
+        lastscore=([[x,y],max(resecond)]);
+      }
+    }
+  }
+  return lastscore
+}
+
+
+function minimaxturnCPU(){
+  // let candidates = moves(data);
+  //firstCheck(candidates[i],turn);
+  //printBoard(candidates[Math.floor(Math.random()*candidates.length)]);
+  printBoard(newminimax(data));
+  console.log("printBoard done");
+  turnChange();
+  //console.log("turnChange done");
+
+  return;
+}
+//test
+function yamamoto(){
+  data[0][1]=1;
+  return data;
+}
+//
+//refData[y][x] === 1
+
+function naoya(){
+  let a=[[30,10],[15,1],[12,9]];
+  console.log(a.length);
+  console.log(a[0]);
+  console.log(a[0][0]);
+  return;
+}
+
+//二次元リストの一要素目を受け取り最大値を返す
+function max2(list){
+  let maxlist=[];
+  let maxnum = list[0][0];
+  for(let k = 0;k < list.length;k++){
+    if(list[k][0] >= maxnum){
+      maxnum = list[k][0];
+      maxlist=list[k];
+    }
+  }
+  return maxlist;
+}
+//二次元リストを受け取り最小値を返す
+function min2(list){
+  let minlist=[];
+  let minnum = list[0][0];
+  for(let k = 0;k < list.length;k++){
+    if(list[k][0] <= minnum){
+      minnum = list[k][0];
+      minlist= list[k];
+    }
+  }
+  return minlist;
+}
+
+
+
+//mini-max最善の手を返す
+function newminimax(data){
+  let next = moves(data)
+  let second =[];
+  let third=[];
+  let thirdscore=[];
+  let resecond=[];
+  let rethird=[];
+  let lastscore=[];
+  let xy1=[];
+  let xy2=[];
+  let t=[];
+  turn=!turn;
+  for (let i =0 ; i<next.length; i++){
+      second.push(moves(next[i]));
+      turn=turn;
+      for (let j=0 ; j<second[i].length; j++){
+          third.push(moves(second[i][j]));
+          thirdscore.push(boardscore(second[i][j]));
+          rethird.push(max(boardscore(second[i][j])));
+          xy1.push([max(boardscore(second[i][j])),i]);
+          //console.log(xy1);
+          thirdscore=[];
+          if (rethird.length === second[i].length){
+            resecond.push(min(rethird));
+            //console.log(xy1);
+            xy2.push(min2(xy1));
+            //console.log(resecond);
+            //console.log(xy2);
+            xy1=[];
+            rethird=[];
+           }    
+           //console.log(i);
+        }
+  }
+  //console.log(max2(xy2));
+  turn=!turn;
+  // console.log(moves(data)[max2(xy2)[1]]);
+  return moves(data)[max2(xy2)[1]]
+  // for (let x = 0; x < cells; x++) {
+  //   for (let y = 0; y < cells; y++) {
+  //     if (evaluate8[x][y]===max(resecond)){
+  //       lastscore=([[x,y],max(resecond)]);
+  //     }
+  //   }
+  // }
+  // return lastscore
+}
+
+
+function saiki(a){
+  if (a<=20){
+  a=a+2;
+  console.log(a);
+  return saiki(a)
+  }
+}
+
+function saiki2(a,count){
+  console.log(a,count);
+  count+=1;
+  a=a*2;
+  if(count<=15){
+    return saiki2(a,count);
+  }
+  }
+
+
+
+//評価値を返す
+function Test(x,y){
+  return evaluate8[x][y];
+}
+
+
+

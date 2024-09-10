@@ -726,3 +726,22 @@ Blockly.Hat['test_printBoard'] = function(block) {
   code += ' '+'^(dummy)\n';
   return code;
 };
+
+
+Blockly.defineBlocksWithJsonArray(
+
+  [{
+    "type": "test_Yamamoto",
+    "message0": "テスト山本",//ブロックの表面の文字
+    "previousStatement": null,//窪み
+    "nextStatement": null,
+    "colour": 230,
+    "tooltip": "",
+    "helpUrl": ""
+  }]
+);
+Blockly.Hat['test_Yamamoto'] = function(block) {
+  // TODO: Assemble Hat into code variable.
+  var code = 'print("testyamamoto\n")^()';
+  return code;
+};
