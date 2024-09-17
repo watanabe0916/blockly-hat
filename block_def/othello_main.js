@@ -751,7 +751,7 @@ Blockly.Hat['test_Yamamoto'] = function(block) {
 Blockly.defineBlocksWithJsonArray(
 
   [{
-    "type": "mini-maxturnCPU",
+    "type": "minimaxturnCPU",
     "message0": "CPUの操作(ミニマックス法)",
     "previousStatement": null,
     "nextStatement": null,
