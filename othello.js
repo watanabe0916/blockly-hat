@@ -970,17 +970,42 @@ function minimax(data){
 }
 
 
+
+
+
+// //mini-maxを用いたCPU
+// function minimaxturnCPU(){
+//   // let candidates = moves(data);
+//   //firstCheck(candidates[i],turn);
+//   //printBoard(candidates[Math.floor(Math.random()*candidates.length)]);
+//   printBoard(newminimax(data));
+//   //console.log("printBoard done");
+//   turnChange();
+//   //console.log("turnChange done");
+
+//   return;
+// }
+
+
+//mini-maxを用いたCPU(改良版)
 function minimaxturnCPU(){
-  // let candidates = moves(data);
+  let candidates = moves(data);
   //firstCheck(candidates[i],turn);
   //printBoard(candidates[Math.floor(Math.random()*candidates.length)]);
-  printBoard(newminimax(data));
-  console.log("printBoard done");
+  if (newminimax ==true){
+    printBoard(newminimax(data));
+  }
+  //console.log("printBoard done");
+  else{
+    printBoard(candidates[Math.floor(Math.random()*candidates.length)]);
+  }
   turnChange();
   //console.log("turnChange done");
 
   return;
 }
+
+
 //test
 function yamamoto(){
   data[0][1]=1;
