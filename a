@@ -1,0 +1,49 @@
+//mini-max最善の手を返す
+function newminimax(data){
+  let next = moves(data)
+  let second =[];
+  let third=[];
+  let thirdscore=[];
+  let resecond=[];
+  let rethird=[];
+  let xy1=[];
+  let xy2=[];
+  //let t=[];
+  //let lastscore=[];
+  turn=!turn;
+  for (let i =0 ; i<next.length; i++){
+      second.push(moves(next[i]));
+      turn=turn;
+      for (let j=0 ; j<second[i].length; j++){
+          third.push(moves(second[i][j]));
+          thirdscore.push(boardscore(second[i][j]));
+          rethird.push(max(boardscore(second[i][j])));
+          xy1.push([max(boardscore(second[i][j])),i]);
+          //console.log(xy1);
+          thirdscore=[];
+          if (rethird.length === second[i].length){
+            resecond.push(min(rethird));
+            //console.log(xy1);
+            xy2.push(min2(xy1));
+            //console.log(resecond);
+            //console.log(xy2);
+            xy1=[];
+            rethird=[];
+           }    
+           //console.log(i);
+        }
+  }
+  //console.log(max2(xy2));
+  turn=!turn;
+  // console.log(moves(data)[max2(xy2)[1]]);
+  //movesの第何要素かを返している
+  return moves(data)[max2(xy2)[1]]
+  // for (let x = 0; x < cells; x++) {
+  //   for (let y = 0; y < cells; y++) {
+  //     if (evaluate8[x][y]===max(resecond)){
+  //       lastscore=([[x,y],max(resecond)]);
+  //     }
+  //   }
+  // }
+  // return lastscore
+}

@@ -445,3 +445,124 @@ Blockly.Hat['n-1'] = function(block) {
   var code = '- n 1';
   return code;
 };
+
+//max2定義
+Blockly.defineBlocksWithJsonArray(
+
+  [{
+    "type": "max2",
+    "message0": "max2 : リストの第二要素の最大値を返す %1 引数 :  %2",// 戻り値 :  %3
+    "args0": [
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "input_statement",
+        "name": "list_arg",
+        "check": "Array"
+       }
+      // {
+      //   "type": "input_statement",
+      //   "name": "list_return",
+      //   "check": "Number"
+      // }
+    ],
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 230,
+    "tooltip": "受け取ったリストの第二要素の最大値を返す",
+    "helpUrl": ""
+  }]
+);
+Blockly.Hat['max2'] = function(block) {
+  var statements_list_arg = Blockly.Hat.statementToCode(block, 'list_arg');
+  //var statements_list_return = Blockly.Hat.statementToCode(block, 'list_return');
+  // TODO: Assemble Hat into code variable.
+  let code = 'JavaScript' + '"' + '(function(list)';
+  code += '{ max2('+ statements_list_arg +');})"';
+  code += 'list ^()'
+  return code;
+};
+
+
+
+//min2定義
+Blockly.defineBlocksWithJsonArray(
+
+  [{
+    "type": "min2",
+    "message0": "min2 : リストの第二要素の最小値を返す %1 引数 :  %2",// 戻り値 :  %3
+    "args0": [
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "input_statement",
+        "name": "list_arg",
+        "check": "Array"
+      }
+      // ,
+      // {
+      //   "type": "input_statement",
+      //   "name": "list_return",
+      //   "check": "Number"
+      // }
+    ],
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 230,
+    "tooltip": "",
+    "helpUrl": ""
+  }]
+);
+Blockly.Hat['min2'] = function(block) {
+  var statements_list_arg = Blockly.Hat.statementToCode(block, 'list_arg');
+  var statements_list_return = Blockly.Hat.statementToCode(block, 'list_return');
+  // TODO: Assemble Hat into code variable.
+  let code = 'JavaScript' + '"' + '(function(list)';
+  code += '{ min2('+ statements_list_arg +');})"';
+  code += 'list ^()'
+  return code;
+};
+
+
+//boardscore
+Blockly.defineBlocksWithJsonArray(
+
+  [{
+    "type": "boardscore",
+    "message0": "boardscore : position -> listof position %1 引数 :  %2 戻り値 : %3",// ",
+    "args0": [
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "input_statement",
+        "name": "list_name"
+      },
+      {
+        "type": "input_statement",
+        "name": "returnlist"
+      }
+    ],
+    "previousStatement": null,
+    "nextStatement": null,
+    "output": null,
+    "colour": 230,
+    "tooltip": "次に打てる場所の評価値を返す",
+    "helpUrl": ""
+  }]
+);
+Blockly.Hat['boardscore'] = function(block) {
+  var statements_list_name = Blockly.Hat.statementToCode(block, 'list_name');
+  var statements_returnlist = Blockly.Hat.statementToCode(block, 'returnlist');
+  // TODO: Assemble Hat into code variable.
+  const argList = statements_list_name.split('.');
+  const returnList = statements_returnlist.split('.');
+  
+
+  let code = 'JavaScript' + ' ';
+  code += '"'+'boardscore' + '"' + ' ' + argList[0] + ' ';
+  code += '^(' + returnList[0] + ')';
+  return code;
+};

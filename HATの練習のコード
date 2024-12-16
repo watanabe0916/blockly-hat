@@ -1,0 +1,65 @@
+(include "util.sch")
+
+(defineCPS mainasuPrint ^(a . return)
+  if((<= a 5) (return)
+  ( (- a 2)^(b)
+    print(b "\n")^()
+    mainasuPrint b . return)))
+
+(defineCPS main ^()
+  10 ^ (a)
+  mainasuPrint a
+  exit 0)
+
+
+(include "util.sch")
+(include "whyfp.sch")
+
+(defineCPS printPosList ^(list . return)
+  if(isNil list) return
+  ( getFirst list ^(first)
+    moves first ^(list2)
+    printPosList2 list2 ^()
+    getRest list ^(rest)
+    printPosList rest . return ))
+
+(defineCPS printPosList2 ^(list . return)
+  if(isNil list) return
+  ( getFirst list ^(second)
+    printPosition second ^()
+    getRest list ^(rest)
+    printPosList2 rest . return ))
+
+(defineCPS main ^()
+  initPosition "  O       " "X" ^(p)
+  printPosition p ^()
+  moves p ^(list)
+  printPosList list ^()
+  exit 0)
+
+//consとかreduceの練習
+
+(include "util.sch")
+(include "whyfp.sch")
+
+(defineCPS hikaku ^(list . return)
+  list ^(list)
+  if(isNil list) 
+  ( (print d "\n") ^()
+    return) 
+  ( getFirst list ^(first)
+    if > first d (first ^(d)) nop 
+    getRest list ^(rest)
+    hikaku rest . return ))
+
+(defineCPS main ^()
+  0 ^(d)
+  cons 5 (cons 3 (cons 6 nil))^(list) ^()
+  hikaku list ^()
+  exit 0)
+
+
+
+
+
+

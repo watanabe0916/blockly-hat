@@ -469,15 +469,26 @@ evaluate6[4] = [20,-5,15,3,3,15,-5,20];
 evaluate6[5] = [-20,-40,-5,-5,-5,-5,-40,-20];
 
 
+// const evaluate8 = [];
+// evaluate8[0] = [120,-20,20,5,5,20,-20,120];
+// evaluate8[1] = [-20,-40,-5,-5,-5,-5,-40,-20];
+// evaluate8[2] = [20,-5,15,3,3,15,-5,20];
+// evaluate8[3] = [5,-5,3,3,3,3,-5,5];
+// evaluate8[4] = [5,-5,3,3,3,3,-5,5];
+// evaluate8[5] = [20,-5,15,3,3,15,-5,20];
+// evaluate8[6] = [-20,-40,-5,-5,-5,-5,-40,-20];
+// evaluate8[7] = [120,-20,20,5,5,20,-20,120];
+
 const evaluate8 = [];
-evaluate8[0] = [120,-20,20,5,5,20,-20,120];
-evaluate8[1] = [-20,-40,-5,-5,-5,-5,-40,-20];
-evaluate8[2] = [20,-5,15,3,3,15,-5,20];
-evaluate8[3] = [5,-5,3,3,3,3,-5,5];
-evaluate8[4] = [5,-5,3,3,3,3,-5,5];
-evaluate8[5] = [20,-5,15,3,3,15,-5,20];
-evaluate8[6] = [-20,-40,-5,-5,-5,-5,-40,-20];
-evaluate8[7] = [120,-20,20,5,5,20,-20,120];
+evaluate8[0] = [1201,-201,201,51,50,200,-202,1202];
+evaluate8[1] = [-200,-400,-51,-50,-52,-53,-401,-203];
+evaluate8[2] = [203,-51,151,34,25,150,-51,202];
+evaluate8[3] = [56,-54,30,31,32,33,-55,54];
+evaluate8[4] = [57,-51,29,28,27,26,-51,55];
+evaluate8[5] = [204,-56,152,35,36,153,-57,205];
+evaluate8[6] = [-199,-402,-49,-48,-47,-46,-403,-198];
+evaluate8[7] = [1203,-197,206,52,53,207,-196,1204];
+
 
 
 //盤面配列を受け取り、評価値を返す
@@ -875,7 +886,7 @@ function thirdboard(data){
 
 
 
-//スコアを返す(mikannsei)
+//スコアを返す
 function boardscore(data){
   const COLOR = turn ? BLACK : WHITE;
   //次に置く候補
@@ -885,20 +896,20 @@ function boardscore(data){
   }
   //置いた後の盤面の情報
   let score = [];
-  let score2=[];
+  //let score2=[];
   for (let x = 0; x < cells; x++) {
     for (let y = 0; y < cells; y++) {
       const result = checkPut(x, y, COLOR,data);
       //console.log(result);
         if (result.length > 0) {
-        score.push(result);
-        score2.push(evaluate8[x][y]);
+        //score2.push(result);
+        score.push(evaluate8[x][y]);
         //console.log(x,y);
         //console.log(evaluate8[x][y]);
         }
       };
     }
-    return score2;
+    return score;
   }
 
 
@@ -1014,7 +1025,7 @@ function yamamoto(){
 //
 //refData[y][x] === 1
 
-function naoya(){
+function num(){
   let a=[[30,10],[15,1],[12,9]];
   console.log(a.length);
   console.log(a[0]);
@@ -1057,10 +1068,10 @@ function newminimax(data){
   let thirdscore=[];
   let resecond=[];
   let rethird=[];
-  let lastscore=[];
   let xy1=[];
   let xy2=[];
-  let t=[];
+  //let t=[];
+  //let lastscore=[];
   turn=!turn;
   for (let i =0 ; i<next.length; i++){
       second.push(moves(next[i]));
@@ -1087,6 +1098,7 @@ function newminimax(data){
   //console.log(max2(xy2));
   turn=!turn;
   // console.log(moves(data)[max2(xy2)[1]]);
+  //movesの第何要素かを返している
   return moves(data)[max2(xy2)[1]]
   // for (let x = 0; x < cells; x++) {
   //   for (let y = 0; y < cells; y++) {

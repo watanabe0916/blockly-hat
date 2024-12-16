@@ -1,0 +1,819 @@
+
+\subsection{研究背景}
+% モジュール化の重要性
+ソフトウェア開発において，一度完成した処理を他の処理でも使い回すことができれば，開発の効率化や品質の担保につながる．
+ゆえに，再利用可能な処理を1つの独立した部品としてモジュール化することが重要である．
+一般的に，多くのプログラミング言語はチューリング完全であることが知られており，ノイマン型コンピュータで計算可能な任意のアルゴリズムを記述できる．
+中でも，ラムダ計算という計算モデルに基づく関数型プログラミングは，高階関数や遅延評価を用いて，
+リストや木構造の操作，数値計算，$\alpha -\beta$法のような高度なアルゴリズムを関数としてモジュール化できる\cite{Hughes1989}．
+チューリング完全なプログラミング言語ならば，高階関数や遅延評価をサポートしない言語であっても高度なアルゴリズムを記述できるが，
+再利用可能な処理だけを抜き出してモジュール化することは難しい．
+
+% 関数型プログラミングの学習方法，問題点
+関数型プログラミング言語は，モジュール化についての利点を持つが，関数型プログラミングを習得しないままでは，その利点を理解しにくい．
+関数型プログラミングを習得するためには，これをサポートする関数型プログラミング言語の学習が必要だが，
+学習の難易度が高く，利点を理解できていない状態では学習意欲が沸かない．
+
+
+\subsection{研究目的}
+本研究では，手続き型のプログラミングに慣れた初心者プログラマの関数型プログラミング学習を動機づけることを目的として，
+高階関数と遅延評価の利点を理解するための視覚的プログラミング環境を設計し，これを実装する．
+既存の関数型プログラミング言語を視覚的に入力するためのエディタは実装されている\cite{Matsumoto2019}が，
+本研究では，特定の言語の習得よりも，学習者が高階関数や遅延評価の利点を理解することを優先する．
+学習者が，これらの利点の理解に集中できるよう，
+手続き型のプログラミングパラダイムに従う視覚的プログラミング環境の提供を目指す．
+%視覚的プログラミングを採用する理由
+視覚的プログラミングを採用する理由は，特定の言語を習得することなくプログラミングを行うことが可能となるからである．
+中でも，プログラムをブロックの組み合わせによって表現する方式のものは，
+文法的に正しい位置にのみブロックをはめられるように設計されるため，文法エラーを回避可能である．
+この利点は，初心者プログラマにとって，
+関数型プログラミング言語の学習難易度の高さによる学習意欲の低下を防止することが期待できる．
+%既存の視覚的環境との違い
+また，新型コロナウィルスの影響によるオンライン学習の急速な需要の拡大と，プログラミング環境の構築の難しさを考慮し，
+デバイスの違いによる影響が少なく，
+開発環境のインストールが不要なWebブラウザ上で動作する環境を実現する．
+
+\clearpage
+
+
+
+
+
+
+
+//344~1020
+
+
+
+\section{視覚的プログラミング環境の実装}
+本研究では，先行研究\cite{Omura2022}と同様，視覚的プログラミング環境の実装にはGoogleが提供するBlocklyを利用した．
+オセロ盤面の操作は，ブラウザでの応答性が高いJavaScriptで行うが，内部の処理は遅延評価を使用するためHat言語で行う．
+Hat言語はWebブラウザ上で実行可能な関数型プログラミング言語である\cite{Hashimoto202001}．
+
+本環境の実装のために利用したBlocklyは，
+視覚的プログラミング環境構築のためのライブラリを提供している．
+Blockly Developer Toolsを用いて，プログラムの構成要素を表すブロックを視覚的に作成でき，
+ブロックの組み合わせに対応する，任意の言語のコードを出力することが可能である．
+本研究で実装する環境で組み合わせたブロックによって出力されるコードは，Hat言語である．
+
+本環境は，先行研究\cite{Enomoto2023}と同様，ブロックを組み合わせて関数を定義するブロックエリア，
+ブロックに対応するHatコードと実行結果を出力するHatエリア，オセロ盤面を操作するオセロエリアを設ける．
+
+
+
+\subsection{ブロックの追加と編集}
+% 先行研究の問題点
+先行研究\cite{Omura2022}は，関数型プログラミング学習のための視覚的プログラミング環境のプロトタイプを実装し，
+新たな関数を定義するためのブロック群や，
+分岐構造，反復構造を表現できるブロックを提供した．
+しかし，オセロのプログラムを作成するためには，
+入れ子の分岐構造や，より自由度の高い反復構造を表現できるように，
+ブロックの構造や，ブロックに対応するHatコードの編集が必要である．
+
+
+また，先行研究\cite{Enomoto2023}では，学習問題のオセロのプログラムに必要な関数のブロックと，
+対局に用いる盤面を提供する視覚的学習環境のプロトタイプが実装された．
+しかし，そのプロトタイプでは，必要なブロックを組み合わせても
+非同期処理が実装されていないため，
+プレイヤーの操作の待機と応答ができないという問題がある．
+
+そこで本研究では，
+学習問題であるオセロのプログラムを作成し，対局を実現させるため，以下のことを行った．
+\begin{itemize}
+  \setlength{\labelsep}{20pt}
+  \item ブロックの新規作成とそのブロックが行う処理を定義する．
+  \item 先行研究\cite{Omura2022, Enomoto2023}で実装されたブロックや出力されるHatコードを編集する．
+  \item プレイヤーの処理に非同期処理を実装する．
+\end{itemize}
+
+本研究で追加・編集したブロックと，その処理の定義について，
+分岐構造ブロックは付録内リスト\ref{ifjs}，
+反復構造ブロックは付録内リスト\ref{whilejs}，
+main関数ブロックは付録内リスト\ref{othellomainjs}に示す．
+また，先行研究\cite{Enomoto2023}で実装された
+オセロのプログラムに，非同期処理の実装のために新たに定義した関数を追加したものを，
+付録内リスト\ref{othellojs}に示す．
+
+\subsubsection{構造}
+ブロックは，Blockly.Blocksを用いて定義する．
+
+また，ブロックのプロパティは，JSON形式で記述されている\cite{developers}．
+
+\begin{dl}
+  \item[this.jsonInit]
+    JSONのフォーマットを確認でき，以下のデータを持つ．
+    \begin{dl}
+      \item[type]
+        Blockly Developer Tools上で保存する際の名称
+      \item[message0]
+        ブロック上に表示される文字列
+      \item[args0]
+        連結できるブロック，入力フォームを定義する．
+      \begin{dl}
+        \item[type]
+          入力，連結形式を指定する．
+          \begin{dl}
+            \item[input\_value]
+              1つを値を受け取る枠組み
+            \item[input\_statement]
+              複数繋がったブロックを受け取る枠組み
+            \item[input\_dummy]
+              枠組みは作らず文字列を表示する．
+            \item[field\_input]
+              任意の文字列，数値を入力する．
+            \item[field\_dropdown]
+              ドロップダウンによる入力をする．
+            \item[field\_checkbox]
+              チェックボックスによる入力をする．
+            \item[field\_colour]
+              色コードを指定する．
+            \item[field\_number]
+              最大値・最小値と精度の範囲内に収まる数値を入力する．
+            \item[field\_angle]
+              角度のパラメータを入力する．
+            \item[field\_variable]
+             ドロップダウンに含める変数のタイプのリスト
+            \item[field\_label]
+              編集不可．シリアル化不可のテキストフィールド
+            \item[field\_image]
+              画像と任意の文字列をブロック上に表示する．
+          \end{dl}
+        \item[name]
+          引数として渡す変数名
+        \item[text]
+          初期値
+        \item[options]
+          ドロップダウンの選択肢．第1要素は表示される文字列，第2要素は引数として渡されるvalue
+        \item[check]
+          受け取る値の型を指定する(指定なしの場合は記述しない)．
+      \end{dl}
+      \item[output]
+        ブロックから出力される型
+      \item[colour]
+        ブロックの色
+      \item[tooltip]
+        ブロックにカーソルを合わせた際に表示される説明文
+      \item[helpUrl]
+        ブロックを右クリックしてHelpをクリックした際に遷移するURL
+      \item[extensions]
+        動的に構成や動作を追加する機能
+    \end{dl}
+\end{dl}
+
+\subsubsection{Hat言語の生成}
+
+Blockly.Hatに，Hat言語で記述したコードを渡す．そのためにblockを引数に持つ関数を作成する．
+関数内に記述するコードを以下に示す．
+\begin{dl}
+  \item[Blockly.Hat.valueToCode(block ，'name'， Blockly.Hat.ORDER\_FUNCTION\_CALL)]
+    'name'で指定された入力箇所に接続されたブロックのコードを文字列として値を返す．
+    入力が接続されてない場合は，nullを返す．
+  \item[block.getFieldValue('name')]
+
+    'name'で指定されたフィールドの値を返す．
+    \begin{ul}
+      \item テキストフィールドの場合:入力されたテキストを返す．
+      \item ドロップダウンの場合:選択したオプションに関連付けられたテキストを返す．
+    \end{ul}
+  \item[Blockly.Hat.statementToCode(block ，'name'， Blockly.Hat.ORDER\_FUNCTION\_CALL)]
+    'name'で指定された入力箇所に接続されたブロックのコードを生成し，コードを文字列として返す．
+    入力が接続されていない場合，空の文字列を返す．
+\end{dl}
+
+関数内でHat言語となるコードを文字列として定義し，戻り値としてBlockly.Hatに渡す．
+\clearpage
+\subsubsection{分岐構造ブロック}
+\label{分岐構造ブロック}
+
+本環境で使用する分岐構造ブロックを定義するJavaScriptのコードを付録内リスト\ref{ifjs}の1\textasciitilde26行目，
+ブロックの処理の定義を付録内リスト\ref{ifjs}の28\textasciitilde44行目に記述した．
+定義したブロックを図\ref{ifblockdef}に示す．
+% 記述したコードをリスト\ref{defifblock}，\ref{defif}に示す．
+% \begin{table}[H]
+%   \begin{lstlisting}[caption=分岐構造ブロックの定義,label=defifblock,frame=single,xleftmargin=3mm,xrightmargin=0mm,breaklines=true,keepspaces=true]
+%     Blockly.Blocks.if_else = {
+%       init() {
+%         this.jsonInit({
+%             type: "controls_if",
+%             message0: "もし %1 ならば %2 そうでなければ %3",
+%             args0: [{
+%                     type: "input_value",
+%                     name: "if_conditions",
+%                 },
+%                 {
+%                     type: "input_statement",
+%                     name: "if",
+%                 },
+%                 {
+%                     type: "input_statement",
+%                     name: "else",
+%                 }
+%             ],
+%             previousStatement: null,
+%             nextStatement: null,
+%             colour: 150,
+%             tooltip: "",
+%             helpUrl: "",
+%         });
+%       },
+%     };
+% \end{lstlisting}
+% \end{table}
+
+\vskip\baselineskip %空行挿入
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=7cm]{ifblockdef.png}
+    \caption{分岐構造ブロック}
+    \label{ifblockdef}
+\end{figure}
+\vskip\baselineskip
+
+分岐構造ブロックは，以下のように定義される．
+
+\begin{ol}
+  \item 5行目で，ブロックに表示される文字と，条件式，真のときの処理と偽のときの処理のブロックをはめこむための枠を定義する．
+  \item 6\textasciitilde18行目で定義した枠の形，名前，条件を定義する．
+  \item 19\textasciitilde23行目でブロックの属性を定義する．
+\end{ol}
+
+% \begin{table}[H]
+%   \begin{lstlisting}[caption=分岐構造ブロックの処理定義,label=defif,frame=single,xleftmargin=3mm,xrightmargin=0mm,breaklines=true,keepspaces=true]
+%     Blockly.Hat.if_else = function (block) {
+%       let if_conditions = Blockly.Hat.statementToCode(block, 'if_conditions', Blockly.Hat.ORDER_FUNCTION_CALL);
+%       let if_order = Blockly.Hat.statementToCode(block, 'if', Blockly.Hat.ORDER_FUNCTION_CALL);
+%       let else_order = Blockly.Hat.statementToCode(block, 'else', Blockly.Hat.ORDER_FUNCTION_CALL);
+
+%       let if_order_last = if_order.lastIndexOf("^");
+%       if_order = if_order.slice(0,if_order_last);
+
+%       let else_order_last = else_order.lastIndexOf("^");
+%       else_order = else_order.slice(0,else_order_last);
+  
+%       return  "if" + "(" + if_conditions + ")\n(\n" + if_order + "\n)\n(\n" + else_order + "\n) " + "^()\n";
+%     };
+  
+% \end{lstlisting}
+% \end{table}
+
+分岐構造ブロックの処理は以下のように定義される．
+\begin{ol}
+  \item 29\textasciitilde31行目で，枠にはめこんだブロックのコードを変数に格納する．
+  \item 34\textasciitilde41行目で，条件が真のときの処理，偽のときの処理の最後に付く「\^\ ()」と，その中の戻り値を削除する．
+  \item 43行目で，出力するHatコードを生成し，Blockly.Hatに渡す．
+\end{ol}
+
+本研究では，先行研究\cite{Omura2022}で実装された分岐構造ブロックの定義文に，
+34\textasciitilde41行目の処理を追加した．
+これにより，入れ子の分岐構造ブロックを表現可能になった．
+
+\subsubsection{反復構造ブロック}
+\label{反復構造ブロック}
+本環境で新たに作成した，反復構造ブロックの定義とブロックの処理の定義を付録内リスト\ref{whilejs}の178\textasciitilde247行目に記述した．
+定義したブロックを図\ref{whileblockdef}に示す．
+% 記述したコードをリスト\ref{defloopblock}，\ref{defloop}に示す．
+% \begin{table}[H]
+%   \begin{lstlisting}[caption=反復構造ブロックの定義,label=defloopblock,frame=single,xleftmargin=3mm,xrightmargin=0mm,breaklines=true,keepspaces=true]
+%     Blockly.Blocks.loop_if_break = {
+%       init() {
+%         this.jsonInit({
+%             type: "block_type",
+%             message0: "繰り返し(while) %1 更新変数 %2 終了条件 %3 処理 %4",
+%             args0: [{
+%                     type: "input_dummy",
+%                 },
+%                 {
+%                   type:"input_statement",
+%                   name:"arg"
+%                 },
+                
+%                 {
+%                   type: "input_value",
+%                   name: "conditions"
+%                 },
+%                 {
+%                   type: "input_statement",
+%                   name: "syori"
+%                 }
+%             ],
+%             previousStatement: null,
+%             nextStatement: null,
+%             colour: 150,
+%             tooltip: "",
+%             helpUrl: ""
+%         });
+%       },
+%     };
+% \end{lstlisting}
+% \end{table}
+\vskip\baselineskip %空行挿入
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=8cm]{whileblock-yasugi.png}
+    \caption{反復構造ブロック}
+    \label{whileblockdef}
+\end{figure}
+\vskip\baselineskip
+
+反復構造ブロックは，以下のように定義される．
+
+\begin{ol}
+  \item 186行目で，ブロックに表示される文字と，引数や処理のブロックをはめこむための枠を定義する．
+  \item 187\textasciitilde203行目で定義した枠の形，名前，条件を定義する．
+  \item 204\textasciitilde208行目でブロックの属性を定義する．
+\end{ol}
+
+% \begin{table}[H]
+%   \begin{lstlisting}[caption=反復構造ブロックの処理定義,label=defloop,frame=single,xleftmargin=3mm,xrightmargin=0mm,breaklines=true,keepspaces=true]
+%     Blockly.Hat.loop_if_break = function (block) {
+%     const arg = Blockly.Hat.statementToCode(block, 'arg', Blockly.Hat.ORDER_FUNCTION_CALL);
+%     const conditions = Blockly.Hat.statementToCode(block, 'conditions', Blockly.Hat.ORDER_FUNCTION_CALL);
+%     const  syori = Blockly.Hat.statementToCode(block, 'syori', Blockly.Hat.ORDER_FUNCTION_CALL);
+%     const args = arg.split('.');
+%     const args_length = args.length;
+%     let temp_args = '';
+%     let temp_inits = '';
+%     let m = 0,n = 0;
+%     while (2 * m <= args_length - 2) {
+%       temp_args += args[2*m] + ' ';
+%       m++;
+%     }
+%     while (2 * n + 1 <= args_length - 2) {
+%       temp_inits += args[2*n + 1] + ' ';
+%       n++;
+%     }
+%     temp_args = temp_args.slice(2);
+%     let order = '';
+%     order += 'fix\n' + '(^( loop ' + temp_args + '. break )\n';
+%     order += 'if (' + conditions + ' ) break\n';
+%     order += '(\n';
+%     order += syori + '\n';
+%     order += 'loop' + ' ' + temp_args + '. break )\n';
+%     order += ') ' + temp_inits + '^() \n';
+
+%     return order;
+%     };
+% \end{lstlisting}
+% \end{table}
+
+反復構造ブロックの処理は以下のように定義される．
+\begin{ol}
+  \item 214\textasciitilde218目で，枠にはめこんだブロックのコードを変数に格納する．
+  \item 220\textasciitilde241行目で，出力するHatコードを生成する．
+  \item 243行目で，生成したHatコードをBlockly.Hatに渡す．
+\end{ol}
+
+% \clearpage
+\subsubsection{手番選択ブロック}
+手番選択ブロックは，先行研究\cite{Enomoto2023}で既にブロック(図\ref{turnSelectBlock})と処理が定義されていた．
+しかし，非同期処理が実装されていないため，プレイヤーが先手か後手を選択していなくてもオセロの盤面が操作可能になっていた．
+これでは，プレイヤーの手番とCPUの手番を区別することができない．
+本研究では，ブロックの処理の定義を編集し，
+オセロのプログラムを実行したとき，プレイヤーが先手か後手を選択するまでゲームを開始しないようにした．
+手番選択ブロックの処理の定義をリスト\ref{othellomainjs}の109\textasciitilde112行目に記述した．
+
+% \begin{table}[H]
+%   \begin{lstlisting}[caption=手番選択ブロックの処理の定義,label=turnSelecter,frame=single,xleftmargin=3mm,xrightmargin=0mm,breaklines=true,keepspaces=true]
+%     Blockly.Hat['turn_select'] = function(block) {
+%       let code = "turnSelect ^(userSente)\n";
+%       return code;
+%     };
+% \end{lstlisting}
+% \end{table}
+\vskip\baselineskip %空行挿入
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=6cm]{turnSelectBlock.png}
+    \caption{手番選択ブロック}
+    \label{turnSelectBlock}
+\end{figure}
+\vskip\baselineskip
+
+手番選択ブロックの処理は以下のように定義される．
+\begin{ol}
+  \item 110行目で，ブロックを置いたときに出力されるHatコードを生成する．
+  \item 111行目で，生成したHatコードをBlockly.Hatに渡す．
+\end{ol}
+
+このブロックの処理で呼び出される関数turnSelectは，
+本環境の内部の処理を行うHat言語のユーティリティ関数群の1つとして追加したものである．
+定義した関数を付録内リスト\ref{utilsch}の1\textasciitilde3行目に記述した．
+
+% \begin{table}[H]
+%   \begin{lstlisting}[caption=turnSelectの定義,label=turnSelect,frame=single,xleftmargin=3mm,xrightmargin=0mm,breaklines=true,keepspaces=true]
+%     (defineCPS turnSelect ^ return
+%       JavaScript "waitTurnSelect" return ^(dummy)
+%       end)
+% \end{lstlisting}
+% \end{table}
+関数turnSelectは，JavaScriptで定義されたプレイヤーの先手・後手選択を待機する関数waitTurnSelectを呼び出す．
+
+関数waitTurnSelectの定義を，付録内リスト\ref{othellojs}の574行目から577行目に記述した．
+% \begin{table}[H]
+%   \begin{lstlisting}[caption=waitTurnSelectの定義,label=waitTurnSelect,frame=single,xleftmargin=3mm,xrightmargin=0mm,breaklines=true,keepspaces=true]
+%   function waitTurnSelect(ret){
+%     waitingTurnSelectActor = HatInterpreter.getCurrentActor();
+%     waitingTurnSelectReturn = ret;
+%   }
+% \end{lstlisting}
+% \end{table}
+
+この関数の処理は，以下のように定義される．
+\begin{ol}
+  \item 575行目で，変数waitingTurnSelectActorに，クリックを待つアクターとして現在のアクター(オセロのプログラム)を格納する．
+  \item 576行目で，変数waitingTurnSelectReturnに，継続returnを格納する．
+\end{ol}
+
+オセロのプログラムは，プレイヤーが先手か後手を選択するまで停止し，
+選択した手番の情報を受け取ってから，停止していたオセロのプログラムに復帰する．
+オセロのプログラムの再開は，選択した手番の情報を引数に持つJavaScriptの関数returnTurnSelectによって行われる．
+関数returnTurnSelectの定義を，付録内リスト\ref{othellojs}の579\textasciitilde582行目に記述した．
+クリックを待っているアクター，クリックを待っている戻り先，選択した手番の情報を，Hatのインタプリタに渡すことで，
+オセロのプログラムに復帰する．
+\clearpage
+\subsubsection{プレイヤーの操作ブロック}
+図\ref{flow}の「プレイヤーの操作」にあたる部分は，
+先行研究\cite{Enomoto2023}で，プレイヤーの操作ブロック(図\ref{turnPlayerBlock})が実装されたが，
+ブロックに対応する処理が定義されていなかった．
+本研究では，ブロックの処理の定義を，
+付録内リスト\ref{othellomainjs}の341\textasciitilde344行目に記述した．
+
+\vskip\baselineskip %空行挿入
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=6cm]{turnPlayerBlock.png}
+    \caption{プレイヤーの操作ブロック}
+    \label{turnPlayerBlock}
+\end{figure}
+\vskip\baselineskip
+
+プレイヤーの操作ブロックの処理は以下のように定義される．
+\begin{ol}
+  \item 342行目で，ブロックを置いたときに出力されるHatコードを生成する．
+  \item 343行目で，生成したHatコードをBlockly.Hatに渡す．
+\end{ol}
+
+このブロックの処理で呼び出される関数turnPlayerは，
+手番選択ブロックと同様に，Hat言語のユーティリティ関数群の1つとして追加したものである．
+定義した関数を付録内リスト\ref{utilsch}の5\textasciitilde7行目に記述した．
+
+
+JavaScriptの関数waitClickを，付録内リスト\ref{othellojs}の584\textasciitilde587行目に追加した．
+
+この関数の処理は，以下のように定義される．
+\begin{ol}
+  \item 585行目で，変数waitingActorに，盤面のクリックを待つ現在のアクター(オセロのプログラム)を格納する．
+  \item 586行目で，変数waitingReturnに，継続returnを格納する．
+\end{ol}
+% 追加したコードを，リスト\ref{waitClick}に示す．
+% \begin{table}[H]
+%   \begin{lstlisting}[caption=関数waitClickの定義,label=waitClick,frame=single,xleftmargin=3mm,xrightmargin=0mm,breaklines=true,keepspaces=true]
+%   function waitClick(ret){
+%     waitingActor = HatInterpreter.getCurrentActor();
+%     waitingReturn = ret;
+%   }
+% \end{lstlisting}
+% \end{table}
+
+オセロのプログラムは，プレイヤーが盤面をクリックして次の一手を打つまで停止し，
+次の一手を打った座標を受け取ってから，停止していたオセロのプログラムに復帰する．
+
+% (リスト\ref{turnPlayer})．
+% \begin{table}[H]
+%   \begin{lstlisting}[caption=turnPlayer関数の定義,label=turnPlayer,frame=single,xleftmargin=3mm,xrightmargin=0mm,breaklines=true,keepspaces=true]
+%     (defineCPS turnPlayer ^ return
+%       JavaScript "waitClick" return ^(dummy)
+%       end)
+% \end{lstlisting}
+% \end{table}
+
+
+\subsubsection{暫定的なCPUの処理}
+先行研究\cite{Enomoto2023}では，\ref{学習に使用する関数}で挙げた関数についてのブロックが実装された．
+学習者は，図\ref{flow}の「CPUの操作」にあたる部分をそれらの関数ブロックに置き換えることで，
+$\alpha -\beta$法によるゲーム木の枝刈りを組み込んだオセロのCPUの処理を作成する．
+本研究では，本環境でのオセロの対局が可能であることを確認するための，暫定的なCPUの処理(以下，「暫定CPU」という)を行うブロックを定義した(図\ref{turnCPU})．
+また，暫定CPUの処理を，JavaScriptの関数turnCPUとして付録内リスト\ref{othellojs}の493\textasciitilde500行目に追加した．
+
+
+% 追加したコードをリスト\ref{turnCPU}に示す．
+% \begin{table}[H]
+%   \begin{lstlisting}[caption=暫定CPUの定義,label=turnCPU,frame=single,xleftmargin=3mm,xrightmargin=0mm,breaklines=true,keepspaces=true]
+%   function turnCPU(){
+%     let candidates = moves(data);
+
+%     printBoard(candidates[Math.floor(Math.random()*candidates.length)]);
+%     turnChange();
+%     showTurn();
+%     return;
+%   }
+% \end{lstlisting}
+% \end{table}
+\clearpage
+\vskip\baselineskip %空行挿入
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=6cm]{cpu_control_block.png}
+    \caption{暫定CPUのブロック}
+    \label{turnCPU}
+\end{figure}
+\vskip\baselineskip
+
+関数turnCPUは以下の処理を行う．
+\begin{ol}
+  \item 494行目で，次の一手で取り得る盤面のリストを返す関数movesを，現在の盤面を引数として渡して実行し，結果を受け取る．
+  \item 496行目では，2行目で受け取った盤面のリストからランダムに1つを選択し，その盤面を表示する関数printBoardに渡している．
+  \item 497行目で，手番を交代する．
+\end{ol}
+
+\clearpage
+\subsection{動作確認}
+実装した視覚的プログラミング環境を，Mac, WindowsおよびLinuxのGoogle Chromeで開発し，以下の環境で動作確認を行った．
+\begin{ul}
+  \item Mac用 Google Chrome バージョン: 120.0.6099.216
+  \item Windows用 Google Chrome バージョン: 120.0.6099.217
+  \item Linux用 Google Chrome バージョン: 120.0.6099.216
+\end{ul}
+
+視覚的プログラミング環境の全体図を図\ref{pageview}に示す．
+\vskip\baselineskip %空行挿入
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=13cm]{pageview2.png}
+    \caption{視覚的プログラミング環境の全体図}
+    \label{pageview}
+\end{figure}
+\vskip\baselineskip
+
+本環境は，先行研究\cite{Enomoto2023}と同様，以下のエリアを持つ．
+
+\begin{dl}
+  \item[mainエリア] ブロックを組み合わせてmain関数を定義する．
+  \item[関数定義エリア] ブロックを組み合わせて関数を定義する．
+  \item[Hatコード出力エリア] 組み合わせたブロックに対応するHatコードを出力する．
+  \item[Hat出力エリア] 出力されたHatコードの実行結果を出力する．
+  \item[オセロエリア] ユーザが操作するオセロ盤面
+  
+  また，オセロ盤面は以下の特徴を持つ．
+  \begin{ul}
+    \item クリック，JavaScript関数呼び出しの2種類で操作可能である．
+    \item 手番選択ボタンがあり，オセロ開始時に先手か後手を選択する．
+    \item ボタン操作でオセロ盤面を$4 \times 4$， $6 \times 6$， $8 \times 8$ に変更可能．
+  \end{ul}
+  \item[ボタンエリア] 用意したボタンは以下のような機能を持つ．
+  \begin{dl}
+    \item[ソースコードを表示する] ブロックエリアに配置されたブロックに対応するHatコードを出力する．
+    \item[コードを実行する] Hatコード出力エリアに表示されたコードを実行する．
+    \item[保存] 関数定義エリアに排他されたブロックをローカルストレージに保存する．
+    \item[復元] 保存した関数を関数定義エリアに復元する．
+    \item[全消去] ブロックエリアに配置されたブロックを全消去する．
+  \end{dl}
+\end{dl}
+
+本環境で実装したブロックの動作確認と，
+学習問題であるオセロのプログラミングを行い，実際に対局ができることを確認した．
+
+\clearpage
+\subsubsection{入れ子の分岐構造}
+\ref{分岐構造ブロック}で定義したブロックを用いて，入れ子の分岐構造を表現し，動作確認を行った．
+入れ子の分岐構造の簡単な例を図\ref{ifblock}に示す．
+\vskip\baselineskip %空行挿入
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=13cm]{ifblocks2.png}
+    \caption{入れ子の分岐構造ブロックの例}
+    \label{ifblock}
+\end{figure}
+\vskip\baselineskip
+図\ref{ifblock}のプログラムは，変数xが0であるとき，
+「xは0」と表示し，
+xが0より大きいとき，
+「xは0より大きい」と表示する．
+また，xが0未満のときは，
+「xは0より小さい」と表示する．
+このプログラムの変数xに3を代入して実行する．
+
+出力されたHatコードをリスト\ref{ifhat}に示す．
+
+\begin{table}[H]
+  \begin{lstlisting}[caption=入れ子の分岐構造ブロックで出力されたHatコード,label=ifhat,frame=single,xleftmargin=3mm,xrightmargin=0mm,breaklines=true,keepspaces=true]
+  3 ^(x)  
+  if (>= x 0)
+  (
+    if (= x 0) 
+    (
+      print("xは0" "\n")
+    ) 
+    (
+      print("xは0より大きい" "\n")
+    )
+  )
+  (
+    print("xは0より小さい" "\n")
+  ) ^()
+\end{lstlisting}
+\end{table}
+
+リスト\ref{ifhat}の2行目の条件式における，真のときの処理は3\textasciitilde11行目，
+偽のときの処理は12\textasciitilde14行目である．
+4行目の条件式における，真のときの処理は，5\textasciitilde7行目，
+偽のときの処理は8\textasciitilde10行目である．
+
+\clearpage
+
+このプログラムの実行結果を図\ref{ifx3}に示す。
+\vskip\baselineskip %空行挿入
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=8cm]{ifx3.png}
+    \caption{入れ子の分岐構造プログラム例の実行結果}
+    \label{ifx3}
+\end{figure}
+\vskip\baselineskip
+
+本研究で実装した分岐構造のブロックと，その処理の定義により，
+入れ子の分岐構造を表現可能であることを確認した．
+
+\subsubsection{反復構造}
+\ref{反復構造ブロック}で定義されたブロックの使用例を図\ref{loopblock}に示す．
+\vskip\baselineskip %空行挿入
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{loopfuncex.png}
+    \caption{反復構造ブロックの使用例}
+    \label{loopblock}
+\end{figure}
+\vskip\baselineskip
+図\ref{loopblock}では，引数として，更新変数(反復処理の中で値が変わる変数)pと，初期値0をとり，
+pの値を表示する処理をpが3を超えるまで繰り返し終了する．
+
+出力されたHatコードをリスト\ref{loophat}，Hatコードを実行した結果を図\ref{loopresult}に示す．
+\begin{table}[H]
+  \begin{lstlisting}[caption=反復構造ブロックで出力されたHatコード,label=loophat,frame=single,xleftmargin=3mm,xrightmargin=0mm,breaklines=true,keepspaces=true]
+    fix (^(loop p . break)
+      if (> p 3) break
+      (
+      print( p "\n") ^()
+      p + 1 ^(p)
+      loop p . break )
+    ) 0 ^()
+\end{lstlisting}
+\end{table}
+
+fixは，不動点コンビネータ(fixed-point combinator)といい，
+任意の関数$f$に対し，fix $f = f$(fix $f$)を満たす高階関数であり，再帰関数の定義として用いられる．
+fixから6行目までの関数がloop関数に代入される．
+pが3を超えたとき，リスト\ref{loophat}の2行目にある継続breakを呼び出し，ループを脱出する．
+
+\vskip\baselineskip %空行挿入
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=8cm]{whileresult.png}
+    \caption{反復構造のプログラム例の実行結果}
+    \label{loopresult}
+\end{figure}
+\vskip\baselineskip
+
+本研究で実装した反復構造のブロックと，その処理の定義により，
+学習者は任意の変数名，任意の初期値を設定した反復構造を表現可能であることを確認した．
+\clearpage
+\subsubsection{mainエリア}
+\label{mainエリア}
+mainエリアでブロックを組み合わせて定義したオセロのmain関数を図\ref{mainblocks}に示す．
+\vskip\baselineskip %空行挿入
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=15cm]{mainblocks2.png}
+    \caption{オセロのmain関数}
+    \label{mainblocks}
+\end{figure}
+\vskip\baselineskip
+mainエリアでは，
+プレイヤーの処理を行う関数ブロックや，分岐構造や反復構造のブロックを用いて
+オセロ全体のプログラムを作成した．
+
+
+\clearpage
+\subsubsection{関数定義エリア}
+\label{関数定義エリア}
+関数定義エリアでブロックを組み合わせて定義したオセロの暫定CPUの関数を図\ref{def_CPU}に示す．
+\vskip\baselineskip %空行挿入
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=13cm]{def_functionCPU.png}
+    \caption{オセロの暫定CPU関数}
+    \label{def_CPU}
+\end{figure}
+\vskip\baselineskip
+関数定義エリアでは，暫定CPUを呼び出す関数CPUを定義した．
+
+
+\clearpage
+\subsubsection{オセロのプログラムの実行結果}
+\ref{mainエリア}，\ref{関数定義エリア}で作成したプログラムを実行し，オセロを終局まで対局した様子を図\ref{othellogame}に示す．
+\vskip\baselineskip %空行挿入
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=15cm]{othello-test3.png}
+    \caption{オセロを終局まで対局したときの様子}
+    \label{othellogame}
+\end{figure}
+\vskip\baselineskip
+本環境で，ブロックの組み合わせによってオセロのプログラムを作成し，
+実行すると，オセロを終局まで対局できることを確認した．
+
+
+
+
+//1041~
+
+\section{検討}
+考慮すべき検討事項として，以下の点が挙げられる．
+\begin{dl}
+\item[応答性]
+  Web実行環境は，サーバサイドで動くプログラムと，
+  クライアントサイドで動くプログラムが連携して動作するシステムが多く用いられている．
+  このシステムは，クライアントからの入力をサーバに送信し，
+  サーバは入力を受け取ってからプログラムを実行し，
+  クライアントに結果を送り返す必要があるため，
+  クライアント・サーバ間の通信遅延が発生する．
+  本研究で実装した実行環境は，クライアントサイドでプログラムを実行するため，
+  最初にWebページのダウンロードを行う以外，
+  サーバとの通信が不要であるため，
+  通信遅延が生じず，応答性が高い．
+
+\item[スケーラビリティ]
+  クライアントサイドとサーバサイドの通信によって成り立つ実行環境ならば，
+  プログラムを実行するユーザ数が増加すると，サーバへの負荷も増加する．
+  多くのユーザが同時にアクセスしても負荷に耐えられるサーバにするためには，
+  CPUやメモリの増強が必要だが，
+  それには限界がある．
+  そのため，ユーザがプログラムを実効できる時間に制約をかけなければならない．
+  一方，クライアントサイドでプログラムを実行する本環境では，
+  ユーザの実行するプログラムがサーバの負荷に影響することはないため，
+  より多くのユーザが同時に利用可能である．
+
+\item[ユーザビリティ]
+  本環境は，学習者自身で実行環境をインストールする必要はなく，
+  Webページにアクセスするだけで，プログラムを実行できる．
+  学習者は，本環境が実装したブロックの組み合わせによってプログラミングを行うため，
+  ノーコードで直感的な操作が可能である．
+  しかし，実行に使用する関数はエリア上に配置しておく必要があり，
+  関数を定義するために合成するブロックの数が増えれば増えるほど，
+  ブロックエリアの視認性が悪くなる．
+  Blocklyは，ブロックを折りたたんで配置する機能を持っているが，
+  関数の区別がしにくくなるため，
+  作った関数のブロックを整理するための改善が必要である．
+  
+\item[保守性]
+  本環境の実装は，htmlファイルが外部ファイルを読み込む形式で行っており，
+  オセロに必要な関数，WebページのUI，Blockly利用部分など，
+  各機能についてファイルを分けているため，環境の更新は比較的容易である．
+  他の開発者にとってより可読性の高いシステムにするための設計書を作成することが課題である．
+
+\item[拡張性（Extensibiity）]
+  本環境は，JavaScriptの関数を呼び出すことができるため，
+  必要に応じて関数を追加することで機能を拡張できる．
+\item[信頼性]
+  本環境の信頼性担保のために，障害や不具合への耐久性をテストする必要がある．
+\item[セキュリティ]
+  本環境では，他者との通信や，個人情報の入力などが発生しないため，
+  セキュリティの考慮は行っていない．
+  他人が作成したブロックとの接続や実行を行う場合に考慮する必要性が生じる．
+\item[移植性]
+  本環境はJavaScriptでWeb上で動作するように実装されており，
+  プラットフォーム間の移植性は比較的高い．
+  しかし，本研究で動作確認をしたOSやブラウザ以外での動作については，
+  検証が必要である．
+\item[頑健性]
+  本環境では，プログラム実行時に，学習者に見えやすい形でのエラー文は表示していない．
+  ブロックの組み合わせの間違いに関しても考慮されていないため，
+  今後検討する必要がある．
+\item[学習の有効性]
+  本研究では，目的達成のために設計した視覚的プログラミング環境を実装したが，
+  実際に，本環境を使って高階関数や遅延評価のメリットを理解することや，
+  関数型プログラミングの学習を動機付けることができるかどうかについては，
+  学習者からの評価が必要である．
+\item[学習容易性]
+  本研究では，学習問題のオセロを実行可能なプログラミング環境を実装したが，
+  本環境を用いた学習のシステムについて考慮する必要がある．
+  現段階では，学習者が取り組む課題について全体的な設定はあるものの，
+  学習のサポートやステップ分けがないため，本環境のみでの学習はできない．
+  そのため，学習者が取り組む課題を理解するための教材が別途必要である．
+\end{dl}
+
+\clearpage
+\section{まとめと今後の課題}
+本研究では，手続き型のプログラミングに慣れた初心者プログラマの関数型プログラミング学習を動機づけることを目的として，
+高階関数と遅延評価の利点を理解するための視覚的プログラミング環境を設計し，これを実装した．
+学習問題であるオセロのプログラムを構成するためのブロックや，非同期処理を実装し，
+学習者が課題に取り組むことのできる視覚的プログラミング環境を構築した．
+本環境を利用してブロックの組み合わせによるプログラミングを行うことで，
+人間とCPUによるオセロの対局を実現できることを示した．
+学習者は，関数定義エリアで，オセロのCPUの処理に$\alpha -\beta$法によるゲーム木の枝刈りを組み込むことで，
+高階関数や遅延評価を用いた，複雑で高度なアルゴリズムのモジュール化を体験することが可能となる．
+
+
+今後の課題として，高階関数や遅延評価を用いたオセロのCPUの処理を実装するための本環境の改良や，
+本環境での学習を支援するシステムの実装，および本環境での学習に対する評価が挙げられる．
+

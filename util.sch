@@ -316,7 +316,7 @@ $listの先頭に$elを追加したリストを返す。
 (defineCPS redtreeap ^(f g a c)
   if (nil? c) a
   (g (redtree f g a (car c))
-  (redtreeap f g a (cde c))))
+  (redtreeap f g a (cdr c))))
 
 
 #|
@@ -342,3 +342,31 @@ $listの先頭に$elを追加したリストを返す。
 (defineCPS turnChange ^ return
   JavaScript "turnChange" ^(dummy)
   return)
+
+#|2024.追加
+(defineCPS moves ^(data . return)
+  data ^(data)
+  JavaScript "moves" data ^(dummy)
+  return)
+
+(defineCPS boardscore ^(score . return)//戻り値
+  data ^(data)//引数
+  JavaScript "boardscore" data ^(score)
+  return)
+
+(defineCPS max2 ^(list . return)
+  JavaScript "max2" list ^(dummy)
+  return)
+
+(defineCPS min2 ^(list . return)
+  JavaScript "min2" list ^(dummy)
+  return)
+
+(defineCPS minimaxturnCPU ^ return
+  JavaScript "minimaxturnCPU" ^(dummy)
+  return)
+
+
+
+
+

@@ -747,7 +747,7 @@ Blockly.Hat['test_Yamamoto'] = function(block) {
 };
 
 
-//mini-maxを用いたCPUの操作(暫定CPU)
+//mini-maxを用いたCPUの操作
 Blockly.defineBlocksWithJsonArray(
 
   [{
@@ -762,6 +762,8 @@ Blockly.defineBlocksWithJsonArray(
 );
 Blockly.Hat['minimaxturnCPU'] = function(block) {
   // TODO: Assemble Hat into code variable.
-  var code = "minimaxturnCPU ^(dummy)\n"
+  var code = 'JavaScript';
+  code += ' '+'"minimaxturnCPU"';
+  code += ' '+'^(dummy)\n';
   return code;
 };
