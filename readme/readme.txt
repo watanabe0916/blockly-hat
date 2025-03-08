@@ -1,0 +1,6 @@
+実験方法
+Git-hubのblockly-hatリポジトリを開く
+settingからPagesのGitHub Pagesに設定したページにアクセス
+main定義エリアにmaindefinition.pngと同じようにブロックを配置
+関数定義エリアにdefmini-maxCPU.pngと同じようにブロックを配置
+コードを実行し先手(黒)または後手(白)を選択しオセロ→後手(白)を選択すると不具合
