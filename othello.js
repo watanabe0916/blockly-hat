@@ -898,10 +898,11 @@ function minimaxturnCPU(){
   //printBoard(candidates[Math.floor(Math.random()*candidates.length)]);
   if (newminimax ==true){
     printBoard(newminimax(data));
+    console.log("nmm printBoard done");
   }
-  //console.log("printBoard done");
   else{
     printBoard(candidates[Math.floor(Math.random()*candidates.length)]);
+    console.log("random printBoard done");
   }
   turnChange();
   //console.log("turnChange done");
