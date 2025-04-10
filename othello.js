@@ -534,10 +534,10 @@ function min(list){
 function hatStart(num){
   let redata = [];
   if(num === 4){
-   redata[0] = [0, 0, 0, 0];
-   redata[1] = [0, -1, 1, 0];
-   redata[2] = [0, 1, -1, 0];
-   redata[3] = [0, 0, 0, 0];
+    redata[0] = [0, 0, 0, 0];
+    redata[1] = [0, -1, 1, 0];
+    redata[2] = [0, 1, -1, 0];
+    redata[3] = [0, 0, 0, 0];
   }else if(num === 6){
     redata[0] = [0, 0, 0, 0, 0, 0];
     redata[1] = [0, 0, 0, 0, 0, 0];

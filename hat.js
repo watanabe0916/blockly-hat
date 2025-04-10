@@ -112,12 +112,12 @@
 		} */
 		
 		/* JavaScript変数
-		   以下の書式によって、JavaScriptで定義された関数を実行する。
-		   JavaScript 関数定義 引数 ・・・ ^(戻り値)
-		   以下の書式によって、JavaScriptで定義された関数を返す。
-		   JavaScript 関数定義 ^(関数)
-		   以下の書式によって、JavaScript関数を実行する。
-		   関数 引数 ・・・ ^(戻り値)
+		以下の書式によって、JavaScriptで定義された関数を実行する。
+		JavaScript 関数定義 引数 ・・・ ^(戻り値)
+		以下の書式によって、JavaScriptで定義された関数を返す。
+		JavaScript 関数定義 ^(関数)
+		以下の書式によって、JavaScript関数を実行する。
+		関数 引数 ・・・ ^(戻り値)
 		*/
 		function JSVar(source){
 			HatVar.call(this, "JavaScript", source);
@@ -147,12 +147,12 @@
 		let emptyArray=[ ];
 	
 		/* リスト
-		   (array[start] array[start+1] ・・・ . tail)
-		   array: 配列
-		   start: 配列の添字
-		   tail: リストの末尾
-		   assignment: 変数への値の割当
-		   source: ソースファイル中の位置
+		(array[start] array[start+1] ・・・ . tail)
+		array: 配列
+		start: 配列の添字
+		tail: リストの末尾
+		assignment: 変数への値の割当
+		source: ソースファイル中の位置
 		*/
 		function List(array, start, tail, assignment, source){
 			assignment=Object.assign({ }, assignment);
@@ -292,7 +292,7 @@
 		let exit=new Var("exit", new Source(__FILE__, __LINE__));
 		let zero=new Var("0", new Source(__FILE__, __LINE__));
 		let exit_zero=new List([exit, zero], 0, null, null,
-							   new Source(__FILE__, __LINE__));
+		new Source(__FILE__, __LINE__));
 		*/
 		function code2HatExp(code, path, line){
 			let a=parse(code, line);
@@ -544,8 +544,8 @@
 				*/
 				var assignment={ }; // 変数に対する値の割当
 				/* 通常の仮引数に引数を割り当てる。
-				   割り当てた結果はassignmentに反映される。
-				   残った仮引数が戻り値としてparsに返される。*/
+				割り当てた結果はassignmentに反映される。
+				残った仮引数が戻り値としてparsに返される。*/
 				var pars=task.assignArgs(this.pars, assignment);
 				if(pars!=null){
 					task.fun=task.contarg? task.contarg: task.popCont( );
@@ -556,9 +556,9 @@
 					return;
 				}
 				/* 2019/12/11 debug
-				   症状：末尾再帰でスタックサイズが増えていく。
-				   修正前：task.pushCont(makeArgFun(task.args, task.contarg));
-				   修正後：以下3行 */
+				症状：末尾再帰でスタックサイズが増えていく。
+				修正前：task.pushCont(makeArgFun(task.args, task.contarg));
+				修正後：以下3行 */
 				if(task.contarg && task.contarg.type=="ContStack"){
 					task.stack=task.contarg;
 					task.contarg=null;
@@ -887,8 +887,8 @@
 			subst(assignment){
 				return this;
 				/* 2019/12/14 Sat debug
-				   症状：ある関数内で別の関数名と同じ局所変数を使うと戻った後でも、
-				   その局所変数が参照される。
+				症状：ある関数内で別の関数名と同じ局所変数を使うと戻った後でも、
+				その局所変数が参照される。
 				if(assignment==null) return this;
 				var undefined;
 				if(assignment===undefined) return this;
@@ -963,7 +963,7 @@
 				for(let [key, value] of Object.entries(script.dictionary)){
 					if(this.dictionary[key]){
 						console.warn('Warning: '+key+' is defined in '+
-									 script.name+' and '+this.name+'.');
+									script.name+' and '+this.name+'.');
 					}else this.dictionary[key]=value;
 				}
 			},
@@ -986,8 +986,8 @@
 						let value2=dictionary[key];
 						if(value2){
 							console.warn("Warning: "+key+" at "+value.source+
-										 " is ignored because it is defined at "+
-										 value2.source+" already.");
+										" is ignored because it is defined at "+
+										value2.source+" already.");
 						}else dictionary[key]=value;
 					}
 				}
@@ -1013,14 +1013,14 @@
 			return script;
 		}
 		/*
-		  function newActor(script, args){
-		  var m=script.dictionary['main'];
-		  if(!m) return null;
-		  var a=Actor(script);
-		  var t=Task(a, m, args, null);
-		  if(script.loading>0) script.tasks.push(t);
-		  else TaskQ.push(t);
-		  }
+		function newActor(script, args){
+		var m=script.dictionary['main'];
+		if(!m) return null;
+		var a=Actor(script);
+		var t=Task(a, m, args, null);
+		if(script.loading>0) script.tasks.push(t);
+		else TaskQ.push(t);
+		}
 		*/
 		
 		function currentActor( ){
@@ -1179,8 +1179,8 @@
 				}
 			}
 			/*
-			  var date=new Date( );
-			  request.open('GET', path+'?'+date.getTime( ), true);
+			var date=new Date( );
+			request.open('GET', path+'?'+date.getTime( ), true);
 			*/
 			request.open('GET', path+'?', true);
 			request.send( );
@@ -1222,14 +1222,14 @@
 		**/
 		
 		/*
-		  Str path
-		  ContStack stack
+		Str path
+		ContStack stack
 		*/
 		function httpGetHatExp(path, stack){
 			httpGet(path.string, function(text){
 				var source=new Source(path.string, 1);
 				var task=new Task(currentActor( ), null,
-								  [new Str(text, source)], null, stack);
+								[new Str(text, source)], null, stack);
 				task.fun=task.popCont( );
 				TaskQ.push(task);
 			});
@@ -1240,10 +1240,9 @@
 		function makeSequence(array, start){
 			// log("makeSequence:"+array);
 			return new HatFun([tmpVar], null,
-							  new List([tmpVar], 0,
-									   new List(array, start, emptySeq, null,
-												currentSource),
-									   null, currentSource), currentSource);
+							new List([tmpVar], 0,
+									new List(array, start, emptySeq, null,currentSource),
+									null, currentSource), currentSource);
 		}
 		function isProperty(key){
 			let actor=currentActor( );
@@ -1280,15 +1279,15 @@
 		let pending=[ ]; // スクリプト読込待ちのタスク集合
 		let emptySeq=new HatVar("seq_empty", new Source(__FILE__, __LINE__));
 		let emptyList=new List(emptyArray, 0, null, null,
-							   new Source(__FILE__, __LINE__));
+							new Source(__FILE__, __LINE__));
 		let currentSource;
 		let animationID;
 		let lastTime;
 		let zero=new HatNumber(0, new Source(__FILE__, __LINE__));
 		/*
-		  Hat言語のスクリプトpathで定義された関数mainに引数argsを与えて実行する。
-		  path: スクリプトのパス
-		  command: コマンド
+		Hat言語のスクリプトpathで定義された関数mainに引数argsを与えて実行する。
+		path: スクリプトのパス
+		command: コマンド
 		*/
 		return{
 			True: new HatVar("true", new Source(__FILE__, __LINE__)),
@@ -1311,7 +1310,7 @@
 				setTimeout(performTasks, 0);
 			},
 			/* ソースコードcodeを読み込み、コマンドcommandを実行する。
-			   ソースファイル名pathはエラーメッセージなどで使われる。*/
+			ソースファイル名pathはエラーメッセージなどで使われる。*/
 			startCode: function(path, code, command){
 				// testList( );
 				if(animationID) window.cancelAnimationFrame(animationID);
@@ -1320,7 +1319,7 @@
 				/*
 				var caller=__STACK__[1];
 				var source=new Source(caller.getFileName( ),
-									  caller.getLineNumber( ));
+									caller.getLineNumber( ));
 				let fun=SExp2HatExp(a[0], "Command");
 				for(let i=1, n=a.length; i<n; ++i)
 					args.push(new Str(a[i], source));
