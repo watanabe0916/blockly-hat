@@ -2,8 +2,7 @@
 
 //オセロ盤面左上(x,y) = (0,0)
 //data[y][x]に注意
-const BLACK = 1,
- WHITE = -1;
+const BLACK = 1, WHITE = -1;
 let data = [];
 let hatData = [];
 let turn = true; //true = 黒, false = 白
