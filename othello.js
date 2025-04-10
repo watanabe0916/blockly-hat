@@ -588,10 +588,11 @@ function turnSelect(){
   
 }
 
-//現在の手番の情報を返す
+/*現在の手番の情報を返す
 function returnTurn(){
+  console.log("turn is "+turn)
   return turn;
-}
+}*/
 
 //ゲームの終了条件を満たすか判定
 function finishGame(){
@@ -599,9 +600,10 @@ function finishGame(){
   let turnPossibility = turnPut();
   let opponentPossibility = opponentPut();
   if(cnt[0] + cnt[1] === cells * cells || !turnPossibility && !opponentPossibility){
-    
+    console.log("game over")
     return true; //ゲームの終了条件を満たした
   } else {
+    console.log("game ongoing")
     return false; //ゲームの終了条件を満たしていない
   }
 }
@@ -611,10 +613,10 @@ function turnPut(){
   let turnPossibility;
   if (turn) {
     turnPossibility = checkReverse(BLACK);
-    console.log(turnPossibility);
+    console.log("turnPossibility is "+turnPossibility);
   } else {
     turnPossibility = checkReverse(WHITE);
-    console.log(turnPossibility);
+    console.log("turnPossibility is "+turnPossibility);
   }
   return turnPossibility;
 }
@@ -624,10 +626,10 @@ function opponentPut(){
   let opponentPossibility;
   if (turn) {
     opponentPossibility = checkReverse(WHITE);
-    console.log(opponentPossibility);
+    console.log("opponentPossibility is "+opponentPossibility);
   } else {
     opponentPossibility = checkReverse(BLACK);
-    console.log(opponentPossibility);
+    console.log("opponentPossibility is "+opponentPossibility);
   }
   return opponentPossibility;
 }
@@ -744,8 +746,15 @@ function waitClick(ret){
 
 //人間のプレイヤーが手番を選択したかどうかをチェック
 function isUserTurn(){
-  if(userSente == true) return turn;
-  if(userSente == false) return !turn;
+  if(userSente == true){
+    console.log("userSente is "+userSente);
+    return turn;
+  }
+  if(userSente == false){
+    console.log("userSente is "+userSente);
+    return !turn;
+  }
+  console.warn("userSente is neither true nor false");
   return false;
 }
 
@@ -790,8 +799,13 @@ function PrintTest(testcnt){
 
 //現在手番がユーザの手番であるか確認
 function userTurncheck(){
-  if(userSente == turn) return true;
-  return false;
+  if(userSente == turn){
+    console.log("user's turn");
+    return true;
+  }else{
+    console.log("not user's turn");
+    return false;
+  }
 }
 
 //関数firstcheckの作りかけ
@@ -893,16 +907,16 @@ function boardscore(data){
 //mini-maxを用いたCPU(改良版)
 function minimaxturnCPU(){
   let candidates = moves(data);
-  let bestMove = undefined;
+  let bestMove = null;
 
   try {
     bestMove = newminimax(data); 
   } catch (e) {
-    console.error("Error in newminimax: ", e);
+    console.error("error in newminimax: ", e);
   }
   //firstCheck(candidates[i],turn);
   //printBoard(candidates[Math.floor(Math.random()*candidates.length)]);
-  if (bestMove !== undefined){
+  if (bestMove !== null){
     printBoard(bestMove);
     console.log("nmm printBoard done");
   }
