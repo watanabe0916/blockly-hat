@@ -894,10 +894,17 @@ function boardscore(data){
 //mini-maxを用いたCPU(改良版)
 function minimaxturnCPU(){
   let candidates = moves(data);
+  let bestMove = undefined;
+
+  try {
+    bestMove = newminimax(data); 
+  } catch (e) {
+    console.error("Error in newminimax: ", e);
+  }
   //firstCheck(candidates[i],turn);
   //printBoard(candidates[Math.floor(Math.random()*candidates.length)]);
-  if (newminimax ==true){
-    printBoard(newminimax(data));
+  if (bestMove !== undefined){
+    printBoard(bestMove);
     console.log("nmm printBoard done");
   }
   else{
