@@ -154,7 +154,7 @@ Blockly.Hat.def_func = function (block) {
     let def_array = '';
     let redefine = ' ';
 
-    let return_code = ""    
+    let return_code = "";   
     if (block.getFieldValue('return') != ""){
         return_code += ". ";
         return_code += block.getFieldValue('return');

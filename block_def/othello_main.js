@@ -762,7 +762,7 @@ Blockly.defineBlocksWithJsonArray(
 );
 Blockly.Hat['minimaxturnCPU'] = function(block) {
   // TODO: Assemble Hat into code variable.
-  var code = "minimaxturnCPU ^(dummy)\n"
+  var code = "minimaxturnCPU \n";
   /*var code = 'JavaScript';
   code += ' '+'"minimaxturnCPU"';
   code += ' '+'^(dummy)\n';*/

@@ -145,7 +145,7 @@ Blockly.Blocks.return = {
 };
 Blockly.Hat.return = function (block) {
     const return_elem = block.getFieldValue('return');
-    return "return " + return_elem;
+    return "return" + return_elem;
 };
 
 
