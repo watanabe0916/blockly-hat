@@ -14,7 +14,7 @@ Blockly.Blocks.call_def_func = {
                 },
                 {
                     type: "field_input",
-                    name: "return",
+                    name: "yield",
                     text: ""
                 }
             ],
@@ -33,9 +33,9 @@ Blockly.Hat.call_def_func = function (block) {
     const order_return = Blockly.Hat.statementToCode(block, 'return', Blockly.Hat.ORDER_FUNCTION_CALL);
     let return_code = order_return;
     if (order_return != ""){
-        return_code = "^(";
+        return_code = " ^ ";
         return_code += order_return;
-        return_code += ")";
+        //return_code += ")";
     }
     return call + return_code + "\n";
 };
@@ -91,8 +91,8 @@ Blockly.Hat.call_func_andarg = function (block) {
     case 1: // call
         return OPERATOR + temporary_num;
     case 2: // define 
-        return OPERATOR + " ^(" + temporary_num +" )\n"
-        //return OPERATOR + temporary_num;
+        //return OPERATOR + " ^(" + temporary_num +" )\n"
+        return OPERATOR + temporary_num;
     }
     /*
     OPERATOR += temporary_num
