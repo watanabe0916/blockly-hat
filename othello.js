@@ -37,11 +37,17 @@ let userSente; // undefined, true, or false
 
 
 function boardnum(num){
-  cells = num;
-  board.innerHTML = "";
-  turn = true;
-  Init();
-  //turnSelect();
+  HatInterpreter.stop();
+  setTimeout(() => {
+    cells = num;
+    board.innerHTML = "";
+    turn = true;
+    data = [];
+    hatData = [];
+    Init();
+    turnSelect();
+    runCode();
+  }, 1000);
 }
 
 // //テスト用ボタン
