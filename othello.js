@@ -36,7 +36,7 @@ let userSente; // undefined, true, or false
 }*/
 
 
-function boardnum(num){
+/*function boardnum(num){
   HatInterpreter.stop();
   setTimeout(() => {
     userSente = null; 
@@ -54,17 +54,15 @@ function boardnum(num){
     Init();
     runCode();
   }, 300);
-}
+}*/
 
-/*function boardnum(num){
-  //data = [];
-  //hatData = [];
+function boardnum(num){
   board.innerHTML = "";
   cells = num;
   turn = true;
-  //turnSelect();
+  turnSelect();
   Init();
-}*/
+}
 
 // //テスト用ボタン
 // test.addEventListener('click',function(){
