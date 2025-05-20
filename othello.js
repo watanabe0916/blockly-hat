@@ -39,16 +39,32 @@ let userSente; // undefined, true, or false
 function boardnum(num){
   HatInterpreter.stop();
   setTimeout(() => {
+    userSente = null; 
+    waitingTurnSelectActor = null;
+    waitingTurnSelectReturn = null;
+    waitingActor = null; 
+    waitingReturn = null; 
     cells = num;
     board.innerHTML = "";
     turn = true;
     data = [];
     hatData = [];
-    Init();
+
     turnSelect();
+    Init();
     runCode();
-  }, 1000);
+  }, 300);
 }
+
+/*function boardnum(num){
+  //data = [];
+  //hatData = [];
+  board.innerHTML = "";
+  cells = num;
+  turn = true;
+  //turnSelect();
+  Init();
+}*/
 
 // //テスト用ボタン
 // test.addEventListener('click',function(){
@@ -569,7 +585,7 @@ function returnPosition(){
   return data;
 }
 
-function turnSelect(){
+/*function turnSelect(){
   // let player = true;
   sente.classList.remove("hide");
   gote.classList.remove("hide");
@@ -581,7 +597,7 @@ function turnSelect(){
     
     // returnTurnSelect(HatInterpreter.True);
     returnTurnSelect(true);
-  });
+  }, { once: true });
   gote.addEventListener('click',function(){
     console.log("gote");
     sente.classList.add("hide");
@@ -590,9 +606,36 @@ function turnSelect(){
     
     // returnTurnSelect(HatInterpreter.False);
     returnTurnSelect(false);
-  });
+  }, { once: true });
   
+}*/
+function handleSenteClick() {
+  console.log("sente");
+  sente.classList.add("hide");
+  gote.classList.add("hide");
+  returnTurnSelect(true);
+
+  sente.removeEventListener('click', handleSenteClick);
+  gote.removeEventListener('click', handleGoteClick);
 }
+
+function handleGoteClick() {
+  console.log("gote");
+  sente.classList.add("hide");
+  gote.classList.add("hide");
+  returnTurnSelect(false);
+
+  sente.removeEventListener('click', handleSenteClick);
+  gote.removeEventListener('click', handleGoteClick);
+}
+
+function turnSelect() {
+  sente.classList.remove("hide");
+  gote.classList.remove("hide");
+  sente.addEventListener('click', handleSenteClick);
+  gote.addEventListener('click', handleGoteClick);
+}
+
 
 /*現在の手番の情報を返す
 function returnTurn(){
@@ -619,10 +662,10 @@ function turnPut(){
   let turnPossibility;
   if (turn) {
     turnPossibility = checkReverse(BLACK);
-    console.log("turnPossibility is "+turnPossibility);
+    //console.log("turnPossibility is "+turnPossibility);
   } else {
     turnPossibility = checkReverse(WHITE);
-    console.log("turnPossibility is "+turnPossibility);
+    //console.log("turnPossibility is "+turnPossibility);
   }
   return turnPossibility;
 }
@@ -632,10 +675,10 @@ function opponentPut(){
   let opponentPossibility;
   if (turn) {
     opponentPossibility = checkReverse(WHITE);
-    console.log("opponentPossibility is "+opponentPossibility);
+    //console.log("opponentPossibility is "+opponentPossibility);
   } else {
     opponentPossibility = checkReverse(BLACK);
-    console.log("opponentPossibility is "+opponentPossibility);
+    //console.log("opponentPossibility is "+opponentPossibility);
   }
   return opponentPossibility;
 }
@@ -805,6 +848,7 @@ function PrintTest(testcnt){
 
 //現在手番がユーザの手番であるか確認
 function userTurncheck(){
+  console.log("turn="+turn)
   if(userSente == turn){
     console.log("user's turn");
     return true;
