@@ -62,6 +62,7 @@ function boardnum(num){
   turn = true;
   turnSelect();
   Init();
+  showTurn();
 }
 
 // //テスト用ボタン
