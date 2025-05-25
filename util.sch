@@ -366,6 +366,11 @@ $listの先頭に$elを追加したリストを返す。
   JavaScript "minimaxturnCPU" ^(dummy)
   return)
 
+(defineCPS alphabetaturnCPU ^ return
+  JavaScript "alphabetaturnCPU" ^(dummy)
+  return)
+
+
 
 
 

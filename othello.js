@@ -1058,8 +1058,30 @@ function newminimax(data){
   // return lastscore
 }
 
-function alphabetaturnCPU(data){
+function alphabetaturnCPU(){
+  let candidates = moves(data);
+  let bestMove = null;
 
+  try {
+    bestMove = alphabeta(data); 
+  } catch (e) {
+    console.error("error in α-β: ", e);
+  }
+  if (bestMove !== null){
+    printBoard(bestMove);
+    console.log("α-β printBoard done");
+  }
+  else{
+    printBoard(candidates[Math.floor(Math.random()*candidates.length)]);
+    console.log("random printBoard done");
+  }
+  turnChange();
+
+  return;
+}
+
+function alphabeta(data){
+  return null;
 }
 
 
