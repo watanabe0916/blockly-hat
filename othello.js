@@ -1058,5 +1058,8 @@ function newminimax(data){
   // return lastscore
 }
 
+function alphabetaturnCPU(data){
+
+}
 
 

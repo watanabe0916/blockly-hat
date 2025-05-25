@@ -768,3 +768,21 @@ Blockly.Hat['minimaxturnCPU'] = function(block) {
   code += ' '+'^(dummy)\n';*/
   return code;
 };
+
+Blockly.defineBlocksWithJsonArray(
+
+  [{
+    "type": "alphabetaturnCPU",
+    "message0": "CPUの操作(α-β法)",
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 230,
+    "tooltip": "",
+    "helpUrl": ""
+  }]
+);
+Blockly.Hat['alphabetaturnCPU'] = function(block) {
+  // TODO: Assemble Hat into code variable.
+  var code = "alphabetaturnCPU \n";
+  return code;
+};
