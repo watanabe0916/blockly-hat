@@ -1011,9 +1011,9 @@ function min2(list){
 
 
 //mini-max最善の手を返す
-function newminimax(data){
+/*function newminimax(data){
   const oriTurn = turn;
-  const myTurn = !oriTurn;
+  const myTurn = oriTurn;
   let next = moves(data)
   let second =[];
   let third=[];
@@ -1022,6 +1022,7 @@ function newminimax(data){
   let rethird=[];
   let xy1=[];
   let xy2=[];
+  console.log("moves:"+moves(data));
 
   for (let i =0 ; i<next.length; i++){
     turn = !myTurn
@@ -1046,6 +1047,44 @@ function newminimax(data){
   }
   turn = oriTurn;
   return moves(data)[max2(xy2)[1]]
+}*/
+
+function newminimax(data) {
+  const oriTurn = turn;
+  const myTurn = oriTurn;
+
+  let nextMoves = moves(data);  // 一手目（CPUの手）
+  let xy2 = []; 
+
+  for (let i = 0; i < nextMoves.length; i++) {
+    turn = !myTurn;
+    let secondMoves = moves(nextMoves[i]); // 二手目（ユーザの手）
+    let scores = [];
+
+    for (let j = 0; j < secondMoves.length; j++) {
+      turn = myTurn;
+      let thirdMoves = moves(secondMoves[j]); // 三手目（CPUの手）
+
+      if (thirdMoves.length === 0) {
+
+        scores.push(boardscore(secondMoves[j]));
+      } else {
+        let thirdScores = thirdMoves.map(m => boardscore(m));
+        scores.push(Math.max(...thirdScores));
+      }
+    }
+
+    if (scores.length > 0) {
+      let worst = Math.min(...scores);
+      xy2.push([worst, i]);
+    }
+  }
+
+  turn = oriTurn;
+
+  if (xy2.length === 0) return null;
+
+  return nextMoves[max2(xy2)[1]];
 }
 
 function alphabetaturnCPU(){
@@ -1073,43 +1112,3 @@ function alphabetaturnCPU(){
 function alphabeta(data){
   return null;
 }
-
-/*function newminimax(data) {
-  const oriTurn = turn;
-  const myTurn = !oriTurn;
-
-  let nextMoves = moves(data);  // 一手目の候補（CPUの手）
-  let xy2 = []; // [評価値, 一手目のインデックス]
-
-  for (let i = 0; i < nextMoves.length; i++) {
-    let secondMoves = moves(nextMoves[i]); // 二手目の候補（ユーザの手）
-    let scores = [];
-
-    for (let j = 0; j < secondMoves.length; j++) {
-      let thirdMoves = moves(secondMoves[j]); // 三手目（CPUの手）
-
-      if (thirdMoves.length === 0) {
-        // 三手目が無ければスコア評価（depth 2 で止まる）
-        scores.push(boardscore(secondMoves[j]));
-      } else {
-        let thirdScores = thirdMoves.map(m => boardscore(m));
-        scores.push(Math.max(...thirdScores));
-      }
-    }
-
-    // 二手目の中で最も悪い手（相手にとって最良）を選ぶ → 自分にとって最悪
-    if (scores.length > 0) {
-      let worst = Math.min(...scores);
-      xy2.push([worst, i]);
-    }
-  }
-
-  turn = oriTurn;
-
-  if (xy2.length === 0) return null;
-
-  // 評価値が最大の手（相手が最善を尽くした中で一番マシな手）を選ぶ
-  return nextMoves[max2(xy2)[1]];
-}*/
-
-
