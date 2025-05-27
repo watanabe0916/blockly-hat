@@ -936,15 +936,19 @@ function boardscore(data){
   //置いた後の盤面の情報
   let score = [];
   //let score2=[];
+  const evalTable = cells === 4 ? evaluate4 :
+                    cells === 6 ? evaluate6 :
+                    cells === 8 ? evaluate8 : 
+                    null;
   for (let x = 0; x < cells; x++) {
     for (let y = 0; y < cells; y++) {
       const result = checkPut(x, y, COLOR,data);
       //console.log(result);
         if (result.length > 0) {
         //score2.push(result);
-        score.push(evaluate8[x][y]);
+        score.push(evalTable[x][y]);
         //console.log(x,y);
-        //console.log(evaluate8[x][y]);
+        //console.log(evalTable[x][y]);
         }
       };
     }
