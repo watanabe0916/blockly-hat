@@ -1012,6 +1012,8 @@ function min2(list){
 
 //mini-max最善の手を返す
 function newminimax(data){
+  const oriTurn = turn;
+  const myTurn = !oriTurn;
   let next = moves(data)
   let second =[];
   let third=[];
@@ -1020,44 +1022,30 @@ function newminimax(data){
   let rethird=[];
   let xy1=[];
   let xy2=[];
-  //let t=[];
-  //let lastscore=[];
-  turn=!turn;
+
   for (let i =0 ; i<next.length; i++){
-      second.push(moves(next[i]));
-      turn=turn;
-      for (let j=0 ; j<second[i].length; j++){
-          third.push(moves(second[i][j]));
-          thirdscore.push(boardscore(second[i][j]));
-          rethird.push(max(boardscore(second[i][j])));
-          xy1.push([max(boardscore(second[i][j])),i]);
-          //console.log(xy1);
-          thirdscore=[];
-          if (rethird.length === second[i].length){
-            resecond.push(min(rethird));
-            //console.log(xy1);
-            xy2.push(min2(xy1));
-            //console.log(resecond);
-            //console.log(xy2);
-            xy1=[];
-            rethird=[];
-          }    
-           //console.log(i);
-        }
+    turn = !myTurn
+    second.push(moves(next[i]));
+
+    for (let j=0 ; j<second[i].length; j++){
+      turn = myTurn;
+      third.push(moves(second[i][j]));
+      thirdscore.push(boardscore(second[i][j]));
+      rethird.push(max(boardscore(second[i][j])));
+      xy1.push([max(boardscore(second[i][j])),i]);
+      thirdscore=[];
+
+      if (rethird.length === second[i].length){
+        resecond.push(min(rethird));
+        xy2.push(min2(xy1));
+        xy1=[];
+        rethird=[];
+
+      }
+    }
   }
-  //console.log(max2(xy2));
-  turn=!turn;
-  //console.log(moves(data)[max2(xy2)[1]]);
-  //movesの第何要素かを返している
+  turn = oriTurn;
   return moves(data)[max2(xy2)[1]]
-  // for (let x = 0; x < cells; x++) {
-  //   for (let y = 0; y < cells; y++) {
-  //     if (evaluate8[x][y]===max(resecond)){
-  //       lastscore=([[x,y],max(resecond)]);
-  //     }
-  //   }
-  // }
-  // return lastscore
 }
 
 function alphabetaturnCPU(){
@@ -1085,5 +1073,43 @@ function alphabetaturnCPU(){
 function alphabeta(data){
   return null;
 }
+
+/*function newminimax(data) {
+  const oriTurn = turn;
+  const myTurn = !oriTurn;
+
+  let nextMoves = moves(data);  // 一手目の候補（CPUの手）
+  let xy2 = []; // [評価値, 一手目のインデックス]
+
+  for (let i = 0; i < nextMoves.length; i++) {
+    let secondMoves = moves(nextMoves[i]); // 二手目の候補（ユーザの手）
+    let scores = [];
+
+    for (let j = 0; j < secondMoves.length; j++) {
+      let thirdMoves = moves(secondMoves[j]); // 三手目（CPUの手）
+
+      if (thirdMoves.length === 0) {
+        // 三手目が無ければスコア評価（depth 2 で止まる）
+        scores.push(boardscore(secondMoves[j]));
+      } else {
+        let thirdScores = thirdMoves.map(m => boardscore(m));
+        scores.push(Math.max(...thirdScores));
+      }
+    }
+
+    // 二手目の中で最も悪い手（相手にとって最良）を選ぶ → 自分にとって最悪
+    if (scores.length > 0) {
+      let worst = Math.min(...scores);
+      xy2.push([worst, i]);
+    }
+  }
+
+  turn = oriTurn;
+
+  if (xy2.length === 0) return null;
+
+  // 評価値が最大の手（相手が最善を尽くした中で一番マシな手）を選ぶ
+  return nextMoves[max2(xy2)[1]];
+}*/
 
 
