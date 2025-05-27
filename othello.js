@@ -927,28 +927,26 @@ function afterdata(x, y, color) {
 
 //スコアを返す
 function boardscore(data){
-  const COLOR = turn ? BLACK : WHITE;
-  //次に置く候補
+  const COLOR = !userSente ? BLACK : WHITE;
+  const opponentCOLOR = userSente ? BLACK : WHITE;
   if(data.length != cells){
     window.alert("配列のサイズを確認してください");
     return;
   }
   //置いた後の盤面の情報
-  let score = [];
-  //let score2=[];
+  let score = 0;
+
   const evalTable = cells === 4 ? evaluate4 :
                     cells === 6 ? evaluate6 :
                     cells === 8 ? evaluate8 : 
                     null;
-  for (let x = 0; x < cells; x++) {
-    for (let y = 0; y < cells; y++) {
-      const result = checkPut(x, y, COLOR,data);
-      //console.log(result);
-        if (result.length > 0) {
-        //score2.push(result);
-        score.push(evalTable[x][y]);
-        //console.log(x,y);
-        //console.log(evalTable[x][y]);
+
+  for (let y = 0; y < cells; y++) {
+    for (let x = 0; x < cells; x++) {
+      if (data[y][x] === COLOR) {
+        score += evalTable[y][x];
+      } else if (data[y][x] === opponentCOLOR) {
+        score -= evalTable[y][x];
         }
       };
     }
@@ -1049,7 +1047,7 @@ function newminimax(data){
   }
   //console.log(max2(xy2));
   turn=!turn;
-  // console.log(moves(data)[max2(xy2)[1]]);
+  //console.log(moves(data)[max2(xy2)[1]]);
   //movesの第何要素かを返している
   return moves(data)[max2(xy2)[1]]
   // for (let x = 0; x < cells; x++) {
