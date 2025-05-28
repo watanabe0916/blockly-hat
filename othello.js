@@ -961,7 +961,7 @@ function minimaxturnCPU(){
   let bestMove = null;
 
   try {
-    bestMove = newminimax(data); 
+    bestMove = newminimax5(data); 
   } catch (e) {
     console.error("error in newminimax: ", e);
   }
@@ -1111,4 +1111,76 @@ function alphabetaturnCPU(){
 
 function alphabeta(data){
   return null;
+}
+
+function newminimax5(data) {
+  const oriTurn = turn;
+  const myTurn = oriTurn;
+
+  let nextMoves = moves(data); // 一手目（CPU）
+  let xy2 = []; 
+
+  for (let i = 0; i < nextMoves.length; i++) {
+    turn = !myTurn;
+    let secondMoves = moves(nextMoves[i]); // 二手目（User）
+    let resecond = [];
+
+    if (secondMoves.length === 0) {
+      resecond.push([boardscore(nextMoves[i]), 0]);
+
+    } else {
+      for (let j = 0; j < secondMoves.length; j++) {
+        turn = myTurn;
+        let thirdMoves = moves(secondMoves[j]); // 三手目（CPU）
+        let rethird = [];
+
+        if (thirdMoves.length === 0) {
+          rethird.push([boardscore(secondMoves[j]), 0]);
+
+        } else {
+          for (let k = 0; k < thirdMoves.length; k++) {
+            turn = !myTurn;
+            let fourthMoves = moves(thirdMoves[k]); // 四手目（User）
+            let refourth = [];
+
+            if (fourthMoves.length === 0) {
+              refourth.push([boardscore(thirdMoves[k]), 0]);
+
+            } else {
+              for (let l = 0; l < fourthMoves.length; l++) {
+                turn = myTurn;
+                let fifthMoves = moves(fourthMoves[l]); // 五手目（CPU）
+
+                if (fifthMoves.length === 0) {
+                  refourth.push([boardscore(fourthMoves[l]), l]);
+
+                } else {
+                  let fifthScores = fifthMoves.map(m => boardscore(m));
+                  refourth.push([Math.max(...fifthScores), l]); // CPUにとって最善
+                }
+              }
+            }
+
+            if (refourth.length > 0) {
+              rethird.push(min2(refourth)); // Userにとって最悪
+            }
+          }
+        }
+
+        if (rethird.length > 0) {
+          resecond.push(max2(rethird)); // CPUにとって最善
+        }
+      }
+    }
+
+    if (resecond.length > 0) {
+      xy2.push(min2(resecond).concat(i)); // Userにとって最悪 + 一手目index
+    }
+  }
+
+  turn = oriTurn;
+
+  if (xy2.length === 0) return null;
+
+  return nextMoves[max2(xy2)[2]]; // 一手目の index
 }
