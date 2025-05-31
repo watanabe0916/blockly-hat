@@ -961,7 +961,7 @@ function minimaxturnCPU(){
   let bestMove = null;
 
   try {
-    bestMove = newminimax5(data); 
+    bestMove = newminimax(data); 
   } catch (e) {
     console.error("error in newminimax: ", e);
   }
@@ -980,6 +980,29 @@ function minimaxturnCPU(){
 
   return;
 }
+
+function minimaxNturnCPU(depth) {
+  let candidates = moves(data);
+  let bestMove = null;
+
+  try {
+    bestMove = newminimaxN(data, depth); 
+  } catch (e) {
+    console.error("error in newminimaxN: ", e);
+  }
+
+  if (bestMove !== null) {
+    printBoard(bestMove);
+    console.log("minimax printBoard done (depth=" + depth + ")");
+  } else {
+    printBoard(candidates[Math.floor(Math.random() * candidates.length)]);
+    console.log("random printBoard done");
+  }
+
+  turnChange();
+  return;
+}
+
 
 
 
@@ -1049,7 +1072,7 @@ function min2(list){
   return moves(data)[max2(xy2)[1]]
 }*/
 
-function newminimax(data) {
+/*function newminimax(data) {
   const oriTurn = turn;
   const myTurn = oriTurn;
 
@@ -1085,7 +1108,7 @@ function newminimax(data) {
   if (xy2.length === 0) return null;
 
   return nextMoves[max2(xy2)[1]];
-}
+}*/
 
 function alphabetaturnCPU(){
   let candidates = moves(data);
@@ -1113,7 +1136,7 @@ function alphabeta(data){
   return null;
 }
 
-function newminimax5(data) {
+function newminimax(data) {
   const oriTurn = turn;
   const myTurn = oriTurn;
 
@@ -1183,4 +1206,38 @@ function newminimax5(data) {
   if (xy2.length === 0) return null;
 
   return nextMoves[max2(xy2)[2]]; // 一手目の index
+}
+
+function newminimaxN(data, depth) {
+  const oriTurn = turn;
+
+  function minimax(board, d, isMyTurn) {
+    const legalMoves = moves(board);
+    if (d === 0 || legalMoves.length === 0) {
+      return [boardscore(board), null];
+    }
+
+    let scoredMoves = [];
+    for (let i = 0; i < legalMoves.length; i++) {
+      turn = !isMyTurn;
+      const [score, _] = minimax(legalMoves[i], d - 1, !isMyTurn);
+      scoredMoves.push([score, i]);
+    }
+
+    return isMyTurn ? max2(scoredMoves) : min2(scoredMoves);
+  }
+
+  const myTurn = oriTurn;
+  const nextMoves = moves(data);
+  if (nextMoves.length === 0) return null;
+
+  let scoredFirstMoves = [];
+  for (let i = 0; i < nextMoves.length; i++) {
+    turn = !myTurn;
+    const [score, _] = minimax(nextMoves[i], depth - 1, !myTurn);
+    scoredFirstMoves.push([score, i]);
+  }
+
+  turn = oriTurn;
+  return nextMoves[max2(scoredFirstMoves)[1]];
 }
