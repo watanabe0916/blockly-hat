@@ -1209,35 +1209,41 @@ function newminimax(data) {
 }
 
 function newminimaxN(data, depth) {
-  const oriTurn = turn;
+  const oriTurn = turn; // グローバルな手番は保持しておく
+  const myTurn = oriTurn;
+  const nextMoves = moves(data);
+  if (nextMoves.length === 0) return null;
 
-  function minimax(board, d, isMyTurn) {
+  function minimax(board, d, currentTurn) {
     const legalMoves = moves(board);
     if (d === 0 || legalMoves.length === 0) {
       return [boardscore(board), null];
     }
 
     let scoredMoves = [];
+
     for (let i = 0; i < legalMoves.length; i++) {
-      turn = !isMyTurn;
-      const [score, _] = minimax(legalMoves[i], d - 1, !isMyTurn);
+      const nextBoard = legalMoves[i];
+      const nextTurn = !currentTurn;
+      const [score, _] = minimax(nextBoard, d - 1, nextTurn);
       scoredMoves.push([score, i]);
     }
 
-    return isMyTurn ? max2(scoredMoves) : min2(scoredMoves);
+    return currentTurn === myTurn ? max2(scoredMoves) : min2(scoredMoves);
   }
 
-  const myTurn = oriTurn;
-  const nextMoves = moves(data);
-  if (nextMoves.length === 0) return null;
-
+  // 一手目の評価
   let scoredFirstMoves = [];
   for (let i = 0; i < nextMoves.length; i++) {
-    turn = !myTurn;
-    const [score, _] = minimax(nextMoves[i], depth - 1, !myTurn);
+    const nextBoard = nextMoves[i];
+    const [score, _] = minimax(nextBoard, depth - 1, !myTurn);
     scoredFirstMoves.push([score, i]);
   }
 
+  // グローバルな turn を戻す
   turn = oriTurn;
+
+  // 最善の一手を返す
   return nextMoves[max2(scoredFirstMoves)[1]];
 }
+

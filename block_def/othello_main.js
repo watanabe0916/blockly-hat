@@ -479,7 +479,7 @@ Blockly.defineBlocksWithJsonArray(
 );
 Blockly.Hat['turnCPU'] = function(block) {
   // TODO: Assemble Hat into code variable.
-  var code = "turnCPU ^(dummy)\n"
+  var code = "turnCPU \n"
   return code;
 };
 
