@@ -383,7 +383,23 @@ function moves(data){
   //console.log(can_put,COLOR);
 };
 
-
+function moves2(data, currentTurn) {
+  const COLOR = currentTurn ? BLACK : WHITE;
+  let after_board = [];
+  for (let x = 0; x < cells; x++) {
+    for (let y = 0; y < cells; y++) {
+      const result = checkPut(x, y, COLOR, data);
+      if (result.length > 0) {
+        let copyBoard = JSON.parse(JSON.stringify(data));
+        for (let i = 0; i < result.length; i++) {
+          copyBoard[result[i][1]][result[i][0]] = COLOR;
+        }
+        after_board.push(copyBoard);
+      }
+    }
+  }
+  return after_board;
+}
 
 //refrectBoard用初期化
 function refInit() {
@@ -1137,15 +1153,13 @@ function alphabeta(data){
 }
 
 function newminimax(data) {
-  const oriTurn = turn;
-  const myTurn = oriTurn;
+  const myTurn = turn;
 
-  let nextMoves = moves(data); // 一手目（CPU）
+  let nextMoves = moves2(data, myTurn); // 一手目（CPU）
   let xy2 = []; 
 
   for (let i = 0; i < nextMoves.length; i++) {
-    turn = !myTurn;
-    let secondMoves = moves(nextMoves[i]); // 二手目（User）
+    let secondMoves = moves2(nextMoves[i], !myTurn); // 二手目（User）
     let resecond = [];
 
     if (secondMoves.length === 0) {
@@ -1153,8 +1167,7 @@ function newminimax(data) {
 
     } else {
       for (let j = 0; j < secondMoves.length; j++) {
-        turn = myTurn;
-        let thirdMoves = moves(secondMoves[j]); // 三手目（CPU）
+        let thirdMoves = moves2(secondMoves[j], myTurn); // 三手目（CPU）
         let rethird = [];
 
         if (thirdMoves.length === 0) {
@@ -1162,8 +1175,7 @@ function newminimax(data) {
 
         } else {
           for (let k = 0; k < thirdMoves.length; k++) {
-            turn = !myTurn;
-            let fourthMoves = moves(thirdMoves[k]); // 四手目（User）
+            let fourthMoves = moves2(thirdMoves[k], !myTurn); // 四手目（User）
             let refourth = [];
 
             if (fourthMoves.length === 0) {
@@ -1171,15 +1183,20 @@ function newminimax(data) {
 
             } else {
               for (let l = 0; l < fourthMoves.length; l++) {
-                turn = myTurn;
-                let fifthMoves = moves(fourthMoves[l]); // 五手目（CPU）
+                let fifthMoves = moves2(fourthMoves[l], myTurn); // 五手目（CPU）
+                let refifth = [];
 
                 if (fifthMoves.length === 0) {
-                  refourth.push([boardscore(fourthMoves[l]), l]);
+                  refifth.push([boardscore(fourthMoves[l]), 0]);
 
                 } else {
-                  let fifthScores = fifthMoves.map(m => boardscore(m));
-                  refourth.push([Math.max(...fifthScores), l]); // CPUにとって最善
+                  for (let m = 0; m < fifthMoves.length; m++) {
+                    refifth.push([boardscore(fifthMoves[m]), m]);
+                  }
+                }
+
+                if (refifth.length > 0) {
+                  refourth.push(max2(refifth)); // CPUにとって最善
                 }
               }
             }
@@ -1201,49 +1218,32 @@ function newminimax(data) {
     }
   }
 
-  turn = oriTurn;
-
   if (xy2.length === 0) return null;
 
   return nextMoves[max2(xy2)[2]]; // 一手目の index
 }
 
-function newminimaxN(data, depth) {
-  const oriTurn = turn; // グローバルな手番は保持しておく
-  const myTurn = oriTurn;
-  const nextMoves = moves(data);
-  if (nextMoves.length === 0) return null;
 
+function newminimaxN(data, depth) {
+  const myTurn = turn;
   function minimax(board, d, currentTurn) {
-    const legalMoves = moves(board);
-    if (d === 0 || legalMoves.length === 0) {
+    if (d === 0) return [boardscore(board), null];
+    const legalMoves = moves2(board, currentTurn);
+    if (legalMoves.length === 0) {
       return [boardscore(board), null];
     }
-
-    let scoredMoves = [];
-
-    for (let i = 0; i < legalMoves.length; i++) {
-      const nextBoard = legalMoves[i];
-      const nextTurn = !currentTurn;
-      const [score, _] = minimax(nextBoard, d - 1, nextTurn);
-      scoredMoves.push([score, i]);
-    }
-
+    let scoredMoves = legalMoves.map((nextBoard, i) => {
+      const [score] = minimax(nextBoard, d - 1, !currentTurn);
+      return [score, i];
+    });
     return currentTurn === myTurn ? max2(scoredMoves) : min2(scoredMoves);
   }
-
-  // 一手目の評価
-  let scoredFirstMoves = [];
-  for (let i = 0; i < nextMoves.length; i++) {
-    const nextBoard = nextMoves[i];
-    const [score, _] = minimax(nextBoard, depth - 1, !myTurn);
-    scoredFirstMoves.push([score, i]);
-  }
-
-  // グローバルな turn を戻す
-  turn = oriTurn;
-
-  // 最善の一手を返す
+  const nextMoves = moves2(data, myTurn);
+  if (nextMoves.length === 0) return null;
+  let scoredFirstMoves = nextMoves.map((nextBoard, i) => {
+    const [score] = minimax(nextBoard, depth - 1, !myTurn);
+    return [score, i];
+  });
   return nextMoves[max2(scoredFirstMoves)[1]];
 }
 
