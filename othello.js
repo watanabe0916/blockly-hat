@@ -1196,31 +1196,31 @@ function newminimax(data) {
                 }
 
                 if (refifth.length > 0) {
-                  refourth.push(max2(refifth)); // CPUにとって最善
+                  refourth.push(max2(refifth)); 
                 }
               }
             }
 
             if (refourth.length > 0) {
-              rethird.push(min2(refourth)); // Userにとって最悪
+              rethird.push(min2(refourth)); 
             }
           }
         }
 
         if (rethird.length > 0) {
-          resecond.push(max2(rethird)); // CPUにとって最善
+          resecond.push(max2(rethird)); 
         }
       }
     }
 
     if (resecond.length > 0) {
-      xy2.push(min2(resecond).concat(i)); // Userにとって最悪 + 一手目index
+      xy2.push(min2(resecond).concat(i)); 
     }
   }
 
   if (xy2.length === 0) return null;
 
-  return nextMoves[max2(xy2)[2]]; // 一手目の index
+  return nextMoves[max2(xy2)[2]]; 
 }
 
 
