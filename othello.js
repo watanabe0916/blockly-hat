@@ -1126,32 +1126,6 @@ function min2(list){
   return nextMoves[max2(xy2)[1]];
 }*/
 
-function alphabetaturnCPU(){
-  let candidates = moves(data);
-  let bestMove = null;
-
-  try {
-    bestMove = alphabeta(data); 
-  } catch (e) {
-    console.error("error in α-β: ", e);
-  }
-  if (bestMove !== null){
-    printBoard(bestMove);
-    console.log("α-β printBoard done");
-  }
-  else{
-    printBoard(candidates[Math.floor(Math.random()*candidates.length)]);
-    console.log("random printBoard done");
-  }
-  turnChange();
-
-  return;
-}
-
-function alphabeta(data){
-  return null;
-}
-
 function newminimax(data) {
   const myTurn = turn;
 
@@ -1247,3 +1221,117 @@ function newminimaxN(data, depth) {
   return nextMoves[max2(scoredFirstMoves)[1]];
 }
 
+function alphabetaturnCPU(){
+  let candidates = moves(data);
+  let bestMove = null;
+
+  try {
+    bestMove = alphabeta(data); 
+  } catch (e) {
+    console.error("error in α-β: ", e);
+  }
+  if (bestMove !== null){
+    printBoard(bestMove);
+    console.log("α-β printBoard done");
+  }
+  else{
+    printBoard(candidates[Math.floor(Math.random()*candidates.length)]);
+    console.log("random printBoard done");
+  }
+  turnChange();
+
+  return;
+}
+
+function alphabeta(data){
+  const myTurn = turn;
+  let nextMoves = moves2(data, myTurn); // 一手目（CPU）
+  let xy2 = []; 
+
+  for (let i = 0; i < nextMoves.length; i++) {
+    let alpha = -Infinity;
+    let beta = Infinity;
+    let secondMoves = moves2(nextMoves[i], !myTurn); // 二手目（User）
+    let resecond = [];
+
+    if (secondMoves.length === 0) {
+      resecond.push([boardscore(nextMoves[i]), 0]);
+
+    } else {
+      for (let j = 0; j < secondMoves.length; j++) {
+        let thirdMoves = moves2(secondMoves[j], myTurn); // 三手目（CPU）
+        let rethird = [];
+
+        if (thirdMoves.length === 0) {
+          rethird.push([boardscore(secondMoves[j]), 0]);
+
+        } else {
+          for (let k = 0; k < thirdMoves.length; k++) {
+            let fourthMoves = moves2(thirdMoves[k], !myTurn); // 四手目（User）
+            let refourth = [];
+
+            if (fourthMoves.length === 0) {
+              refourth.push([boardscore(thirdMoves[k]), 0]);
+
+            } else {
+              for (let l = 0; l < fourthMoves.length; l++) {
+                let fifthMoves = moves2(fourthMoves[l], myTurn); // 五手目（CPU）
+                let refifth = [];
+
+                if (fifthMoves.length === 0) {
+                  let score = boardscore(fourthMoves[l]);
+                  refifth.push([score, 0]);
+                  alpha = Math.max(alpha, score);
+
+                  if (alpha >=beta) break;
+
+                } else { 
+                  for (let m = 0; m < fifthMoves.length; m++) {
+                    let score = boardscore(fifthMoves[m]);
+                    refifth.push([score, m]);
+                    alpha = Math.max(alpha, score);
+
+                    if (alpha >= beta) break; 
+                  }
+                }
+
+                if (refifth.length > 0) {
+                  let best = max2(refifth);
+                  refourth.push(best);
+                  beta = Math.min(beta, best[0]);
+
+                  if (alpha >= beta) break;
+                }
+              }
+            }
+
+            if (refourth.length > 0) {
+              let worst = min2(refourth);
+              rethird.push(worst);
+              alpha = Math.max(alpha, worst[0]);
+
+              if (alpha >= beta) break;
+            }
+          }
+        }
+
+        if (rethird.length > 0) {
+          let best = max2(rethird);
+          resecond.push(best);
+          beta = Math.min(beta, best[0]);
+
+          if (alpha >= beta) break; 
+        }
+      }
+    }
+
+    if (resecond.length > 0) {
+      let worst = min2(resecond);
+      xy2.push(worst.concat(i)); 
+    }
+  }
+
+  if (xy2.length === 0) return null;
+
+  return nextMoves[max2(xy2)[2]]; 
+}
