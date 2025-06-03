@@ -1133,7 +1133,7 @@ function newminimax(data) {
     let resecond = [];
 
     if (secondMoves.length === 0) {
-      resecond.push([boardscore(nextMoves[i], !myTurn), 0]);
+      resecond.push([boardscore(nextMoves[i], myTurn), 0]);
 
     } else {
       for (let j = 0; j < secondMoves.length; j++) {
@@ -1149,7 +1149,7 @@ function newminimax(data) {
             let refourth = [];
 
             if (fourthMoves.length === 0) {
-              refourth.push([boardscore(thirdMoves[k], !myTurn), 0]);
+              refourth.push([boardscore(thirdMoves[k], myTurn), 0]);
 
             } else {
               for (let l = 0; l < fourthMoves.length; l++) {
@@ -1197,10 +1197,10 @@ function newminimax(data) {
 function newminimaxN(data, depth) {
   const myTurn = turn;
   function minimax(board, d, currentTurn) {
-    if (d === 0) return [boardscore(board), null];
+    if (d === 0) return [boardscore(board, myTurn), null];
     const legalMoves = moves2(board, currentTurn);
     if (legalMoves.length === 0) {
-      return [boardscore(board, currentTurn), null];
+      return [boardscore(board, myTurn), null];
     }
     let scoredMoves = legalMoves.map((nextBoard, i) => {
       const [score] = minimax(nextBoard, d - 1, !currentTurn);
@@ -1243,15 +1243,15 @@ function alphabeta(data){
   const myTurn = turn;
   let nextMoves = moves2(data, myTurn); // 一手目（CPU）
   let xy2 = []; 
+  let alpha = -Infinity;
 
   for (let i = 0; i < nextMoves.length; i++) {
-    let alpha = -Infinity;
-    let beta = Infinity;
     let secondMoves = moves2(nextMoves[i], !myTurn); // 二手目（User）
     let resecond = [];
+    let beta = Infinity;
 
     if (secondMoves.length === 0) {
-      resecond.push([boardscore(nextMoves[i], !myTurn), 0]);
+      resecond.push([boardscore(nextMoves[i], myTurn), 0]);
 
     } else {
       for (let j = 0; j < secondMoves.length; j++) {
@@ -1267,7 +1267,7 @@ function alphabeta(data){
             let refourth = [];
 
             if (fourthMoves.length === 0) {
-              refourth.push([boardscore(thirdMoves[k], !myTurn), 0]);
+              refourth.push([boardscore(thirdMoves[k], myTurn), 0]);
 
             } else {
               for (let l = 0; l < fourthMoves.length; l++) {
@@ -1277,17 +1277,11 @@ function alphabeta(data){
                 if (fifthMoves.length === 0) {
                   let score = boardscore(fourthMoves[l], myTurn);
                   refifth.push([score, 0]);
-                  alpha = Math.max(alpha, score);
-
-                  if (alpha >=beta) break;
 
                 } else { 
                   for (let m = 0; m < fifthMoves.length; m++) {
                     let score = boardscore(fifthMoves[m], myTurn);
                     refifth.push([score, m]);
-                    alpha = Math.max(alpha, score);
-
-                    if (alpha >= beta) break; 
                   }
                 }
 
