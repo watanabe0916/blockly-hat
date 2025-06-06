@@ -350,7 +350,7 @@ function restartBtn() {
 
 
 //次に置く候補と置いた後の盤面(分解可能)
-function moves(data){
+/*function moves(data){
   const COLOR = turn ? BLACK : WHITE;
   //ディープコピー
   //let copyBoard = JSON.parse(JSON.stringify(data));
@@ -381,9 +381,9 @@ function moves(data){
   return after_board;
   //console.log(after_board);
   //console.log(can_put,COLOR);
-};
+};*/
 
-function moves2(data, currentTurn) {
+function moves(data, currentTurn) {
   const COLOR = currentTurn ? BLACK : WHITE;
   let after_board = [];
   for (let x = 0; x < cells; x++) {
@@ -1124,32 +1124,32 @@ function min2(list){
 
 function newminimax(data) {
   const myTurn = turn;
-  let nextMoves = moves2(data, myTurn); // 一手目（CPU）
+  let nextMoves = moves(data, myTurn); // 一手目（CPU）
   let xy2 = [];
 
   for (let i = 0; i < nextMoves.length; i++) {
-    let secondMoves = moves2(nextMoves[i], !myTurn); // 二手目（User）
+    let secondMoves = moves(nextMoves[i], !myTurn); // 二手目（User）
     let scores2 = [];
 
     if (secondMoves.length === 0) {
       scores2.push(boardscore(nextMoves[i], myTurn));
     } else {
       for (let j = 0; j < secondMoves.length; j++) {
-        let thirdMoves = moves2(secondMoves[j], myTurn); // 三手目（CPU）
+        let thirdMoves = moves(secondMoves[j], myTurn); // 三手目（CPU）
         let scores3 = [];
 
         if (thirdMoves.length === 0) {
           scores3.push(boardscore(secondMoves[j], myTurn));
         } else {
           for (let k = 0; k < thirdMoves.length; k++) {
-            let fourthMoves = moves2(thirdMoves[k], !myTurn); // 四手目（User）
+            let fourthMoves = moves(thirdMoves[k], !myTurn); // 四手目（User）
             let scores4 = [];
 
             if (fourthMoves.length === 0) {
               scores4.push(boardscore(thirdMoves[k], myTurn));
             } else {
               for (let l = 0; l < fourthMoves.length; l++) {
-                let fifthMoves = moves2(fourthMoves[l], myTurn); // 五手目（CPU）
+                let fifthMoves = moves(fourthMoves[l], myTurn); // 五手目（CPU）
                 let scores5 = [];
 
                 if (fifthMoves.length === 0) {
@@ -1187,7 +1187,7 @@ function newminimaxN(data, depth) {
   const myTurn = turn;
   function minimax(board, d, currentTurn) {
     if (d === 0) return [boardscore(board, myTurn), null];
-    const legalMoves = moves2(board, currentTurn);
+    const legalMoves = moves(board, currentTurn);
     if (legalMoves.length === 0) {
       return [boardscore(board, myTurn), null];
     }
@@ -1197,7 +1197,7 @@ function newminimaxN(data, depth) {
     });
     return currentTurn === myTurn ? max2(scoredMoves) : min2(scoredMoves);
   }
-  const nextMoves = moves2(data, myTurn);
+  const nextMoves = moves(data, myTurn);
   if (nextMoves.length === 0) return null;
   let scoredFirstMoves = nextMoves.map((nextBoard, i) => {
     const [score] = minimax(nextBoard, depth - 1, !myTurn);
@@ -1230,12 +1230,12 @@ function alphabetaturnCPU(){
 
 function alphabeta(data) {
   const myTurn = turn;
-  let nextMoves = moves2(data, myTurn); // 一手目（CPU）
+  let nextMoves = moves(data, myTurn); // 一手目（CPU）
   let xy2 = [];
   let alpha = -Infinity;
 
   for (let i = 0; i < nextMoves.length; i++) {
-    let secondMoves = moves2(nextMoves[i], !myTurn); // 二手目（User）
+    let secondMoves = moves(nextMoves[i], !myTurn); // 二手目（User）
     let scores2 = [];
     let beta = Infinity;
 
@@ -1243,21 +1243,21 @@ function alphabeta(data) {
       scores2.push(boardscore(nextMoves[i], myTurn));
     } else {
       for (let j = 0; j < secondMoves.length; j++) {
-        let thirdMoves = moves2(secondMoves[j], myTurn); // 三手目（CPU）
+        let thirdMoves = moves(secondMoves[j], myTurn); // 三手目（CPU）
         let scores3 = [];
 
         if (thirdMoves.length === 0) {
           scores3.push(boardscore(secondMoves[j], myTurn));
         } else {
           for (let k = 0; k < thirdMoves.length; k++) {
-            let fourthMoves = moves2(thirdMoves[k], !myTurn); // 四手目（User）
+            let fourthMoves = moves(thirdMoves[k], !myTurn); // 四手目（User）
             let scores4 = [];
 
             if (fourthMoves.length === 0) {
               scores4.push(boardscore(thirdMoves[k], myTurn));
             } else {
               for (let l = 0; l < fourthMoves.length; l++) {
-                let fifthMoves = moves2(fourthMoves[l], myTurn); // 五手目（CPU）
+                let fifthMoves = moves(fourthMoves[l], myTurn); // 五手目（CPU）
                 let scores5 = [];
 
                 if (fifthMoves.length === 0) {
