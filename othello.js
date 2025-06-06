@@ -526,7 +526,6 @@ evaluate8[6] = [-199,-402,-49,-48,-47,-46,-403,-198];
 evaluate8[7] = [1203,-197,206,52,53,207,-196,1204];
 
 
-
 //盤面配列を受け取り、評価値を返す
 function staticBoard(staticData){
   let point = 0;
@@ -993,6 +992,28 @@ function minimaxturnCPU(){
   return;
 }
 
+function alphabetaturnCPU(){
+  let candidates = moves(data);
+  let bestMove = null;
+
+  try {
+    bestMove = alphabeta(data); 
+  } catch (e) {
+    console.error("error in α-β: ", e);
+  }
+  if (bestMove !== null){
+    printBoard(bestMove);
+    console.log("α-β printBoard done");
+  }
+  else{
+    printBoard(candidates[Math.floor(Math.random()*candidates.length)]);
+    console.log("random printBoard done");
+  }
+  turnChange();
+
+  return;
+}
+
 function minimaxNturnCPU(depth) {
   let candidates = moves(data);
   let bestMove = null;
@@ -1084,44 +1105,6 @@ function min2(list){
   return moves(data)[max2(xy2)[1]]
 }*/
 
-/*function newminimax(data) {
-  const oriTurn = turn;
-  const myTurn = oriTurn;
-
-  let nextMoves = moves(data);  // 一手目（CPUの手）
-  let xy2 = []; 
-
-  for (let i = 0; i < nextMoves.length; i++) {
-    turn = !myTurn;
-    let secondMoves = moves(nextMoves[i]); // 二手目（ユーザの手）
-    let scores = [];
-
-    for (let j = 0; j < secondMoves.length; j++) {
-      turn = myTurn;
-      let thirdMoves = moves(secondMoves[j]); // 三手目（CPUの手）
-
-      if (thirdMoves.length === 0) {
-
-        scores.push(boardscore(secondMoves[j]));
-      } else {
-        let thirdScores = thirdMoves.map(m => boardscore(m));
-        scores.push(Math.max(...thirdScores));
-      }
-    }
-
-    if (scores.length > 0) {
-      let worst = Math.min(...scores);
-      xy2.push([worst, i]);
-    }
-  }
-
-  turn = oriTurn;
-
-  if (xy2.length === 0) return null;
-
-  return nextMoves[max2(xy2)[1]];
-}*/
-
 function newminimax(data) {
   const myTurn = turn;
   let nextMoves = moves(data, myTurn); // 一手目（CPU）
@@ -1178,6 +1161,7 @@ function newminimax(data) {
       xy2.push([Math.min(...scores2), i]);
     }
   }
+  console.log("xy2:", xy2);
   if (xy2.length === 0) return null;
   return nextMoves[max2(xy2)[1]];
 }
@@ -1206,38 +1190,16 @@ function newminimaxN(data, depth) {
   return nextMoves[max2(scoredFirstMoves)[1]];
 }
 
-function alphabetaturnCPU(){
-  let candidates = moves(data);
-  let bestMove = null;
-
-  try {
-    bestMove = alphabeta(data); 
-  } catch (e) {
-    console.error("error in α-β: ", e);
-  }
-  if (bestMove !== null){
-    printBoard(bestMove);
-    console.log("α-β printBoard done");
-  }
-  else{
-    printBoard(candidates[Math.floor(Math.random()*candidates.length)]);
-    console.log("random printBoard done");
-  }
-  turnChange();
-
-  return;
-}
-
 function alphabeta(data) {
   const myTurn = turn;
   let nextMoves = moves(data, myTurn); // 一手目（CPU）
   let xy2 = [];
-  let alpha = -Infinity;
 
   for (let i = 0; i < nextMoves.length; i++) {
     let secondMoves = moves(nextMoves[i], !myTurn); // 二手目（User）
     let scores2 = [];
     let beta = Infinity;
+    let alpha = -Infinity;
 
     if (secondMoves.length === 0) {
       scores2.push(boardscore(nextMoves[i], myTurn));
@@ -1289,9 +1251,91 @@ function alphabeta(data) {
       }
     }
     if (scores2.length > 0) {
+      alpha = Math.max(alpha, Math.min(...scores2));
       xy2.push([Math.min(...scores2), i]);
     }
   }
+  console.log("xy2:", xy2);
+  if (xy2.length === 0) return null;
+  return nextMoves[max2(xy2)[1]];
+}
+
+function alphabeta3(data) {
+  const myTurn = turn;
+  let nextMoves = moves(data, myTurn); // 一手目（CPU）
+  let xy2 = [];
+  
+
+  for (let i = 0; i < nextMoves.length; i++) {
+    let secondMoves = moves(nextMoves[i], !myTurn); // 二手目（User）
+    let scores2 = [];
+    let beta = Infinity;
+    let alpha = -Infinity;
+
+    if (secondMoves.length === 0) {
+      scores2.push(boardscore(nextMoves[i], myTurn));
+    } else {
+      for (let j = 0; j < secondMoves.length; j++) {
+        let thirdMoves = moves(secondMoves[j], myTurn); // 三手目（CPU）
+        let scores3 = [];
+
+        if (thirdMoves.length === 0) {
+          scores3.push(boardscore(secondMoves[j], myTurn));
+        } else {
+          for (let k = 0; k < thirdMoves.length; k++) {
+            scores3.push(boardscore(thirdMoves[k], myTurn));
+          }
+        }
+        if (scores3.length > 0) {
+          scores2.push(Math.max(...scores3));
+          beta = Math.min(beta, Math.max(...scores3));
+          if (alpha >= beta) break;
+        }
+      }
+    }
+    if (scores2.length > 0) {
+      xy2.push([Math.min(...scores2), i]);
+      alpha = Math.max(alpha, Math.min(...scores2));
+    }
+  }
+  console.log("xy2:", xy2);
+  if (xy2.length === 0) return null;
+  return nextMoves[max2(xy2)[1]];
+}
+
+function newminimax3(data) {
+  const myTurn = turn;
+  let nextMoves = moves(data, myTurn); // 一手目（CPU）
+  let xy2 = [];
+
+  for (let i = 0; i < nextMoves.length; i++) {
+    let secondMoves = moves(nextMoves[i], !myTurn); // 二手目（User）
+    let scores2 = [];
+
+    if (secondMoves.length === 0) {
+      scores2.push(boardscore(nextMoves[i], myTurn));
+    } else {
+      for (let j = 0; j < secondMoves.length; j++) {
+        let thirdMoves = moves(secondMoves[j], myTurn); // 三手目（CPU）
+        let scores3 = [];
+
+        if (thirdMoves.length === 0) {
+          scores3.push(boardscore(secondMoves[j], myTurn));
+        } else {
+          for (let k = 0; k < thirdMoves.length; k++) {
+            scores3.push(boardscore(thirdMoves[k], myTurn));
+          }
+        }
+        if (scores3.length > 0) {
+          scores2.push(Math.max(...scores3));
+        }
+      }
+    }
+    if (scores2.length > 0) {
+      xy2.push([Math.min(...scores2), i]);
+    }
+  }
+  console.log("xy2:", xy2);
   if (xy2.length === 0) return null;
   return nextMoves[max2(xy2)[1]];
 }
