@@ -814,6 +814,33 @@ Blockly.Hat['minimaxNturnCPU'] = function(block) {
   return code;
 };
 
+Blockly.defineBlocksWithJsonArray(
+  
+  [{
+    "type": "alphabetaNturnCPU",
+    "message0": "CPUの操作(α-β法 深さ %1)",
+    "args0": [
+      {
+        "type": "field_number",
+        "name": "DEPTH",
+        "value": 5,
+        "min": 1,
+        "max": 10
+      }
+    ],
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 230,
+    "tooltip": "指定した深さでα-β探索を行う",
+    "helpUrl": ""
+  }]
+);
+Blockly.Hat['alphabetaNturnCPU'] = function(block) {
+  var depth = block.getFieldValue('DEPTH'); 
+  var code = `alphabetaNturnCPU ${depth}\n`;
+  return code;
+};
+
 
 
 

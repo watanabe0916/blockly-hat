@@ -374,6 +374,9 @@ $listの先頭に$elを追加したリストを返す。
   JavaScript "minimaxNturnCPU" depth ^(dummy)
   return)
 
+(defineCPS alphabetaNturnCPU ^(depth . return)
+  JavaScript "alphabetaNturnCPU" depth ^(dummy)
+  return)
 
 
 

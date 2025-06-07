@@ -1036,6 +1036,28 @@ function minimaxNturnCPU(depth) {
   return;
 }
 
+function alphabetaNturnCPU(depth) {
+  let candidates = moves(data);
+  let bestMove = null;
+
+  try {
+    bestMove = alphabetaN(data, depth); 
+  } catch (e) {
+    console.error("error in alphatbetaN: ", e);
+  }
+
+  if (bestMove !== null) {
+    printBoard(bestMove);
+    console.log("alphabeta printBoard done (depth=" + depth + ")");
+  } else {
+    printBoard(candidates[Math.floor(Math.random() * candidates.length)]);
+    console.log("random printBoard done");
+  }
+
+  turnChange();
+  return;
+}
+
 
 
 
@@ -1191,74 +1213,72 @@ function newminimaxN(data, depth) {
   return nextMoves[max2(scoredFirstMoves)[1]];
 }
 
-function alphabeta(data) {
+function alphabeta5(data) {
   const myTurn = turn;
-  let nextMoves = moves(data, myTurn); // 一手目（CPU）
+  let nextMoves = moves(data, myTurn); // 1手目（CPU）
   let xy2 = [];
+  let alpha = -Infinity;
+  let beta = Infinity;
 
   for (let i = 0; i < nextMoves.length; i++) {
-    let secondMoves = moves(nextMoves[i], !myTurn); // 二手目（User）
-    let scores2 = [];
-    let beta = Infinity;
-    let alpha = -Infinity;
+    let secondMoves = moves(nextMoves[i], !myTurn); // 2手目（User）
+    let minScore = Infinity;
 
-    if (secondMoves.length === 0) {
-      scores2.push(boardscore(nextMoves[i], myTurn));
-    } else {
-      for (let j = 0; j < secondMoves.length; j++) {
-        let thirdMoves = moves(secondMoves[j], myTurn); // 三手目（CPU）
-        let scores3 = [];
+    for (let j = 0; j < secondMoves.length; j++) {
+      let thirdMoves = moves(secondMoves[j], myTurn); // 3手目（CPU）
+      let maxScore = -Infinity;
 
-        if (thirdMoves.length === 0) {
-          scores3.push(boardscore(secondMoves[j], myTurn));
-        } else {
-          for (let k = 0; k < thirdMoves.length; k++) {
-            let fourthMoves = moves(thirdMoves[k], !myTurn); // 四手目（User）
-            let scores4 = [];
+      for (let k = 0; k < thirdMoves.length; k++) {
+        let fourthMoves = moves(thirdMoves[k], !myTurn); // 4手目（User）
+        let minScore2 = Infinity;
 
-            if (fourthMoves.length === 0) {
-              scores4.push(boardscore(thirdMoves[k], myTurn));
-            } else {
-              for (let l = 0; l < fourthMoves.length; l++) {
-                let fifthMoves = moves(fourthMoves[l], myTurn); // 五手目（CPU）
-                let scores5 = [];
+        for (let l = 0; l < fourthMoves.length; l++) {
+          let fifthMoves = moves(fourthMoves[l], myTurn); // 5手目（CPU）
+          let maxScore2 = -Infinity;
 
-                if (fifthMoves.length === 0) {
-                  scores5.push(boardscore(fourthMoves[l], myTurn));
-                } else {
-                  for (let m = 0; m < fifthMoves.length; m++) {
-                    scores5.push(boardscore(fifthMoves[m], myTurn));
-                  }
-                }
-                if (scores5.length > 0) {
-                  scores4.push(Math.max(...scores5));
-                  beta = Math.min(beta, Math.max(...scores5));
-                  if (alpha >= beta) break;
-                }
-              }
-            }
-            if (scores4.length > 0) {
-              scores3.push(Math.min(...scores4));
-              alpha = Math.max(alpha, Math.min(...scores4));
-              if (alpha >= beta) break;
-            }
+          for (let m = 0; m < fifthMoves.length; m++) {
+            let score = boardscore(fifthMoves[m], myTurn);
+            if (score > maxScore2) maxScore2 = score;
+            // 枝切り
+            if (maxScore2 >= beta) break;
           }
+          // 5手目がなければ4手目の盤面を評価
+          if (fifthMoves.length === 0) {
+            let score = boardscore(fourthMoves[l], myTurn);
+            if (score > maxScore2) maxScore2 = score;
+          }
+          if (maxScore2 < minScore2) minScore2 = maxScore2;
+          // 枝切り
+          if (minScore2 <= alpha) break;
         }
-        if (scores3.length > 0) {
-          scores2.push(Math.max(...scores3));
-          beta = Math.min(beta, Math.max(...scores3));
-          if (alpha >= beta) break;
+        // 4手目がなければ3手目の盤面を評価
+        if (fourthMoves.length === 0) {
+          let score = boardscore(thirdMoves[k], myTurn);
+          if (score < minScore2) minScore2 = score;
         }
+        if (minScore2 > maxScore) maxScore = minScore2;
+        // 枝切り
+        if (maxScore >= beta) break;
       }
+      // 3手目がなければ2手目の盤面を評価
+      if (thirdMoves.length === 0) {
+        let score = boardscore(secondMoves[j], myTurn);
+        if (score > maxScore) maxScore = score;
+      }
+      if (maxScore < minScore) minScore = maxScore;
+      // 枝切り
+      if (minScore <= alpha) break;
     }
-    if (scores2.length > 0) {
-      alpha = Math.max(alpha, Math.min(...scores2));
-      xy2.push([Math.min(...scores2), i]);
+    // 2手目がなければ1手目の盤面を評価
+    if (secondMoves.length === 0) {
+      minScore = boardscore(nextMoves[i], myTurn);
     }
+    xy2.push([minScore, i]);
+    if (minScore > alpha) alpha = minScore;
+    // α-β枝切り
+    if (alpha >= beta) break;
   }
   if (xy2.length === 0) return null;
-  console.log("xy2:", xy2);
-  console.log("best move:", max2(xy2)[1]);
   return nextMoves[max2(xy2)[1]];
 }
 
@@ -1340,4 +1360,46 @@ function newminimax3(data) {
   console.log("xy2:", xy2);
   if (xy2.length === 0) return null;
   return nextMoves[max2(xy2)[1]];
+}
+
+function alphabetaN(data, depth) {
+  const myTurn = turn;
+  function alphabetaRec(board, d, currentTurn, alpha, beta) {
+    if (d === 0) return [boardscore(board, myTurn), null];
+    const legalMoves = moves(board, currentTurn);
+    if (legalMoves.length === 0) {
+      return [boardscore(board, myTurn), null];
+    }
+    let bestIdx = null;
+    if (currentTurn === myTurn) {
+      let value = -Infinity;
+      for (let i = 0; i < legalMoves.length; i++) {
+        const [score] = alphabetaRec(legalMoves[i], d - 1, !currentTurn, alpha, beta);
+        if (score > value) {
+          value = score;
+          bestIdx = i;
+        }
+        alpha = Math.max(alpha, value);
+        if (alpha >= beta) break;
+      }
+      return [value, bestIdx];
+    } else {
+      let value = Infinity;
+      for (let i = 0; i < legalMoves.length; i++) {
+        const [score] = alphabetaRec(legalMoves[i], d - 1, !currentTurn, alpha, beta);
+        if (score < value) {
+          value = score;
+          bestIdx = i;
+        }
+        beta = Math.min(beta, value);
+        if (alpha >= beta) break;
+      }
+      return [value, bestIdx];
+    }
+  }
+  const nextMoves = moves(data, myTurn);
+  if (nextMoves.length === 0) return null;
+  const [, bestIdx] = alphabetaRec(data, depth, myTurn, -Infinity, Infinity);
+  if (bestIdx === null) return nextMoves[0];
+  return nextMoves[bestIdx];
 }
