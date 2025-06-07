@@ -1213,72 +1213,74 @@ function newminimaxN(data, depth) {
   return nextMoves[max2(scoredFirstMoves)[1]];
 }
 
-function alphabeta5(data) {
+function alphabeta(data) {
   const myTurn = turn;
-  let nextMoves = moves(data, myTurn); // 1手目（CPU）
+  let nextMoves = moves(data, myTurn); // 一手目（CPU）
   let xy2 = [];
-  let alpha = -Infinity;
-  let beta = Infinity;
 
   for (let i = 0; i < nextMoves.length; i++) {
-    let secondMoves = moves(nextMoves[i], !myTurn); // 2手目（User）
-    let minScore = Infinity;
+    let secondMoves = moves(nextMoves[i], !myTurn); // 二手目（User）
+    let scores2 = [];
+    let beta = Infinity;
+    let alpha = -Infinity;
 
-    for (let j = 0; j < secondMoves.length; j++) {
-      let thirdMoves = moves(secondMoves[j], myTurn); // 3手目（CPU）
-      let maxScore = -Infinity;
-
-      for (let k = 0; k < thirdMoves.length; k++) {
-        let fourthMoves = moves(thirdMoves[k], !myTurn); // 4手目（User）
-        let minScore2 = Infinity;
-
-        for (let l = 0; l < fourthMoves.length; l++) {
-          let fifthMoves = moves(fourthMoves[l], myTurn); // 5手目（CPU）
-          let maxScore2 = -Infinity;
-
-          for (let m = 0; m < fifthMoves.length; m++) {
-            let score = boardscore(fifthMoves[m], myTurn);
-            if (score > maxScore2) maxScore2 = score;
-            // 枝切り
-            if (maxScore2 >= beta) break;
-          }
-          // 5手目がなければ4手目の盤面を評価
-          if (fifthMoves.length === 0) {
-            let score = boardscore(fourthMoves[l], myTurn);
-            if (score > maxScore2) maxScore2 = score;
-          }
-          if (maxScore2 < minScore2) minScore2 = maxScore2;
-          // 枝切り
-          if (minScore2 <= alpha) break;
-        }
-        // 4手目がなければ3手目の盤面を評価
-        if (fourthMoves.length === 0) {
-          let score = boardscore(thirdMoves[k], myTurn);
-          if (score < minScore2) minScore2 = score;
-        }
-        if (minScore2 > maxScore) maxScore = minScore2;
-        // 枝切り
-        if (maxScore >= beta) break;
-      }
-      // 3手目がなければ2手目の盤面を評価
-      if (thirdMoves.length === 0) {
-        let score = boardscore(secondMoves[j], myTurn);
-        if (score > maxScore) maxScore = score;
-      }
-      if (maxScore < minScore) minScore = maxScore;
-      // 枝切り
-      if (minScore <= alpha) break;
-    }
-    // 2手目がなければ1手目の盤面を評価
     if (secondMoves.length === 0) {
-      minScore = boardscore(nextMoves[i], myTurn);
+      scores2.push(boardscore(nextMoves[i], myTurn));
+    } else {
+      for (let j = 0; j < secondMoves.length; j++) {
+        let thirdMoves = moves(secondMoves[j], myTurn); // 三手目（CPU）
+        let scores3 = [];
+
+        if (thirdMoves.length === 0) {
+          scores3.push(boardscore(secondMoves[j], myTurn));
+        } else {
+          for (let k = 0; k < thirdMoves.length; k++) {
+            let fourthMoves = moves(thirdMoves[k], !myTurn); // 四手目（User）
+            let scores4 = [];
+
+            if (fourthMoves.length === 0) {
+              scores4.push(boardscore(thirdMoves[k], myTurn));
+            } else {
+              for (let l = 0; l < fourthMoves.length; l++) {
+                let fifthMoves = moves(fourthMoves[l], myTurn); // 五手目（CPU）
+                let scores5 = [];
+
+                if (fifthMoves.length === 0) {
+                  scores5.push(boardscore(fourthMoves[l], myTurn));
+                } else {
+                  for (let m = 0; m < fifthMoves.length; m++) {
+                    scores5.push(boardscore(fifthMoves[m], myTurn));
+                  }
+                }
+                if (scores5.length > 0) {
+                  scores4.push(Math.max(...scores5));
+                  beta = Math.min(beta, Math.max(...scores5));
+                  if (alpha >= beta) break;
+                }
+              }
+            }
+            if (scores4.length > 0) {
+              scores3.push(Math.min(...scores4));
+              alpha = Math.max(alpha, Math.min(...scores4));
+              if (alpha >= beta) break;
+            }
+          }
+        }
+        if (scores3.length > 0) {
+          scores2.push(Math.max(...scores3));
+          beta = Math.min(beta, Math.max(...scores3));
+          if (alpha >= beta) break;
+        }
+      }
     }
-    xy2.push([minScore, i]);
-    if (minScore > alpha) alpha = minScore;
-    // α-β枝切り
-    if (alpha >= beta) break;
+    if (scores2.length > 0) {
+      alpha = Math.max(alpha, Math.min(...scores2));
+      xy2.push([Math.min(...scores2), i]);
+    }
   }
   if (xy2.length === 0) return null;
+  console.log("xy2:", xy2);
+  console.log("best move:", max2(xy2)[1]);
   return nextMoves[max2(xy2)[1]];
 }
 
