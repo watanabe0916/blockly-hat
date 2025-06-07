@@ -1161,8 +1161,9 @@ function newminimax(data) {
       xy2.push([Math.min(...scores2), i]);
     }
   }
-  console.log("xy2:", xy2);
   if (xy2.length === 0) return null;
+  console.log("xy2:", xy2);
+  console.log("best move:", max2(xy2)[1]);
   return nextMoves[max2(xy2)[1]];
 }
 
@@ -1255,8 +1256,9 @@ function alphabeta(data) {
       xy2.push([Math.min(...scores2), i]);
     }
   }
-  console.log("xy2:", xy2);
   if (xy2.length === 0) return null;
+  console.log("xy2:", xy2);
+  console.log("best move:", max2(xy2)[1]);
   return nextMoves[max2(xy2)[1]];
 }
 
