@@ -1284,7 +1284,52 @@ function alphabeta(data) {
   return nextMoves[max2(xy2)[1]];
 }
 
-function alphabeta3(data) {
+
+
+function alphabetaN(data, depth) {
+  const myTurn = turn;
+  function alphabetaRec(board, d, currentTurn, alpha, beta) {
+    if (d === 0) return [boardscore(board, myTurn), null];
+    const legalMoves = moves(board, currentTurn);
+    if (legalMoves.length === 0) {
+      return [boardscore(board, myTurn), null];
+    }
+    let bestIdx = null;
+    if (currentTurn === myTurn) {
+      let value = -Infinity;
+      for (let i = 0; i < legalMoves.length; i++) {
+        const [score] = alphabetaRec(legalMoves[i], d - 1, !currentTurn, alpha, beta);
+        if (score > value) {
+          value = score;
+          bestIdx = i;
+        }
+        alpha = Math.max(alpha, value);
+        if (alpha >= beta) break;
+      }
+      return [value, bestIdx];
+    } else {
+      let value = Infinity;
+      for (let i = 0; i < legalMoves.length; i++) {
+        const [score] = alphabetaRec(legalMoves[i], d - 1, !currentTurn, alpha, beta);
+        if (score < value) {
+          value = score;
+          bestIdx = i;
+        }
+        beta = Math.min(beta, value);
+        if (alpha >= beta) break;
+      }
+      return [value, bestIdx];
+    }
+  }
+  const nextMoves = moves(data, myTurn);
+  if (nextMoves.length === 0) return null;
+  const [, bestIdx] = alphabetaRec(data, depth, myTurn, -Infinity, Infinity);
+  if (bestIdx === null) return nextMoves[0];
+  return nextMoves[bestIdx];
+}
+
+
+/*function alphabeta3(data) {
   const myTurn = turn;
   let nextMoves = moves(data, myTurn); // 一手目（CPU）
   let xy2 = [];
@@ -1362,46 +1407,4 @@ function newminimax3(data) {
   console.log("xy2:", xy2);
   if (xy2.length === 0) return null;
   return nextMoves[max2(xy2)[1]];
-}
-
-function alphabetaN(data, depth) {
-  const myTurn = turn;
-  function alphabetaRec(board, d, currentTurn, alpha, beta) {
-    if (d === 0) return [boardscore(board, myTurn), null];
-    const legalMoves = moves(board, currentTurn);
-    if (legalMoves.length === 0) {
-      return [boardscore(board, myTurn), null];
-    }
-    let bestIdx = null;
-    if (currentTurn === myTurn) {
-      let value = -Infinity;
-      for (let i = 0; i < legalMoves.length; i++) {
-        const [score] = alphabetaRec(legalMoves[i], d - 1, !currentTurn, alpha, beta);
-        if (score > value) {
-          value = score;
-          bestIdx = i;
-        }
-        alpha = Math.max(alpha, value);
-        if (alpha >= beta) break;
-      }
-      return [value, bestIdx];
-    } else {
-      let value = Infinity;
-      for (let i = 0; i < legalMoves.length; i++) {
-        const [score] = alphabetaRec(legalMoves[i], d - 1, !currentTurn, alpha, beta);
-        if (score < value) {
-          value = score;
-          bestIdx = i;
-        }
-        beta = Math.min(beta, value);
-        if (alpha >= beta) break;
-      }
-      return [value, bestIdx];
-    }
-  }
-  const nextMoves = moves(data, myTurn);
-  if (nextMoves.length === 0) return null;
-  const [, bestIdx] = alphabetaRec(data, depth, myTurn, -Infinity, Infinity);
-  if (bestIdx === null) return nextMoves[0];
-  return nextMoves[bestIdx];
-}
+}*/
