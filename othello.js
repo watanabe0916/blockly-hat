@@ -1192,26 +1192,48 @@ function newminimax(data) {
 
 function newminimaxN(data, depth) {
   const myTurn = turn;
-  function minimax(board, d, currentTurn) {
+
+  function minimaxRec(board, d, currentTurn) {
     if (d === 0) return [boardscore(board, myTurn), null];
+
     const legalMoves = moves(board, currentTurn);
     if (legalMoves.length === 0) {
       return [boardscore(board, myTurn), null];
     }
-    let scoredMoves = legalMoves.map((nextBoard, i) => {
-      const [score] = minimax(nextBoard, d - 1, !currentTurn);
-      return [score, i];
-    });
-    return currentTurn === myTurn ? max2(scoredMoves) : min2(scoredMoves);
+
+    let bestIdx = null;
+
+    if (currentTurn === myTurn) {
+      let value = -Infinity;
+      for (let i = 0; i < legalMoves.length; i++) {
+        const [score] = minimaxRec(legalMoves[i], d - 1, !currentTurn);
+        if (score > value) {
+          value = score;
+          bestIdx = i;
+        }
+      }
+      return [value, bestIdx];
+    } else {
+      let value = Infinity;
+      for (let i = 0; i < legalMoves.length; i++) {
+        const [score] = minimaxRec(legalMoves[i], d - 1, !currentTurn);
+        if (score < value) {
+          value = score;
+          bestIdx = i;
+        }
+      }
+      return [value, bestIdx];
+    }
   }
+
   const nextMoves = moves(data, myTurn);
   if (nextMoves.length === 0) return null;
-  let scoredFirstMoves = nextMoves.map((nextBoard, i) => {
-    const [score] = minimax(nextBoard, depth - 1, !myTurn);
-    return [score, i];
-  });
-  return nextMoves[max2(scoredFirstMoves)[1]];
+
+  const [, bestIdx] = minimaxRec(data, depth, myTurn);
+  if (bestIdx === null) return nextMoves[0];
+  return nextMoves[bestIdx];
 }
+
 
 function alphabeta(data) {
   const myTurn = turn;
