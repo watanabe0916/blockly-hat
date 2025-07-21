@@ -1308,46 +1308,32 @@ function alphabeta(data) {
 
 
 
+
 function alphabetaN(data, depth) {
   const myTurn = turn;
-  function alphabetaRec(board, d, currentTurn, alpha, beta) {
+  function ab(board, d, currentTurn, alpha, beta) {
     if (d === 0) return [boardscore(board, myTurn), null];
     const legalMoves = moves(board, currentTurn);
-    if (legalMoves.length === 0) {
-      return [boardscore(board, myTurn), null];
-    }
-    let bestIdx = null;
-    if (currentTurn === myTurn) {
-      let value = -Infinity;
-      for (let i = 0; i < legalMoves.length; i++) {
-        const [score] = alphabetaRec(legalMoves[i], d - 1, !currentTurn, alpha, beta);
-        if (score > value) {
-          value = score;
-          bestIdx = i;
-        }
-        alpha = Math.max(alpha, value);
-        if (alpha >= beta) break;
+    if (!legalMoves.length) return [boardscore(board, myTurn), null];
+    let bestIdx = 0;
+    let best = currentTurn === myTurn ? -Infinity : Infinity;
+    for (let i = 0; i < legalMoves.length; i++) {
+      const [score] = ab(legalMoves[i], d - 1, !currentTurn, alpha, beta);
+      if (currentTurn === myTurn) {
+        if (score > best) best = score, bestIdx = i;
+        alpha = Math.max(alpha, best);
+      } else {
+        if (score < best) best = score, bestIdx = i;
+        beta = Math.min(beta, best);
       }
-      return [value, bestIdx];
-    } else {
-      let value = Infinity;
-      for (let i = 0; i < legalMoves.length; i++) {
-        const [score] = alphabetaRec(legalMoves[i], d - 1, !currentTurn, alpha, beta);
-        if (score < value) {
-          value = score;
-          bestIdx = i;
-        }
-        beta = Math.min(beta, value);
-        if (alpha >= beta) break;
-      }
-      return [value, bestIdx];
+      if (alpha >= beta) break;
     }
+    return [best, bestIdx];
   }
   const nextMoves = moves(data, myTurn);
-  if (nextMoves.length === 0) return null;
-  const [, bestIdx] = alphabetaRec(data, depth, myTurn, -Infinity, Infinity);
-  if (bestIdx === null) return nextMoves[0];
-  return nextMoves[bestIdx];
+  if (!nextMoves.length) return null;
+  const [, bestIdx] = ab(data, depth, myTurn, -Infinity, Infinity);
+  return nextMoves[bestIdx] || nextMoves[0];
 }
 
 
