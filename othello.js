@@ -1190,48 +1190,52 @@ function newminimax(data) {
 }
 
 
+/*function newminimaxN(data, depth) {
+  const myTurn = turn;
+  function rec(board, d, currentTurn) {
+    if (d === 0) return [boardscore(board, myTurn), null];
+    const legalMoves = moves(board, currentTurn);
+    if (!legalMoves.length) return [boardscore(board, myTurn), null];
+    let best = currentTurn === myTurn ? -Infinity : Infinity, bestIdx = null;
+    for (let i = 0; i < legalMoves.length; i++) {
+      const [score] = rec(legalMoves[i], d - 1, !currentTurn);
+      if (currentTurn === myTurn && score > best) best = score, bestIdx = i;
+      if (currentTurn !== myTurn && score < best) best = score, bestIdx = i;
+    }
+    return [best, bestIdx];
+  }
+  const nextMoves = moves(data, myTurn);
+  if (!nextMoves.length) return null;
+  const [, bestIdx] = rec(data, depth, myTurn);
+  return bestIdx === null ? nextMoves[0] : nextMoves[bestIdx];
+}*/
+
 function newminimaxN(data, depth) {
   const myTurn = turn;
-
-  function minimaxRec(board, d, currentTurn) {
+  function rec(board, d, currentTurn) {
     if (d === 0) return [boardscore(board, myTurn), null];
-
     const legalMoves = moves(board, currentTurn);
-    if (legalMoves.length === 0) {
-      return [boardscore(board, myTurn), null];
-    }
-
-    let bestIdx = null;
-
+    if (!legalMoves.length) return [boardscore(board, myTurn), null];
+    let best, bestIdx = null;
     if (currentTurn === myTurn) {
-      let value = -Infinity;
+      best = -Infinity;
       for (let i = 0; i < legalMoves.length; i++) {
-        const [score] = minimaxRec(legalMoves[i], d - 1, !currentTurn);
-        if (score > value) {
-          value = score;
-          bestIdx = i;
-        }
+        const [score] = rec(legalMoves[i], d - 1, !currentTurn);
+        if (score > best) best = score, bestIdx = i;
       }
-      return [value, bestIdx];
     } else {
-      let value = Infinity;
+      best = Infinity;
       for (let i = 0; i < legalMoves.length; i++) {
-        const [score] = minimaxRec(legalMoves[i], d - 1, !currentTurn);
-        if (score < value) {
-          value = score;
-          bestIdx = i;
-        }
+        const [score] = rec(legalMoves[i], d - 1, !currentTurn);
+        if (score < best) best = score, bestIdx = i;
       }
-      return [value, bestIdx];
     }
+    return [best, bestIdx];
   }
-
   const nextMoves = moves(data, myTurn);
-  if (nextMoves.length === 0) return null;
-
-  const [, bestIdx] = minimaxRec(data, depth, myTurn);
-  if (bestIdx === null) return nextMoves[0];
-  return nextMoves[bestIdx];
+  if (!nextMoves.length) return null;
+  const [, bestIdx] = rec(data, depth, myTurn);
+  return bestIdx === null ? nextMoves[0] : nextMoves[bestIdx];
 }
 
 
