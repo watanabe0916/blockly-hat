@@ -6,6 +6,13 @@
 // mainエリア
 
 //ループ終了条件
+
+if (typeof Hat === 'undefined') {
+  var Hat = {};
+}
+Hat.ORDER_NONE = 0;
+Hat.ORDER_FUNCTION_CALL = 2;
+
 Blockly.defineBlocksWithJsonArray(
 
   [{
@@ -841,6 +848,55 @@ Blockly.Hat['alphabetaNturnCPU'] = function(block) {
   return code;
 };
 
+// --- mmN ブロック (Algorithm value) ---
+Blockly.defineBlocksWithJsonArray([{
+  "type": "mmN",
+  "message0": "ミニマックス探索 (深さ %1)",
+  "args0": [
+    { "type": "field_number", "name": "DEPTH", "value": 5, "min": 1, "max": 10 }
+  ],
+  "output": "Algorithm",
+  "colour": 230
+}]);
 
+Blockly.Hat['mmN'] = function(block) {
+  var depth = block.getFieldValue('DEPTH');
+  // JSON 文字列リテラル（Hat に渡る値を「文字列」として固定する）
+  var code = `"{\\"type\\":\\"mmN\\",\\"depth\\":${depth}}"`;
+  return [code, Hat.ORDER_ATOMIC];
+};
 
+// --- abN ブロック ---
+Blockly.defineBlocksWithJsonArray([{
+  "type": "abN",
+  "message0": "アルファベータ探索 (深さ %1)",
+  "args0": [
+    { "type": "field_number", "name": "DEPTH", "value": 5, "min": 1, "max": 10 }
+  ],
+  "output": "Algorithm",
+  "colour": 230
+}]);
 
+Blockly.Hat['abN'] = function(block) {
+  var depth = block.getFieldValue('DEPTH');
+  var code = `"{\\"type\\":\\"abN\\",\\"depth\\":${depth}}"`;
+  return [code, Hat.ORDER_ATOMIC];
+};
+
+// --- CPU ブロック（アルゴリズム入力） ---
+Blockly.defineBlocksWithJsonArray([{
+  "type": "othelloCPUTurn",
+  "message0": "オセロCPUの操作 %1",
+  "args0": [
+    { "type": "input_value", "name": "ALGO", "check": "Algorithm" }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 120
+}]);
+
+Blockly.Hat['othelloCPUTurn'] = function(block) {
+  var algo = Blockly.Hat.valueToCode(block, 'ALGO', Hat.ORDER_NONE) || 'null';
+  var code = `(othelloCPUTurn ${algo})\n`;
+  return code;
+};

@@ -378,6 +378,15 @@ $listの先頭に$elを追加したリストを返す。
   JavaScript "alphabetaNturnCPU" depth ^(dummy)
   return)
 
+;; othelloCPUTurn は JSON 文字列を受け取り JS 関数に渡す
+(defineCPS othelloCPUTurn ^(algoJsonStr . return)
+  JavaScript "othelloCPUTurn" algoJsonStr
+  return)
+
+
+
+
+
 
 
 

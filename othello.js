@@ -1018,9 +1018,9 @@ function minimaxNturnCPU(depth) {
   let candidates = moves(data);
   let bestMove = null;
 
-  try {
-    bestMove = newminimaxN(data, depth); 
-  } catch (e) {
+  try{ 
+    bestMove = newminimaxN(data, depth);} 
+  catch (e) {
     console.error("error in newminimaxN: ", e);
   }
 
@@ -1340,83 +1340,149 @@ function alphabetaN(data, depth) {
   return nextMoves[bestIdx] || nextMoves[0];
 }
 
+// --- ユーティリティ: Hat から来た引数を安全にパースする ---
+function parseAlgoArg(algoArg) {
+  // 期待：algoArg は JSON 文字列 (例: '{"type":"mmN","depth":5}')
+  // しかし Hat の内部表現 (List オブジェクト) が来ることが過去にあったため
+  // いくつかのフォールバックを行う。
 
-/*function alphabeta3(data) {
-  const myTurn = turn;
-  let nextMoves = moves(data, myTurn); // 一手目（CPU）
-  let xy2 = [];
-  
-
-  for (let i = 0; i < nextMoves.length; i++) {
-    let secondMoves = moves(nextMoves[i], !myTurn); // 二手目（User）
-    let scores2 = [];
-    let beta = Infinity;
-    let alpha = -Infinity;
-
-    if (secondMoves.length === 0) {
-      scores2.push(boardscore(nextMoves[i], myTurn));
-    } else {
-      for (let j = 0; j < secondMoves.length; j++) {
-        let thirdMoves = moves(secondMoves[j], myTurn); // 三手目（CPU）
-        let scores3 = [];
-
-        if (thirdMoves.length === 0) {
-          scores3.push(boardscore(secondMoves[j], myTurn));
-        } else {
-          for (let k = 0; k < thirdMoves.length; k++) {
-            scores3.push(boardscore(thirdMoves[k], myTurn));
-          }
-        }
-        if (scores3.length > 0) {
-          scores2.push(Math.max(...scores3));
-          beta = Math.min(beta, Math.max(...scores3));
-          if (alpha >= beta) break;
-        }
-      }
-    }
-    if (scores2.length > 0) {
-      xy2.push([Math.min(...scores2), i]);
-      alpha = Math.max(alpha, Math.min(...scores2));
+  // 1) 文字列ならそのまま parse
+  if (typeof algoArg === 'string') {
+    try {
+      return JSON.parse(algoArg);
+    } catch (e) {
+      console.error("parseAlgoArg: JSON.parse failed for string:", algoArg, e);
+      return null;
     }
   }
-  console.log("xy2:", xy2);
-  if (xy2.length === 0) return null;
-  return nextMoves[max2(xy2)[1]];
+
+  // 2) 既に JS オブジェクト（直接渡されるケース）
+  if (algoArg && typeof algoArg === 'object' && algoArg.type !== undefined) {
+    return algoArg;
+  }
+
+  // 3) Hat の List オブジェクトが来る場合：内部に文字列が入っていることがある
+  if (algoArg && typeof algoArg === 'object' && Array.isArray(algoArg.array) && algoArg.array.length > 0) {
+    const inner = algoArg.array[0];
+    if (typeof inner === 'string') {
+      try {
+        return JSON.parse(inner);
+      } catch (e) {
+        // 文字列が JSON ではない可能性
+        console.warn("parseAlgoArg: inner string not JSON:", inner);
+      }
+    }
+    // 別の可能性：inner が JS オブジェクト風なら使う
+    if (inner && typeof inner === 'object' && inner.type !== undefined) {
+      return inner;
+    }
+  }
+
+  console.error("parseAlgoArg: cannot parse algorithm arg:", algoArg);
+  return null;
 }
 
-function newminimax3(data) {
-  const myTurn = turn;
-  let nextMoves = moves(data, myTurn); // 一手目（CPU）
-  let xy2 = [];
+// --- ミニマックス (深さ指定を最後の引数に取る) ---
+// signature: mmN(state, generateMoves, evaluate, turn, depth)
+function mmN(state, generateMoves, evaluate, turn, depth) {
+  function rec(board, d, currentTurn, rootTurn) {
+    if (d === 0) return [evaluate(board, rootTurn), null];
+    const legal = generateMoves(board, currentTurn);
+    if (!legal || legal.length === 0) return [evaluate(board, rootTurn), null];
 
-  for (let i = 0; i < nextMoves.length; i++) {
-    let secondMoves = moves(nextMoves[i], !myTurn); // 二手目（User）
-    let scores2 = [];
-
-    if (secondMoves.length === 0) {
-      scores2.push(boardscore(nextMoves[i], myTurn));
-    } else {
-      for (let j = 0; j < secondMoves.length; j++) {
-        let thirdMoves = moves(secondMoves[j], myTurn); // 三手目（CPU）
-        let scores3 = [];
-
-        if (thirdMoves.length === 0) {
-          scores3.push(boardscore(secondMoves[j], myTurn));
-        } else {
-          for (let k = 0; k < thirdMoves.length; k++) {
-            scores3.push(boardscore(thirdMoves[k], myTurn));
-          }
-        }
-        if (scores3.length > 0) {
-          scores2.push(Math.max(...scores3));
-        }
+    if (currentTurn === rootTurn) {
+      let best = -Infinity, bestIdx = null;
+      for (let i = 0; i < legal.length; i++) {
+        const [score] = rec(legal[i], d - 1, !currentTurn, rootTurn);
+        if (score > best) { best = score; bestIdx = i; }
       }
-    }
-    if (scores2.length > 0) {
-      xy2.push([Math.min(...scores2), i]);
+      return [best, bestIdx];
+    } else {
+      let best = Infinity, bestIdx = null;
+      for (let i = 0; i < legal.length; i++) {
+        const [score] = rec(legal[i], d - 1, !currentTurn, rootTurn);
+        if (score < best) { best = score; bestIdx = i; }
+      }
+      return [best, bestIdx];
     }
   }
-  console.log("xy2:", xy2);
-  if (xy2.length === 0) return null;
-  return nextMoves[max2(xy2)[1]];
-}*/
+
+  const [, bestIdx] = rec(state, depth, turn, turn);
+  const movesList = generateMoves(state, turn);
+  if (!movesList || movesList.length === 0) return null;
+  return (bestIdx === null) ? movesList[0] : movesList[bestIdx];
+}
+
+// --- アルファベータ (深さ最後引数) ---
+function abN(state, generateMoves, evaluate, turn, depth) {
+  function rec(board, d, alpha, beta, currentTurn, rootTurn) {
+    if (d === 0) return [evaluate(board, rootTurn), null];
+    const legal = generateMoves(board, currentTurn);
+    if (!legal || legal.length === 0) return [evaluate(board, rootTurn), null];
+
+    if (currentTurn === rootTurn) {
+      let best = -Infinity, bestIdx = null;
+      for (let i = 0; i < legal.length; i++) {
+        const [score] = rec(legal[i], d - 1, alpha, beta, !currentTurn, rootTurn);
+        if (score > best) { best = score; bestIdx = i; }
+        alpha = Math.max(alpha, best);
+        if (beta <= alpha) break;
+      }
+      return [best, bestIdx];
+    } else {
+      let best = Infinity, bestIdx = null;
+      for (let i = 0; i < legal.length; i++) {
+        const [score] = rec(legal[i], d - 1, alpha, beta, !currentTurn, rootTurn);
+        if (score < best) { best = score; bestIdx = i; }
+        beta = Math.min(beta, best);
+        if (beta <= alpha) break;
+      }
+      return [best, bestIdx];
+    }
+  }
+
+  const [, bestIdx] = rec(state, depth, -Infinity, Infinity, turn, turn);
+  const movesList = generateMoves(state, turn);
+  if (!movesList || movesList.length === 0) return null;
+  return (bestIdx === null) ? movesList[0] : movesList[bestIdx];
+}
+
+// --- CPU 呼び出し（Hat から JSON 文字列を受け取る）---
+function othelloCPUTurn(algoArgFromHat) {
+  console.log("othelloCPUTurn received raw arg:", algoArgFromHat);
+  const algoObj = parseAlgoArg(algoArgFromHat);
+  if (!algoObj) {
+    console.error("othelloCPUTurn: invalid algorithm argument; aborting.");
+    return;
+  }
+
+  console.log("othelloCPUTurn parsed algo:", algoObj);
+
+  const depth = Number(algoObj.depth) || 0;
+  let bestMove = null;
+
+  if (algoObj.type === "mmN") {
+    bestMove = mmN(data, moves, boardscore, turn, depth);
+  } else if (algoObj.type === "abN") {
+    bestMove = abN(data, moves, boardscore, turn, depth);
+  } else {
+    console.error("othelloCPUTurn: unknown algorithm type:", algoObj.type);
+    return;
+  }
+
+  if (bestMove !== null) {
+    printBoard(bestMove);
+    console.log("CPU move chosen by", algoObj.type, "depth", depth);
+  } else {
+    // フォールバック：ランダム手
+    const cands = moves(data, turn);
+    if (cands && cands.length > 0) {
+      printBoard(cands[Math.floor(Math.random() * cands.length)]);
+      console.log("CPU fallback random");
+    } else {
+      console.log("No legal moves for CPU");
+    }
+  }
+
+  turnChange();
+}

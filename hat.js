@@ -724,13 +724,56 @@
 			return array2;
 		}
 	
-		function makeArgFun(args, tail){
+		/*function makeArgFun(args, tail){
 			if(args==null || args.length==0) return tail;
+			console.log("makeArgFun args:", args); 
 			var source=args[0].source;
 			var list=new List(args, 0, tail, null, source);
 			var fc=new List([tmpVar], 0, list, null, source);
 			return new HatFun([tmpVar], null, fc, source);
-		}
+		}*/
+
+		function makeArgFun(args, tail){
+			try {
+				console.log("makeArgFun ENTRY args:", args);
+    if (!args) {
+					console.warn("makeArgFun: args is falsy (null/undefined). returning tail.");
+	return tail;
+    }
+    // args が配列なら要素の型を出す
+    for (let i = 0; i < args.length; i++) {
+    const it = args[i];
+    if (it === undefined) {
+    console.error("makeArgFun: args[" + i + "] === undefined -> dumping TaskQ and stack");
+    console.error(new Error().stack);
+        				// TaskQ の要素を最小限に出力（ご自身の hat.js のTaskQ名に合わせて）
+        try {
+        console.log("TaskQ snapshot (first 8):");
+        for (let t = 0; t < Math.min(8, TaskQ.length); t++) {
+            const task = TaskQ[t];
+            console.log(" TaskQ[" + t + "]: fun=", task && task.fun && task.fun.name ? task.fun.name : task && task.fun, 
+                        " args=", Array.isArray(task && task.args) ? task.args.map(a => (a && a.constructor && a.constructor.name) || typeof a) : task && task.args);
+        }
+        } catch (e) {
+        console.warn("Could not dump TaskQ:", e);
+        }
+        // ここで return tail するとクラッシュは抑えられるが原因は残る
+        return tail;
+    }
+    }
+    var source = args[0].source;
+    var list = new List(args, 0, tail, null, source);
+    var fc = new List([tmpVar], 0, list, null, source);
+    return new HatFun([tmpVar], null, fc, source);
+} catch (err) {
+    console.error("makeArgFun: unexpected error", err, args, tail);
+    // 安全策として tail を返す（呼び出し継続させる）
+    return tail;
+}
+}
+
+
+		
 	
 		function isNumber(value){
 			return Number.isFinite(value);
