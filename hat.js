@@ -724,16 +724,34 @@
 			return array2;
 		}
 	
-		/*function makeArgFun(args, tail){
+		function makeArgFun(args, tail){
 			if(args==null || args.length==0) return tail;
 			console.log("makeArgFun args:", args); 
 			var source=args[0].source;
 			var list=new List(args, 0, tail, null, source);
 			var fc=new List([tmpVar], 0, list, null, source);
 			return new HatFun([tmpVar], null, fc, source);
-		}*/
+		}
 
-		function makeArgFun(args, tail){
+		/*function makeArgFun(args, tail){
+    if (args === undefined) {
+        console.error("makeArgFun: args is undefined!");
+        console.trace(); // 呼び出し元のスタックトレースを表示
+    } else {
+        console.log("makeArgFun args:", args);
+    }
+
+    if (args == null || args.length == 0) return tail;
+
+    var source = args[0].source;
+    var list = new List(args, 0, tail, null, source);
+    var fc = new List([tmpVar], 0, list, null, source);
+    return new HatFun([tmpVar], null, fc, source);
+}*/
+
+
+
+		/*function makeArgFun(args, tail){
 			try {
 				console.log("makeArgFun ENTRY args:", args);
     if (!args) {
@@ -770,7 +788,7 @@
     // 安全策として tail を返す（呼び出し継続させる）
     return tail;
 }
-}
+}*/
 
 
 		
