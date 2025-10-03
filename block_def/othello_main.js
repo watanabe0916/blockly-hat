@@ -886,7 +886,7 @@ Blockly.Hat['abN'] = function(block) {
 // --- CPU ブロック（アルゴリズム入力） ---
 Blockly.defineBlocksWithJsonArray([{
   "type": "othelloCPUTurn",
-  "message0": "オセロCPUの操作 %1",
+  "message0": "オセロCPU %1",
   "args0": [
     { "type": "input_value", "name": "ALGO", "check": "Algorithm" }
   ],
