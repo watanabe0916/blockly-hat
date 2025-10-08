@@ -383,6 +383,9 @@ $listの先頭に$elを追加したリストを返す。
   JavaScript "othelloCPUTurn" algoJsonStr ^(dummy)
   return)
 
+(defineCPS chessCPUTurn ^(algoJsonStr . return)
+  JavaScript "chessCPUTurn" algoJsonStr ^(dummy)
+  return)
 
 
 

@@ -900,3 +900,20 @@ Blockly.Hat['othelloCPUTurn'] = function(block) {
   var code = `(othelloCPUTurn ${algo})\n`;
   return code;
 };
+
+Blockly.defineBlocksWithJsonArray([{
+  "type": "chessCPUTurn",
+  "message0": "チェスCPU %1",
+  "args0": [
+    { "type": "input_value", "name": "ALGO", "check": "Algorithm" }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 120
+}]);
+
+Blockly.Hat['chessCPUTurn'] = function(block) {
+  var algo = Blockly.Hat.valueToCode(block, 'ALGO', Hat.ORDER_NONE) || 'null';
+  var code = `(chessCPUTurn ${algo})\n`;
+  return code;
+};
