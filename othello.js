@@ -1342,11 +1342,7 @@ function alphabetaN(data, depth) {
 
 // --- ユーティリティ: Hat から来た引数を安全にパースする ---
 function parseAlgoArg(algoArg) {
-  // 期待：algoArg は JSON 文字列 (例: '{"type":"mmN","depth":5}')
-  // しかし Hat の内部表現 (List オブジェクト) が来ることが過去にあったため
-  // いくつかのフォールバックを行う。
 
-  // 1) 文字列ならそのまま parse
   if (typeof algoArg === 'string') {
     try {
       return JSON.parse(algoArg);
@@ -1355,8 +1351,9 @@ function parseAlgoArg(algoArg) {
       return null;
     }
   }
+}
 
-  // 2) 既に JS オブジェクト（直接渡されるケース）
+  /*/ 2) 既に JS オブジェクト（直接渡されるケース）
   if (algoArg && typeof algoArg === 'object' && algoArg.type !== undefined) {
     return algoArg;
   }
@@ -1380,7 +1377,8 @@ function parseAlgoArg(algoArg) {
 
   console.error("parseAlgoArg: cannot parse algorithm arg:", algoArg);
   return null;
-}
+}*/
+
 
 // --- ミニマックス (深さ指定を最後の引数に取る) ---
 // signature: mmN(state, generateMoves, evaluate, turn, depth)
