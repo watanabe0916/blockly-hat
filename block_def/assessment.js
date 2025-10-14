@@ -1,6 +1,35 @@
 (function () {
     if (typeof savedBlockPrefix === 'undefined') window.savedBlockPrefix = 'bky.prc.saved.';
 
+    const DEFAULT_SAVED = {
+        // "sample1": { main: "<xml>...</xml>", function: "<xml>...</xml>" }
+        // "あなたの保存名": { main: "ここに main ワークスペースの XML 文字列", function: "ここに function ワークスペースの XML 文字列" }
+        "アルファベータ探索": { main: "<xml xmlns=\"http://www.w3.org/1999/xhtml\"><variables></variables><block type=\"turn_select\" id=\"$^6;i|!?@7@Im%MvQgvS\" x=\"59\" y=\"10\"><next><block type=\"loop_if_break\" id=\"m{mH~`wED1T2w;jMd/a-\"><statement name=\"arg\"><block type=\"update_variable\" id=\"1uoBBXn4*859Y!;c3d%o\"><field name=\"var_name\">p</field><field name=\"init_value\">data</field></block></statement><value name=\"conditions\"><block type=\"finishGame\" id=\"A]b@I)Sa9#Kky;pZo2~{\"></block></value><statement name=\"syori\"><block type=\"if_else\" id=\"xDa!SvaCkoi+wBP~me::\"><value name=\"if_conditions\"><block type=\"turnPut\" id=\"cY^J*}It1%~phCs^w]SF\"></block></value><statement name=\"if\"><block type=\"if_else\" id=\"SS+]3iS@Q#tPXXuLNnb/\"><value name=\"if_conditions\"><block type=\"userTurncheck\" id=\"D{mVnEE1D{BL8m/xd0nX\"></block></value><statement name=\"if\"><block type=\"turnPlayer\" id=\"aq.}0ROe]7wEt)*h5oAU\"></block></statement><statement name=\"else\"><block type=\"call_def_func\" id=\"e{Kk|pRt~A5CQ6WSiO2w\"><field name=\"yield\"></field><value name=\"call\"><block type=\"call_func_andarg\" id=\"fXnZ:q(c;8J1xVy6GlXi\"><field name=\"func_name\">CPU</field></block></value></block></statement></block></statement><statement name=\"else\"><block type=\"if_else\" id=\"ONtWAX}iV%n[x$y=b+c/\"><value name=\"if_conditions\"><block type=\"opponentPut\" id=\"@qY7gyOcK,zK$n3aqsKQ\"></block></value><statement name=\"if\"><block type=\"turnChange\" id=\"|!qK}6$TSYaP`a/u!=bL\"></block></statement><statement name=\"else\"><block type=\"break\" id=\"Yg?Y]0kdRHqjLB3=3JKJ\"></block></statement></block></statement></block></statement><next><block type=\"showResult\" id=\"ZDCJE3~{S1#62-H^oh(/\"></block></next></block></next></block></xml>", function: "<xml xmlns=\"http://www.w3.org/1999/xhtml\"><variables></variables><block type=\"def_func\" id=\"}l^`(yh:kLrjPWP=@~pi\" x=\"35\" y=\"43\"><field name=\"code\">1</field><field name=\"return\"></field><statement name=\"define\"><block type=\"call_def_func\" id=\"@;aI~!8q~*TBNb`sB^{Y\"><field name=\"yield\"></field><value name=\"call\"><block type=\"call_func_andarg\" id=\"07Q2(6%((t7%*/Hz|3Ru\"><field name=\"func_name\">CPU</field></block></value></block></statement><statement name=\"do\"><block type=\"minimaxturnCPU\" id=\")iS7-otx]}aAa.G[KFG}\"></block></statement></block></xml>" }
+    };
+
+    function seedDefaultSaves() {
+        // 既に1つでも savedBlockPrefix のキーがあれば何もしない
+        for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            if (k && k.startsWith(savedBlockPrefix)) return;
+        }
+        // 挿入
+        Object.keys(DEFAULT_SAVED).forEach(name => {
+            try {
+                const key = savedBlockPrefix + name;
+                const value = DEFAULT_SAVED[name];
+                // 値はオブジェクト {main, function} を JSON 文字列で保存する想定
+                localStorage.setItem(key, JSON.stringify(value));
+                console.log('seeded saved program:', name);
+            } catch (e) {
+                console.warn('failed to seed saved program', name, e);
+            }
+        });
+    }
+
+    // 自動実行
+    seedDefaultSaves();
+
     function createPanel() {
         if (document.getElementById('assessmentPanel')) return;
 
@@ -18,7 +47,8 @@
             zIndex: 2000,
             boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
             fontFamily: 'sans-serif',
-            fontSize: '13px'
+            fontSize: '13px',
+            display: 'none'
         });
 
         const header = document.createElement('div');
@@ -69,16 +99,16 @@
         if (!openBtn) {
             openBtn = document.createElement('button');
             openBtn.id = 'assessmentOpenBtn';
-            openBtn.textContent = '判定パネル';
+            openBtn.textContent = '正解判定パネル';
             Object.assign(openBtn.style, {
                 position: 'fixed',
                 top: '12px',
                 right: '12px',
                 zIndex: 2001,
                 padding: '6px 8px',
-                fontSize: '12px',
-                borderRadius: '4px',
-                display: 'none',
+                fontSize: '16px',
+                borderRadius: '8px',
+                //display: 'none',
                 boxShadow: '0 1px 4px rgba(0,0,0,0.12)'
             });
             document.body.appendChild(openBtn);
@@ -216,11 +246,11 @@
 
         let out = '';
         out += '判定: ' + (isCorrect ? '正解' : '不正解') + '\n\n';
-        out += '欠損ブロック : ' + (Object.keys(missing).length ? '' : 'なし') + '\n';
+        out += '欠損ブロック : ' + (Object.keys(missing).length ? '' : '0') + '\n';
         Object.keys(missing).forEach(k => out += `  ${k}: ${missing[k]}\n`);
-        out += '\n過剰ブロック : ' + (Object.keys(excess).length ? '' : 'なし') + '\n';
+        out += '\n過剰ブロック : ' + (Object.keys(excess).length ? '' : '0') + '\n';
         Object.keys(excess).forEach(k => out += `  ${k}: ${excess[k]}\n`);
-        out += '\n本来使用しないブロック : ' + forbiddenCount + '\n';
+        out += '\n本来使用しないブロック : ' + (forbiddenCount ? '' : '0') + '\n';
         forbiddenTypes.forEach(f => out += `  ${f.type}: ${f.count}\n`);
         out += '\n--- 参照情報 ---\n';
         out += '正解のブロック種類数: ' + Object.keys(savedMap).length + '\n';
