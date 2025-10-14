@@ -191,15 +191,11 @@ Blockly.Blocks.loop_if_break = {
     init() {
         this.jsonInit({
             type: "block_type",
-            message0: "繰り返し(while) %1 更新変数 %2 終了条件 %3 処理 %4",
+            message0: "繰り返し(while) %1 終了条件 %2 処理 %3",
             args0: [{
                     type: "input_dummy",
                     //name: "value",
                     //text: "loop1"
-                },
-                {
-                  type:"input_statement",
-                  name:"arg"
                 },
                 
                 {
