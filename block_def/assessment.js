@@ -22,7 +22,7 @@
         });
 
         const header = document.createElement('div');
-        header.textContent = '保存プログラム判定';
+        header.textContent = '正解ブロック判定';
         header.style.fontWeight = '600';
         header.style.marginBottom = '6px';
         panel.appendChild(header);
@@ -216,14 +216,14 @@
 
         let out = '';
         out += '判定: ' + (isCorrect ? '正解' : '不正解') + '\n\n';
-        out += '欠損ブロック（必要だが現在不足）: ' + (Object.keys(missing).length ? '' : 'なし') + '\n';
+        out += '欠損ブロック : ' + (Object.keys(missing).length ? '' : 'なし') + '\n';
         Object.keys(missing).forEach(k => out += `  ${k}: ${missing[k]}\n`);
-        out += '\n過剰ブロック（現在多い）: ' + (Object.keys(excess).length ? '' : 'なし') + '\n';
+        out += '\n過剰ブロック : ' + (Object.keys(excess).length ? '' : 'なし') + '\n';
         Object.keys(excess).forEach(k => out += `  ${k}: ${excess[k]}\n`);
-        out += '\n本来使用しないブロック（保存にない）: ' + forbiddenCount + '\n';
+        out += '\n本来使用しないブロック : ' + forbiddenCount + '\n';
         forbiddenTypes.forEach(f => out += `  ${f.type}: ${f.count}\n`);
         out += '\n--- 参照情報 ---\n';
-        out += '保存時のブロック種類数: ' + Object.keys(savedMap).length + '\n';
+        out += '正解のブロック種類数: ' + Object.keys(savedMap).length + '\n';
         out += '現在のブロック種類数: ' + Object.keys(currentMap).length + '\n';
 
         resEl.textContent = out;
