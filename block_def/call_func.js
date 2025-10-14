@@ -52,7 +52,7 @@ Blockly.Blocks.call_func_andarg = {
             args0: [{
                     type: "field_input",
                     name: "func_name",
-                    text: "func",
+                    text: "CPU",
                 },
                 {
                     type: "input_dummy"

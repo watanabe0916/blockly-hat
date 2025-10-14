@@ -3,7 +3,6 @@
 
     const DEFAULT_SAVED = {
         // "sample1": { main: "<xml>...</xml>", function: "<xml>...</xml>" }
-        // "あなたの保存名": { main: "ここに main ワークスペースの XML 文字列", function: "ここに function ワークスペースの XML 文字列" }
         "アルファベータ探索": { main: "<xml xmlns=\"http://www.w3.org/1999/xhtml\"><variables></variables><block type=\"turn_select\" id=\"$^6;i|!?@7@Im%MvQgvS\" x=\"59\" y=\"10\"><next><block type=\"loop_if_break\" id=\"m{mH~`wED1T2w;jMd/a-\"><statement name=\"arg\"><block type=\"update_variable\" id=\"1uoBBXn4*859Y!;c3d%o\"><field name=\"var_name\">p</field><field name=\"init_value\">data</field></block></statement><value name=\"conditions\"><block type=\"finishGame\" id=\"A]b@I)Sa9#Kky;pZo2~{\"></block></value><statement name=\"syori\"><block type=\"if_else\" id=\"xDa!SvaCkoi+wBP~me::\"><value name=\"if_conditions\"><block type=\"turnPut\" id=\"cY^J*}It1%~phCs^w]SF\"></block></value><statement name=\"if\"><block type=\"if_else\" id=\"SS+]3iS@Q#tPXXuLNnb/\"><value name=\"if_conditions\"><block type=\"userTurncheck\" id=\"D{mVnEE1D{BL8m/xd0nX\"></block></value><statement name=\"if\"><block type=\"turnPlayer\" id=\"aq.}0ROe]7wEt)*h5oAU\"></block></statement><statement name=\"else\"><block type=\"call_def_func\" id=\"e{Kk|pRt~A5CQ6WSiO2w\"><field name=\"yield\"></field><value name=\"call\"><block type=\"call_func_andarg\" id=\"fXnZ:q(c;8J1xVy6GlXi\"><field name=\"func_name\">CPU</field></block></value></block></statement></block></statement><statement name=\"else\"><block type=\"if_else\" id=\"ONtWAX}iV%n[x$y=b+c/\"><value name=\"if_conditions\"><block type=\"opponentPut\" id=\"@qY7gyOcK,zK$n3aqsKQ\"></block></value><statement name=\"if\"><block type=\"turnChange\" id=\"|!qK}6$TSYaP`a/u!=bL\"></block></statement><statement name=\"else\"><block type=\"break\" id=\"Yg?Y]0kdRHqjLB3=3JKJ\"></block></statement></block></statement></block></statement><next><block type=\"showResult\" id=\"ZDCJE3~{S1#62-H^oh(/\"></block></next></block></next></block></xml>", function: "<xml xmlns=\"http://www.w3.org/1999/xhtml\"><variables></variables><block type=\"def_func\" id=\"}l^`(yh:kLrjPWP=@~pi\" x=\"35\" y=\"43\"><field name=\"code\">1</field><field name=\"return\"></field><statement name=\"define\"><block type=\"call_def_func\" id=\"@;aI~!8q~*TBNb`sB^{Y\"><field name=\"yield\"></field><value name=\"call\"><block type=\"call_func_andarg\" id=\"07Q2(6%((t7%*/Hz|3Ru\"><field name=\"func_name\">CPU</field></block></value></block></statement><statement name=\"do\"><block type=\"minimaxturnCPU\" id=\")iS7-otx]}aAa.G[KFG}\"></block></statement></block></xml>" }
     };
 
@@ -19,13 +18,10 @@
                 } catch (e) {
                     console.warn('failed to seed saved program', name, e);
                 }
-            } else {
-                // すでに存在する場合はスキップ
-            }
+            } 
         });
     }
 
-    // 自動実行
     seedDefaultSaves();
 
     function createPanel() {

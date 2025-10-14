@@ -179,12 +179,12 @@ Blockly.defineBlocksWithJsonArray([
     {
       "type": "field_input",
       "name": "var_name",
-      "text": "name"
+      "text": "p"
     },
     {
       "type": "field_input",
       "name": "init_value",
-      "text": "value"
+      "text": "data"
     }
   ],
   "previousStatement": null,
