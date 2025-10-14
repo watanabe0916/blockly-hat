@@ -8,21 +8,19 @@
     };
 
     function seedDefaultSaves() {
-        // 既に1つでも savedBlockPrefix のキーがあれば何もしない
-        for (let i = 0; i < localStorage.length; i++) {
-            const k = localStorage.key(i);
-            if (k && k.startsWith(savedBlockPrefix)) return;
-        }
-        // 挿入
+        // DEFAULT_SAVED の各エントリについて、同名キーが存在しなければ保存する
         Object.keys(DEFAULT_SAVED).forEach(name => {
-            try {
-                const key = savedBlockPrefix + name;
-                const value = DEFAULT_SAVED[name];
-                // 値はオブジェクト {main, function} を JSON 文字列で保存する想定
-                localStorage.setItem(key, JSON.stringify(value));
-                console.log('seeded saved program:', name);
-            } catch (e) {
-                console.warn('failed to seed saved program', name, e);
+            const key = savedBlockPrefix + name;
+            if (localStorage.getItem(key) == null) {
+                try {
+                    const value = DEFAULT_SAVED[name];
+                    localStorage.setItem(key, JSON.stringify(value));
+                    console.log('seeded saved program:', name);
+                } catch (e) {
+                    console.warn('failed to seed saved program', name, e);
+                }
+            } else {
+                // すでに存在する場合はスキップ
             }
         });
     }
