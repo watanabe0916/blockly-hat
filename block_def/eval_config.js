@@ -21,9 +21,30 @@
     };
 
     const GROUP_COLORS = {
-        A: '#e74c3c', B: '#e67e22', C: '#f1c40f', D: '#2ecc71', E: '#27ae60',
-        F: '#16a085', G: '#3498db', H: '#9b59b6', I: '#95a5a6'
+        A: '#16a085', B: '#e67e22', C: '#34495e', D: '#2ecc71', E: '#f1c40f',
+        F: '#e74c3c', G: '#3498db', H: '#9b59b6', I: '#bdc3c7'
     };
+
+    function hexToRgba(hex, alpha) {
+        if (!hex) return `rgba(0,0,0,${alpha})`;
+        const h = hex.replace('#', '');
+        const bigint = parseInt(h.length === 3 ? h.split('').map(c => c + c).join('') : h, 16);
+        const r = (bigint >> 16) & 255;
+        const g = (bigint >> 8) & 255;
+        const b = bigint & 255;
+        return `rgba(${r},${g},${b},${alpha})`;
+    }
+
+    function getGroupByCoord(y, x) {
+        for (const g in GROUP_COORDS) {
+            const coords = GROUP_COORDS[g];
+            for (let i = 0; i < coords.length; i++) {
+                const [yy, xx] = coords[i];
+                if (yy === y && xx === x) return g;
+            }
+        }
+        return null;
+    }
 
     // UI 作成
     function createPanel() {
@@ -32,14 +53,14 @@
         const panel = document.createElement('div');
         panel.id = 'evalConfigPanel';
         Object.assign(panel.style, {
-            position: 'fixed', top: '60px', right: '12px', width: '360px',
+            position: 'fixed', top: '60px', left: '12px', width: '360px',
             maxWidth: '46vw', background: '#fff', border: '1px solid #ccc',
             padding: '10px', zIndex: 2100, boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
             fontFamily: 'sans-serif', fontSize: '13px', display: 'none'
         });
 
         const header = document.createElement('div');
-        header.textContent = '評価値設定 (evaluate8 グループ設定)';
+        header.textContent = '評価値設定';
         header.style.fontWeight = '600';
         header.style.marginBottom = '8px';
         panel.appendChild(header);
@@ -95,7 +116,6 @@
         resetBtn.textContent = 'デフォルトに戻す';
         resetBtn.addEventListener('click', () => {
             localStorage.removeItem(STORAGE_KEY);
-            // 再読み込みしてUIを初期化（既存 evaluate8 値に戻す）
             window.location.reload();
         });
         btnRow.appendChild(resetBtn);
@@ -111,27 +131,27 @@
 
         panel.appendChild(btnRow);
 
-        // プレビュー（簡易 8x8 表示）
-        const preview = document.createElement('pre');
-        preview.id = 'evalPreview';
-        preview.style.marginTop = '8px';
-        preview.style.background = '#fafafa';
-        preview.style.padding = '6px';
-        preview.style.maxHeight = '30vh';
-        preview.style.overflow = 'auto';
-        panel.appendChild(preview);
+        // プレビュー（カラフルな 8x8 表示）
+        const previewWrap = document.createElement('div');
+        previewWrap.id = 'evalPreview';
+        previewWrap.style.marginTop = '8px';
+        previewWrap.style.background = '#fafafa';
+        previewWrap.style.padding = '6px';
+        previewWrap.style.maxHeight = '30vh';
+        previewWrap.style.overflow = 'auto';
+        panel.appendChild(previewWrap);
 
         document.body.appendChild(panel);
 
-        // Open button
+        // Open button （左にずらして表示）
         let openBtn = document.getElementById('evalConfigOpenBtn');
         if (!openBtn) {
             openBtn = document.createElement('button');
             openBtn.id = 'evalConfigOpenBtn';
             openBtn.textContent = '評価値設定';
             Object.assign(openBtn.style, {
-                position: 'fixed', top: '12px', right: '12px', zIndex: 2101,
-                padding: '6px 10px', fontSize: '12px', borderRadius: '6px'
+                position: 'fixed', top: '12px', left: '12px', zIndex: 2101,
+                padding: '6px 10px', fontSize: '16px', borderRadius: '6px'
             });
             document.body.appendChild(openBtn);
         }
@@ -142,12 +162,10 @@
             updatePreview();
         });
 
-        // set close behavior when starting hidden
         openBtn.style.display = 'block';
     }
 
     function getRepresentativeValue(group) {
-        // try to derive from current evaluate8 if available
         try {
             if (typeof evaluate8 !== 'undefined' && Array.isArray(evaluate8)) {
                 const coords = GROUP_COORDS[group];
@@ -185,7 +203,6 @@
         });
         if (saveAfter) saveStoredValues(obj);
         updatePreview();
-        // notify user
         console.log('evaluate8 updated by groups', obj);
     }
 
@@ -202,21 +219,67 @@
     }
 
     function updatePreview() {
-        const preview = document.getElementById('evalPreview');
-        if (!preview) return;
+        const wrap = document.getElementById('evalPreview');
+        if (!wrap) return;
+        // build HTML table with colors per group
         if (typeof evaluate8 === 'undefined' || !Array.isArray(evaluate8)) {
-            preview.textContent = 'evaluate8 が未定義です';
+            wrap.innerHTML = '<div style="padding:8px">evaluate8 が未定義です</div>';
             return;
         }
-        let s = '';
+        const table = document.createElement('table');
+        table.style.borderCollapse = 'collapse';
+        table.style.width = '100%';
+        table.style.fontSize = '13px';
+
         for (let y = 0; y < 8; y++) {
+            const tr = document.createElement('tr');
             for (let x = 0; x < 8; x++) {
+                const td = document.createElement('td');
+                td.style.padding = '4px';
+                td.style.textAlign = 'center';
+                td.style.border = '1px solid #ddd';
+                td.style.minWidth = '30px';
                 const v = (evaluate8[y] && evaluate8[y][x] !== undefined) ? evaluate8[y][x] : 0;
-                s += v.toString().padStart(6, ' ');
+                const g = getGroupByCoord(y, x);
+                if (g) {
+                    td.style.background = hexToRgba(GROUP_COLORS[g], 0.14);
+                    td.style.borderLeft = `4px solid ${GROUP_COLORS[g]}`;
+                } else {
+                    td.style.background = '#fff';
+                }
+                td.textContent = v;
+                tr.appendChild(td);
             }
-            s += '\n';
+            table.appendChild(tr);
         }
-        preview.textContent = s;
+        // legend
+        const legend = document.createElement('div');
+        legend.style.display = 'flex';
+        legend.style.flexWrap = 'wrap';
+        legend.style.gap = '6px';
+        legend.style.marginTop = '6px';
+        Object.keys(GROUP_COLORS).forEach(g => {
+            const item = document.createElement('div');
+            item.style.display = 'inline-flex';
+            item.style.alignItems = 'center';
+            item.style.gap = '6px';
+            item.style.fontSize = '12px';
+            const sw = document.createElement('span');
+            sw.style.display = 'inline-block';
+            sw.style.width = '14px';
+            sw.style.height = '14px';
+            sw.style.background = GROUP_COLORS[g];
+            sw.style.borderRadius = '3px';
+            const lbl = document.createElement('span');
+            lbl.textContent = `${g}`;
+            item.appendChild(sw);
+            item.appendChild(lbl);
+            legend.appendChild(item);
+        });
+
+        wrap.innerHTML = '';
+        wrap.appendChild(table);
+        wrap.appendChild(legend);
     }
 
     function populateInputsFromStored() {
@@ -247,7 +310,6 @@
     window.addEventListener('load', () => {
         createPanel();
         seedMissingStored();
-        // apply stored values to evaluate8 on load so othello uses them immediately
         const stored = loadStoredValues();
         if (stored) {
             Object.keys(stored).forEach(g => applyGroupToEvaluate8(g, stored[g]));
