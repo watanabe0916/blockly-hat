@@ -11,12 +11,12 @@ h1{
     overflow: hidden;
 }
 #blocklyDiv{
-    width:100%;
-    height: 700px;
+    width:90%;
+    height: 600px;
 }
 #blocklyDiv_function{
-    width:100%;
-    height: 500px;
+    width:90%;
+    height: 400px;
 }
  #code_area{ /*#othello_area*/ 
     float: right;
@@ -39,7 +39,7 @@ h1{
 }*/
 .outputcode{
     width:90%;
-    height:20em;
+    height:10em;
 }
 .blocklySvg {
     width: 100%;
@@ -175,5 +175,3 @@ body {
   .hide {
     display: none;
   }
- 
-  

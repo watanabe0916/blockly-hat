@@ -33,7 +33,7 @@
         panel.id = 'assessmentPanel';
         Object.assign(panel.style, {
             position: 'fixed',
-            top: '12px',
+            top: '60px',
             right: '12px',
             width: '340px',
             maxWidth: '40vw',
