@@ -115,8 +115,18 @@
         const resetBtn = document.createElement('button');
         resetBtn.textContent = 'デフォルトに戻す';
         resetBtn.addEventListener('click', () => {
+            // 保存値を消す
             localStorage.removeItem(STORAGE_KEY);
-            window.location.reload();
+            // evaluate8 と入力欄をそれぞれデフォルト（代表値）で更新する
+            Object.keys(GROUP_COORDS).forEach(g => {
+                const v = getRepresentativeValue(g);
+                const el = document.getElementById('eval_group_' + g);
+                if (el) el.value = v;
+                applyGroupToEvaluate8(g, v);
+            });
+            updatePreview();
+            // 簡単な通知（必要なら別の UI に変更）
+            console.log('評価値をデフォルトに戻しました');
         });
         btnRow.appendChild(resetBtn);
 
@@ -167,11 +177,14 @@
 
     function getRepresentativeValue(group) {
         try {
-            if (typeof evaluate8 !== 'undefined' && Array.isArray(evaluate8)) {
+            // 優先して othello.js で保持したオリジナルの評価テーブルを参照する
+            const defaultTable = (typeof window !== 'undefined' && Array.isArray(window.__DEFAULT_EVALUATE8__)) ? window.__DEFAULT_EVALUATE8__ :
+                            (typeof evaluate8 !== 'undefined' && Array.isArray(evaluate8) ? evaluate8 : null);
+            if (defaultTable) {
                 const coords = GROUP_COORDS[group];
                 for (let i = 0; i < coords.length; i++) {
                     const [y, x] = coords[i];
-                    if (evaluate8[y] && typeof evaluate8[y][x] === 'number') return evaluate8[y][x];
+                    if (defaultTable[y] && typeof defaultTable[y][x] === 'number') return defaultTable[y][x];
                 }
             }
         } catch (e) { }

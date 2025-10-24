@@ -526,6 +526,8 @@ evaluate8[5] = [204,-56,152,35,36,153,-57,205];
 evaluate8[6] = [-199,-402,-49,-48,-47,-46,-403,-198];
 evaluate8[7] = [1203,-197,206,52,53,207,-196,1204];
 
+// 保存：初期定義された評価値のコピーを保持（eval_config.js から参照）
+window.__DEFAULT_EVALUATE8__ = JSON.parse(JSON.stringify(evaluate8));
 
 //盤面配列を受け取り、評価値を返す
 function staticBoard(staticData){
