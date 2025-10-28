@@ -16,7 +16,7 @@ h1{
 }
 #blocklyDiv_function{
     width:90%;
-    height: 400px;
+    height: 1000px;
 }
  #code_area{ /*#othello_area*/ 
     float: right;
