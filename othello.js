@@ -1448,6 +1448,7 @@ function abN(state, generateMoves, evaluate, turn, depth) {
   return (bestIdx === null) ? movesList[0] : movesList[bestIdx];
 }
 
+/*
 // --- CPU 呼び出し（Hat から JSON 文字列を受け取る）---
 function othelloCPUTurn(algoArgFromHat) {
   console.log("othelloCPUTurn received raw arg:", algoArgFromHat);
@@ -1466,6 +1467,86 @@ function othelloCPUTurn(algoArgFromHat) {
     bestMove = mmN(data, moves, boardscore, turn, depth);
   } else if (algoObj.type === "abN") {
     bestMove = abN(data, moves, boardscore, turn, depth);
+  } else {
+    console.error("othelloCPUTurn: unknown algorithm type:", algoObj.type);
+    return;
+  }
+
+  if (bestMove !== null) {
+    printBoard(bestMove);
+    console.log("CPU move chosen by", algoObj.type, "depth", depth);
+  } else {
+    // フォールバック：ランダム手
+    const cands = moves(data, turn);
+    if (cands && cands.length > 0) {
+      printBoard(cands[Math.floor(Math.random() * cands.length)]);
+      console.log("CPU fallback random");
+    } else {
+      console.log("No legal moves for CPU");
+    }
+  }
+
+  turnChange();
+}
+*/
+
+// --- CPU 呼び出し（Hat から JSON 文字列を受け取る；第二引数は評価テーブル）---
+function othelloCPUTurn(algoArgFromHat, evalArgFromHat) {
+  console.log("othelloCPUTurn received raw algo:", algoArgFromHat, "eval:", evalArgFromHat);
+
+  // --- parse algorithm arg (supports plain JSON string or Hat List(JSVar,Str)) ---
+  function parseHatStringArg(arg) {
+    if (!arg) return null;
+    // plain JS string
+    if (typeof arg === 'string') {
+      try { return JSON.parse(arg); } catch(e){ return null; }
+    }
+    // Hat List(JSVar, Str) pattern
+    if (arg && arg.type === 'List' && Array.isArray(arg.array) && arg.array.length >= 2) {
+      const s = arg.array[1] && arg.array[1].string;
+      if (typeof s === 'string') {
+        try { return JSON.parse(s); } catch(e) { return null; }
+      }
+    }
+    return null;
+  }
+
+  const algoObj = parseHatStringArg(algoArgFromHat);
+  if (!algoObj) {
+    console.error("othelloCPUTurn: invalid algorithm argument; aborting.", algoArgFromHat);
+    return;
+  }
+  console.log("othelloCPUTurn parsed algo:", algoObj);
+
+  // --- parse eval table arg to produce an evaluate(board, rootTurn) function ---
+  let evaluateFn = boardscore; // fallback to existing boardscore
+  const evalObj = parseHatStringArg(evalArgFromHat);
+  if (evalObj && evalObj.type === 'evalTable' && Array.isArray(evalObj.table)) {
+    const table = evalObj.table;
+    // evaluator from table: returns score from perspective of rootTurn (true => BLACK)
+    evaluateFn = function(board, rootTurn) {
+      const myColor = rootTurn ? BLACK : WHITE;
+      const oppColor = rootTurn ? WHITE : BLACK;
+      let score = 0;
+      for (let y = 0; y < board.length; y++) {
+        for (let x = 0; x < board.length; x++) {
+          if (board[y][x] === myColor) score += (table[y] && table[y][x]) ? table[y][x] : 0;
+          else if (board[y][x] === oppColor) score -= (table[y] && table[y][x]) ? table[y][x] : 0;
+        }
+      }
+      return score;
+    };
+  } else {
+    console.log("othelloCPUTurn: using default boardscore (no evalTable provided or parse failed).");
+  }
+
+  const depth = Number(algoObj.depth) || 0;
+  let bestMove = null;
+
+  if (algoObj.type === "mmN") {
+    bestMove = mmN(data, moves, evaluateFn, turn, depth);
+  } else if (algoObj.type === "abN") {
+    bestMove = abN(data, moves, evaluateFn, turn, depth);
   } else {
     console.error("othelloCPUTurn: unknown algorithm type:", algoObj.type);
     return;

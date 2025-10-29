@@ -379,8 +379,12 @@ $listの先頭に$elを追加したリストを返す。
   return)
 
 ;; othelloCPUTurn は JSON 文字列を受け取り JS 関数に渡す
-(defineCPS othelloCPUTurn ^(algoJsonStr . return)
-  JavaScript "othelloCPUTurn" algoJsonStr ^(dummy)
+//(defineCPS othelloCPUTurn ^(algoJsonStr . return)
+  //JavaScript "othelloCPUTurn" algoJsonStr ^(dummy)
+  //return)
+
+(defineCPS othelloCPUTurn ^(algoJsonStr evalJsonStr . return)
+  JavaScript "othelloCPUTurn" algoJsonStr evalJsonStr ^(dummy)
   return)
 
 (defineCPS chessCPUTurn ^(algoJsonStr . return)

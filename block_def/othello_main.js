@@ -883,6 +883,7 @@ Blockly.Hat['abN'] = function(block) {
   return [code, Hat.ORDER_ATOMIC];
 };
 
+/*
 // --- CPU ブロック（アルゴリズム入力） ---
 Blockly.defineBlocksWithJsonArray([{
   "type": "othelloCPUTurn",
@@ -900,6 +901,7 @@ Blockly.Hat['othelloCPUTurn'] = function(block) {
   var code = `(othelloCPUTurn ${algo})\n`;
   return code;
 };
+*/
 
 Blockly.defineBlocksWithJsonArray([{
   "type": "chessCPUTurn",
@@ -915,5 +917,64 @@ Blockly.defineBlocksWithJsonArray([{
 Blockly.Hat['chessCPUTurn'] = function(block) {
   var algo = Blockly.Hat.valueToCode(block, 'ALGO', Hat.ORDER_NONE) || 'null';
   var code = `(chessCPUTurn ${algo})\n`;
+  return code;
+};
+
+// 8x8 評価値ブロック (出力: EvalTable)
+Blockly.Blocks['eval_table'] = {
+  init: function() {
+    this.setColour(200);
+    this.setOutput(true, 'EvalTable');
+    this.appendDummyInput().appendField('評価値テーブル (8x8)');
+    // create 8 rows of inputs with 8 dropdown fields each
+    const options = [];
+    for (let v = -100; v <= 100; v += 10) options.push([String(v), String(v)]);
+    for (let y = 0; y < 8; y++) {
+      const row = this.appendDummyInput('ROW' + y);
+      for (let x = 0; x < 8; x++) {
+        const fname = 'r' + y + 'c' + x;
+        // small label on first column to help orientation
+        if (x === 0) row.appendField(String(y) + ':');
+        row.appendField(new Blockly.FieldDropdown(options), fname);
+      }
+    }
+    this.setTooltip('各マスの評価値を -100〜100 (10刻み) で指定します');
+  }
+};
+
+Blockly.Hat['eval_table'] = function(block) {
+  const table = [];
+  for (let y = 0; y < 8; y++) {
+    table[y] = [];
+    for (let x = 0; x < 8; x++) {
+      const fname = 'r' + y + 'c' + x;
+      const v = block.getFieldValue(fname) || '0';
+      table[y][x] = Number(v);
+    }
+  }
+  const payload = JSON.stringify({ type: 'evalTable', table: table });
+  // produce a JavaScript string literal containing the JSON (same style as mmN/abN)
+  const code = JSON.stringify(payload);
+  return [code, Hat.ORDER_ATOMIC];
+};
+
+// --- CPU ブロック（アルゴリズム入力 + 評価テーブル） ---
+Blockly.defineBlocksWithJsonArray([{
+  "type": "othelloCPUTurn",
+  "message0": "オセロCPU %1 評価テーブル %2",
+  "args0": [
+    { "type": "input_value", "name": "ALGO", "check": "Algorithm" },
+    { "type": "input_value", "name": "EVAL", "check": "EvalTable" }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 120
+}]);
+
+Blockly.Hat['othelloCPUTurn'] = function(block) {
+  var algo = Blockly.Hat.valueToCode(block, 'ALGO', Hat.ORDER_NONE) || 'null';
+  var evaltbl = Blockly.Hat.valueToCode(block, 'EVAL', Hat.ORDER_NONE) || 'null';
+  // pass two args to othelloCPUTurn: algorithm and evaltable
+  var code = `(othelloCPUTurn ${algo} ${evaltbl})\n`;
   return code;
 };
