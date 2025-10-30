@@ -920,21 +920,32 @@ Blockly.Hat['chessCPUTurn'] = function(block) {
   return code;
 };
 
-// 8x8 評価値ブロック (出力: EvalTable)
+// 8x8 評価値ブロック (出力: EvalTable) — 行番号・列番号なし
 Blockly.Blocks['eval_table'] = {
   init: function() {
     this.setColour(200);
     this.setOutput(true, 'EvalTable');
+    // タイトルのみ
     this.appendDummyInput().appendField('評価値テーブル (8x8)');
-    // create 8 rows of inputs with 8 dropdown fields each
+
+    // ドロップダウンの選択肢（表示はNBSPでパディング）
     const options = [];
-    for (let v = -100; v <= 100; v += 10) options.push([String(v), String(v)]);
+    function makeLabel(n) {
+      const s = (n >= 0 ? (n === 0 ? '0' : '+' + n) : String(n));
+      const target = 4;
+      let out = s;
+      while (out.length < target) out = '\u00A0' + out;
+      return out;
+    }
+    for (let v = -100; v <= 100; v += 10) {
+      options.push([ makeLabel(v), String(v) ]);
+    }
+
+    // 各行（行番号・列番号なしで8×8のドロップダウンを配置）
     for (let y = 0; y < 8; y++) {
       const row = this.appendDummyInput('ROW' + y);
       for (let x = 0; x < 8; x++) {
         const fname = 'r' + y + 'c' + x;
-        // small label on first column to help orientation
-        if (x === 0) row.appendField(String(y) + ':');
         row.appendField(new Blockly.FieldDropdown(options), fname);
       }
     }
@@ -943,6 +954,7 @@ Blockly.Blocks['eval_table'] = {
 };
 
 Blockly.Hat['eval_table'] = function(block) {
+  // collect values into 2D array
   const table = [];
   for (let y = 0; y < 8; y++) {
     table[y] = [];
@@ -953,9 +965,7 @@ Blockly.Hat['eval_table'] = function(block) {
     }
   }
   const payload = JSON.stringify({ type: 'evalTable', table: table });
-  // produce a JavaScript string literal containing the JSON (same style as mmN/abN)
-  const code = JSON.stringify(payload);
-  return [code, Hat.ORDER_ATOMIC];
+  return [JSON.stringify(payload), Hat.ORDER_ATOMIC];
 };
 
 // --- CPU ブロック（アルゴリズム入力 + 評価テーブル） ---

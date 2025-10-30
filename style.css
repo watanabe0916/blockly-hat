@@ -175,3 +175,89 @@ body {
   .hide {
     display: none;
   }
+/* Blockly ドロップダウンを固定幅にして行ずれを防止 */
+#blocklyDiv .blocklyText, 
+#blocklyDiv .blocklyDropdownText {
+  display: inline-block;
+  min-width: 44px;    /* 表示幅（必要なら調整） */
+  width: 44px;
+  box-sizing: border-box;
+  text-align: center; /* 数値を中央表示 */
+  padding: 0 2px;
+}
+
+/* HTML select を使っている場合のフォールバック */
+#blocklyDiv .blocklyHtmlInput, 
+#blocklyDiv select {
+  width: 44px !important;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 12px;
+  padding: 0 2px;
+}
+
+/* eval_table のセル（ブロック上表示）の余白を一定にする */
+.blocklyBlockBackground .eval-table-cell,
+#blocklyDiv .eval-table-cell {
+  min-width: 44px;
+  width: 44px;
+  display: inline-block;
+  text-align: center;
+}
+
+/* Blockly のドロップダウンを等幅・固定幅にして行ずれを防止 */
+.blocklyText,
+.blocklyDropdownText,
+.blocklyHtmlInput,
+.blocklyFieldLabel,
+.blocklyFieldDropdown {
+  font-family: "Courier New", "Courier", "monospace" !important;
+  font-size: 14px !important;
+  font-weight: bold !important;
+  white-space: pre !important;       /* 空白も幅に影響させる */
+  text-align: center !important;
+}
+
+/* SVG内の表示文字を見た目上固定幅にする */
+.blocklyDropdownText,
+.blocklyText {
+  display: inline-block !important;
+  min-width: 48px !important;       /* -100 を入れても崩れない目安 */
+  width: 48px !important;
+  box-sizing: border-box !important;
+  padding: 0 2px !important;
+}
+
+/* HTML select / input のオーバーレイ */
+.blocklyHtmlInput,
+.blocklyDropDownDiv select,
+#blocklyDiv select {
+  width: 48px !important;
+  min-width: 48px !important;
+  box-sizing: border-box !important;
+  text-align: center !important;
+  font-family: "Courier New", "Courier", "monospace" !important;
+  font-size: 12px !important;
+  padding: 0 2px !important;
+}
+
+/* eval_table 左ラベル（行番号）の固定幅）*/
+.blocklyBlockBackground .blocklyFieldLabel,
+#blocklyDiv .blocklyFieldLabel {
+  min-width: 24px;
+  width: 24px;
+  display: inline-block;
+  text-align: right;
+  padding-right: 6px;
+}
+
+/* eval_table セルの見た目（ブロック上）*/
+.blocklyBlockBackground .eval-table-cell,
+#blocklyDiv .eval-table-cell {
+  min-width: 48px;
+  width: 48px;
+  display: inline-block;
+  text-align: center;
+  box-sizing: border-box;
+  padding: 0 2px;
+}
