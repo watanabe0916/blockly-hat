@@ -241,16 +241,6 @@ body {
   padding: 0 2px !important;
 }
 
-/* eval_table 左ラベル（行番号）の固定幅）*/
-.blocklyBlockBackground .blocklyFieldLabel,
-#blocklyDiv .blocklyFieldLabel {
-  min-width: 24px;
-  width: 24px;
-  display: inline-block;
-  text-align: right;
-  padding-right: 6px;
-}
-
 /* eval_table セルの見た目（ブロック上）*/
 .blocklyBlockBackground .eval-table-cell,
 #blocklyDiv .eval-table-cell {
