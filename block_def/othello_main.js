@@ -988,3 +988,75 @@ Blockly.Hat['othelloCPUTurn'] = function(block) {
   var code = `(othelloCPUTurn ${algo} ${evaltbl})\n`;
   return code;
 };
+
+// ...existing code...
+// 変更: 評価値グループを出力タイプ "EvalTable" にして CPU の EVAL 入力と一致させる
+Blockly.defineBlocksWithJsonArray([{
+  "type": "eval_table",
+  "message0": "評価値グループ (A〜I)",
+  "message1": "A %1",
+  "args1": [{ "type": "input_value", "name": "G_A", "check": "Number" }],
+  "message2": "B %1",
+  "args2": [{ "type": "input_value", "name": "G_B", "check": "Number" }],
+  "message3": "C %1",
+  "args3": [{ "type": "input_value", "name": "G_C", "check": "Number" }],
+  "message4": "D %1",
+  "args4": [{ "type": "input_value", "name": "G_D", "check": "Number" }],
+  "message5": "E %1",
+  "args5": [{ "type": "input_value", "name": "G_E", "check": "Number" }],
+  "message6": "F %1",
+  "args6": [{ "type": "input_value", "name": "G_F", "check": "Number" }],
+  "message7": "G %1",
+  "args7": [{ "type": "input_value", "name": "G_G", "check": "Number" }],
+  "message8": "H %1",
+  "args8": [{ "type": "input_value", "name": "G_H", "check": "Number" }],
+  "message9": "I %1",
+  "args9": [{ "type": "input_value", "name": "G_I", "check": "Number" }],
+  "inputsInline": false,
+  "output": "EvalTable",  // ← ここを EvalTable に
+  "colour": 200,
+  "tooltip": "グループごとの評価値（各引数は数値ブロック）"
+}]);
+
+// Hat 出力: 9グループの数値を集めて JSON 文字列を返す
+Blockly.Hat['eval_table'] = function(block) {
+  const groups = ['A','B','C','D','E','F','G','H','I'];
+  const vals = {};
+  groups.forEach(g => {
+    const code = Blockly.Hat.valueToCode(block, 'G_' + g, Hat.ORDER_NONE) || '0';
+    let n = 0;
+    try {
+      n = Number(JSON.parse(code));
+    } catch (e) {
+      n = Number(code) || 0;
+    }
+    vals[g] = n;
+  });
+  const payload = { type: 'evalGroups', values: vals };
+  const payloadStr = JSON.stringify(payload);
+  return [JSON.stringify(payloadStr), Hat.ORDER_ATOMIC];
+};
+// ...existing code...
+
+// 単体の評価値ブロック（各グループに接続して使う数値）
+// 出力: Number（Hat で数値リテラルを返す）
+Blockly.defineBlocksWithJsonArray([{
+  "type": "eval_group_value",
+  "message0": "評価値 %1",
+  "args0": [
+    {
+      "type": "field_number",
+      "name": "VAL",
+      "value": 0,
+    }
+  ],
+  "output": "Number",
+  "colour": 200,
+  "tooltip": "グループ用の評価値（-100〜100、10刻みを想定）"
+}]);
+
+Blockly.Hat['eval_group_value'] = function(block) {
+  const v = Number(block.getFieldValue('VAL')) || 0;
+  // Hat に渡す数値リテラル（例: 10）
+  return [String(v), Hat.ORDER_ATOMIC];
+};

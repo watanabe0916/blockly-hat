@@ -1490,6 +1490,7 @@ function othelloCPUTurn(algoArgFromHat) {
 }
 */
 
+/*
 // --- CPU 呼び出し（Hat から JSON 文字列を受け取る；第二引数は評価テーブル）---
 function othelloCPUTurn(algoArgFromHat, evalArgFromHat) {
   console.log("othelloCPUTurn received raw algo:", algoArgFromHat, "eval:", evalArgFromHat);
@@ -1568,3 +1569,130 @@ function othelloCPUTurn(algoArgFromHat, evalArgFromHat) {
 
   turnChange();
 }
+*/
+
+// ...existing code...
+function othelloCPUTurn(algoArgFromHat, evalArgFromHat) {
+  // Hat/Blockly から渡される引数を安全にパースするユーティリティ
+  function parseHatStringArg(arg) {
+    if (!arg) return null;
+    // 文字列として渡される場合（JSON文字列／二重JSONなど）
+    if (typeof arg === 'string') {
+      try {
+        const first = JSON.parse(arg);
+        // first がさらに文字列化された JSON の場合はもう一度パース
+        if (typeof first === 'string') {
+          try { return JSON.parse(first); } catch (e) { return first; }
+        }
+        return first;
+      } catch (e) {
+        // そのまま数値リテラルなどが来る場合
+        try { return JSON.parse(JSON.parse(arg)); } catch (e2) { return null; }
+      }
+    }
+    // Hat の List(JSVar, Str) 形式
+    if (arg && arg.type === 'List' && Array.isArray(arg.array) && arg.array.length >= 2) {
+      const s = arg.array[1] && arg.array[1].string;
+      if (typeof s === 'string') {
+        try { return JSON.parse(s); } catch (e) { return null; }
+      }
+    }
+    // 既にオブジェクトの場合はそのまま返す
+    if (typeof arg === 'object') return arg;
+    return null;
+  }
+
+  const algoObj = parseHatStringArg(algoArgFromHat);
+  if (!algoObj) {
+    console.error("othelloCPUTurn: invalid algorithm argument:", algoArgFromHat);
+    return;
+  }
+
+  // グループ座標定義（A..I）
+  const GROUP_COORDS = {
+    A: [[0,0],[0,7],[7,0],[7,7]],
+    B: [[0,2],[0,5],[2,0],[2,7],[5,0],[5,7],[7,2],[7,5]],
+    C: [[0,3],[0,4],[3,0],[4,0],[3,7],[4,7],[7,3],[7,4]],
+    D: [[2,2],[2,5],[5,2],[5,5]],
+    E: [[2,3],[2,4],[3,2],[4,2],[3,5],[4,5],[5,3],[5,4]],
+    F: [[3,3],[3,4],[4,3],[4,4]],
+    G: [[1,2],[1,3],[1,4],[1,5],[2,1],[2,6],[3,1],[3,6],[4,1],[4,6],[5,1],[5,6],[6,2],[6,3],[6,4],[6,5]],
+    H: [[0,1],[1,0],[0,6],[1,7],[6,0],[7,1],[6,7],[7,6]],
+    I: [[1,1],[1,6],[6,1],[6,6]]
+  };
+
+  // evalArgFromHat をパースして evaluate8 に反映する
+  const evalObj = parseHatStringArg(evalArgFromHat);
+  if (evalObj) {
+    if (evalObj.type === 'evalTable' && Array.isArray(evalObj.table)) {
+      // フルテーブルをそのまま適用
+      if (typeof window.evaluate8 === 'undefined') window.evaluate8 = Array.from({length:8}, ()=>Array(8).fill(0));
+      for (let y = 0; y < 8; y++) {
+        for (let x = 0; x < 8; x++) {
+          const v = (evalObj.table[y] && typeof evalObj.table[y][x] !== 'undefined') ? Number(evalObj.table[y][x]) : 0;
+          window.evaluate8[y][x] = v;
+        }
+      }
+    } else if (evalObj.type === 'evalGroups' && evalObj.values) {
+      // グループ指定を展開して適用
+      if (typeof window.evaluate8 === 'undefined') window.evaluate8 = Array.from({length:8}, ()=>Array(8).fill(0));
+      Object.keys(evalObj.values).forEach(g => {
+        const v = Number(evalObj.values[g]) || 0;
+        const coords = GROUP_COORDS[g];
+        if (!coords) return;
+        coords.forEach(([y,x]) => {
+          window.evaluate8[y][x] = v;
+        });
+      });
+    } else {
+      // 未知の形式はログ出力して無視
+      console.log("othelloCPUTurn: evalArg ignored (unknown format):", evalObj);
+    }
+  } else {
+    // evalObj が無ければ既存の evaluate8 をそのまま使う
+  }
+
+  // evaluate 関数：evaluate8 があればそれを使う。なければ既存の boardscore を利用
+  const evaluateFn = function(board, rootTurn) {
+    if (!window.evaluate8 || !Array.isArray(window.evaluate8)) return boardscore(board, rootTurn);
+    const myColor = rootTurn ? BLACK : WHITE;
+    const oppColor = rootTurn ? WHITE : BLACK;
+    let score = 0;
+    for (let y = 0; y < board.length; y++) {
+      for (let x = 0; x < board.length; x++) {
+        const val = (window.evaluate8[y] && typeof window.evaluate8[y][x] !== 'undefined') ? Number(window.evaluate8[y][x]) : 0;
+        if (board[y][x] === myColor) score += val;
+        else if (board[y][x] === oppColor) score -= val;
+      }
+    }
+    return score;
+  };
+
+  const depth = Number(algoObj.depth) || 0;
+  let bestMove = null;
+
+  if (algoObj.type === "mmN") {
+    bestMove = mmN(data, moves, evaluateFn, turn, depth);
+  } else if (algoObj.type === "abN") {
+    bestMove = abN(data, moves, evaluateFn, turn, depth);
+  } else {
+    console.error("othelloCPUTurn: unknown algorithm type:", algoObj.type);
+    return;
+  }
+
+  if (bestMove !== null) {
+    printBoard(bestMove);
+    console.log("CPU move chosen by", algoObj.type, "depth", depth);
+  } else {
+    const cands = moves(data, turn);
+    if (cands && cands.length > 0) {
+      printBoard(cands[Math.floor(Math.random() * cands.length)]);
+      console.log("CPU fallback random");
+    } else {
+      console.log("No legal moves for CPU");
+    }
+  }
+
+  turnChange();
+}
+// ...existing code...
