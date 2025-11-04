@@ -251,3 +251,29 @@ body {
   box-sizing: border-box;
   padding: 0 2px;
 }
+
+/* 評価表示エリアの位置調整・中央寄せ */
+#evalMultiDisplay {
+  margin-top: 11008px;        /* 表示位置を下げる（値を調整） */
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 980px;
+  box-sizing: border-box;
+}
+
+/* テーブル・選択を中央に */
+#evalMultiDisplay #evalTablesContainer,
+#evalMultiDisplay #evalFuncSelect {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  text-align: center;
+}
+
+/* 各評価テーブルを中央配置 */
+#evalMultiDisplay table {
+  margin: 8px auto;
+}
+
+/* 必要ならボタン列も中央寄せ */
+#evalMultiDisplay div.row { text-align: center; }

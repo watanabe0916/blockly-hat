@@ -920,6 +920,7 @@ Blockly.Hat['chessCPUTurn'] = function(block) {
   return code;
 };
 
+/*
 // 8x8 評価値ブロック (出力: EvalTable) — 行番号・列番号なし
 Blockly.Blocks['eval_table'] = {
   init: function() {
@@ -967,11 +968,12 @@ Blockly.Hat['eval_table'] = function(block) {
   const payload = JSON.stringify({ type: 'evalTable', table: table });
   return [JSON.stringify(payload), Hat.ORDER_ATOMIC];
 };
+*/
 
 // --- CPU ブロック（アルゴリズム入力 + 評価テーブル） ---
 Blockly.defineBlocksWithJsonArray([{
   "type": "othelloCPUTurn",
-  "message0": "オセロCPU %1 評価テーブル %2",
+  "message0": "オセロCPU %1 評価値 %2",
   "args0": [
     { "type": "input_value", "name": "ALGO", "check": "Algorithm" },
     { "type": "input_value", "name": "EVAL", "check": "EvalTable" }
@@ -993,7 +995,7 @@ Blockly.Hat['othelloCPUTurn'] = function(block) {
 // 変更: 評価値グループを出力タイプ "EvalTable" にして CPU の EVAL 入力と一致させる
 Blockly.defineBlocksWithJsonArray([{
   "type": "eval_table",
-  "message0": "評価値グループ (A〜I)",
+  "message0": "評価値グループ",
   "message1": "A %1",
   "args1": [{ "type": "input_value", "name": "G_A", "check": "Number" }],
   "message2": "B %1",
@@ -1036,10 +1038,8 @@ Blockly.Hat['eval_table'] = function(block) {
   const payloadStr = JSON.stringify(payload);
   return [JSON.stringify(payloadStr), Hat.ORDER_ATOMIC];
 };
-// ...existing code...
 
-// 単体の評価値ブロック（各グループに接続して使う数値）
-// 出力: Number（Hat で数値リテラルを返す）
+// 単体の評価値ブロック
 Blockly.defineBlocksWithJsonArray([{
   "type": "eval_group_value",
   "message0": "評価値 %1",
@@ -1051,12 +1051,10 @@ Blockly.defineBlocksWithJsonArray([{
     }
   ],
   "output": "Number",
-  "colour": 200,
-  "tooltip": "グループ用の評価値（-100〜100、10刻みを想定）"
+  "colour": 200
 }]);
 
 Blockly.Hat['eval_group_value'] = function(block) {
   const v = Number(block.getFieldValue('VAL')) || 0;
-  // Hat に渡す数値リテラル（例: 10）
   return [String(v), Hat.ORDER_ATOMIC];
 };
