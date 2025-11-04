@@ -18,7 +18,7 @@ h1{
     width:120%;
     height: 1000px;
 }
- #code_area{ /*#othello_area*/ 
+#code_area{ /*#othello_area*/ 
     float: right;
     width:28%;
     margin-left:2%;
@@ -30,12 +30,20 @@ h1{
     width:60%;
     margin-top:10px;
 }
-.js_area, .hat_area, .hat_output_area{
+.js_area{
     /* height: 200px; */
     padding:10px;
 }
- /*.js_area{
-     display: none; 
+.hat_area{
+    height: 200px; 
+    padding:10px;
+}
+.hat_output_area{
+    /* height: 200px; */
+    padding:10px;
+}
+/*.js_area{
+    display: none; 
 }*/
 .outputcode{
     width:90%;
