@@ -24,7 +24,7 @@
         return `rgba(${r},${g},${b},${alpha})`;
     }
 
-    // UI を作る（Hat出力と othello_area の間に挿入）
+    // UI を作る（更新ボタンは作らない）
     function ensureUI() {
         if (document.getElementById('evalMultiDisplay')) return;
         const hatOut = document.getElementById('terminal');
@@ -32,8 +32,8 @@
         const container = document.createElement('div');
         container.id = 'evalMultiDisplay';
         container.style.border = '1px solid #ddd';
-        container.style.padding = '8px';
-        container.style.margin = '8px 0';
+        container.style.padding = '2px';
+        container.style.margin = '2px';
         container.style.background = '#fff';
         container.style.maxHeight = '360px';
         container.style.overflow = 'auto';
@@ -45,25 +45,20 @@
         header.style.marginBottom = '6px';
         container.appendChild(header);
 
-        const row = document.createElement('div');
-        row.style.display = 'flex';
-        row.style.gap = '8px';
-        row.style.alignItems = 'center';
-        const label = document.createElement('div');
-        label.textContent = '関数:';
-        row.appendChild(label);
+        // 関数ラベルとセレクトを中央寄せで横並び（更新ボタンは削除）
+        const controls = document.createElement('div');
+        controls.style.display = 'flex';
+        controls.style.justifyContent = 'center'; // コンテナは常に中央揃え
+        controls.style.alignItems = 'center';
+        controls.style.gap = '8px';
+        controls.style.marginBottom = '6px';
 
         const select = document.createElement('select');
         select.id = 'evalFuncSelect';
-        select.style.minWidth = '160px';
-        row.appendChild(select);
+        select.style.minWidth = '200px';
+        controls.appendChild(select);
 
-        const refreshBtn = document.createElement('button');
-        refreshBtn.textContent = '更新';
-        refreshBtn.addEventListener('click', updateDisplays);
-        row.appendChild(refreshBtn);
-
-        container.appendChild(row);
+        container.appendChild(controls);
 
         const tablesWrap = document.createElement('div');
         tablesWrap.id = 'evalTablesContainer';
@@ -82,61 +77,77 @@
         select.addEventListener('change', function () {
             renderTableForSelected();
         });
+
+        // 外部からラベルの余白を動的に変更できるユーティリティを公開
+        window.setEvalLabelMarginLeft = function (px) {
+            window.EVAL_LABEL_MARGIN_LEFT = px;
+            const lbl = document.getElementById('evalLabel');
+            if (lbl) lbl.style.marginLeft = px;
+        };
+        // 便利関数: 一括でスタイルを渡す (例: {marginLeft:'20px', color:'#333'})
+        window.setEvalLabelStyle = function (styleObj) {
+            if (!styleObj || typeof styleObj !== 'object') return;
+            window.EVAL_LABEL_STYLE = Object.assign(window.EVAL_LABEL_STYLE || {}, styleObj);
+            const lbl = document.getElementById('evalLabel');
+            if (!lbl) return;
+            Object.keys(styleObj).forEach(k => {
+                try { lbl.style[k] = styleObj[k]; } catch (e) { /* ignore */ }
+            });
+        };
     }
 
-    // workspace から関数定義ブロック（call_func_andarg）を集め、
-    // 各関数ブロック内に含まれる eval_table / eval_groups を探して evalObj を得る
-    function collectFunctionEvals() {
-        const result = {}; // name -> evalObj
-        if (typeof workspace === 'undefined') return result;
-        const blocks = workspace.getAllBlocks(false);
-        blocks.forEach(b => {
-            if (b && b.type === 'call_func_andarg') {
-                const name = b.getFieldValue && b.getFieldValue('func_name') ? b.getFieldValue('func_name') : 'fn';
-                // search descendants for eval_table blocks
-                const descendants = b.getDescendants ? b.getDescendants() : [];
-                let foundEval = null;
-                for (let i = 0; i < descendants.length && !foundEval; i++) {
-                    const d = descendants[i];
-                    if (!d || !d.type) continue;
-                    if (d.type === 'eval_table' || d.type === 'eval_groups_input' || d.type === 'eval_groups') {
-                        // use generator to obtain payload (Hat generator for eval_table exists)
-                        try {
-                            const gen = Blockly.Hat[d.type];
-                            if (typeof gen === 'function') {
-                                const code0 = gen(d)[0]; // quoted JSON string
-                                // parse carefully (may be JSON.stringify(payloadStr) etc.)
-                                let payload = null;
-                                try {
-                                    const step1 = JSON.parse(code0); // yields payloadStr or object
-                                    try { payload = JSON.parse(step1); } catch (e) { payload = step1; }
-                                } catch (e) {
-                                    try { payload = JSON.parse(code0); } catch (e) { payload = null; }
-                                }
-                                if (payload) foundEval = payload;
-                            }
-                        } catch (e) {
-                            // ignore
-                        }
-                    }
-                }
-                // if not found, keep undefined (will show default)
-                result[name] = foundEval || null;
+    // HatCode テキスト（ここでは workspace_function の出力）から defineCPS と othelloCPUTurn の eval 引数を抽出
+    function parseHatCodeFunctionsFromText(hatText) {
+        const map = {};
+        if (!hatText || typeof hatText !== 'string') return map;
+        map['__GLOBAL__'] = null;
+        const re = /\(defineCPS\s+([^\s\)]+)[\s\S]*?\(othelloCPUTurn\s+("(?:(?:\\.|[^"\\])*)")\s+("(?:(?:\\.|[^"\\])*)")\s*\)/g;
+        let m;
+        while ((m = re.exec(hatText)) !== null) {
+            const fname = m[1];
+            const evalLit = m[3];
+            let evalObj = null;
+            try {
+                const s1 = JSON.parse(evalLit);
+                try { evalObj = JSON.parse(s1); } catch (e) { evalObj = s1; }
+            } catch (e) { evalObj = null; }
+            map[fname] = evalObj;
+        }
+        return map;
+    }
+
+    // workspace_function の Hat 出力のみを使って関数ごとの eval マップを取得する
+    function getFunctionEvalMap() {
+        const map = {};
+        map['__GLOBAL__'] = null;
+        try {
+            if (typeof Blockly !== 'undefined' && typeof workspace_function !== 'undefined') {
+                const hatText = Blockly.Hat.workspaceToCode(workspace_function) || '';
+                const parsed = parseHatCodeFunctionsFromText(hatText);
+                // マップは parsed を返す（必ず __GLOBAL__ を含める）
+                if (!('__GLOBAL__' in parsed)) parsed['__GLOBAL__'] = null;
+                return parsed;
             }
-        });
-        return result;
+        } catch (e) {
+            console.warn('eval_display_ui getFunctionEvalMap workspace_function parse failed', e);
+        }
+        // フォールバック：textarea の HatCode を使う（極力使わない）
+        const hatEl = document.getElementById('HatCode');
+        if (hatEl && hatEl.value) return parseHatCodeFunctionsFromText(hatEl.value);
+        return map;
     }
 
     // evalObj -> 8x8 numeric matrix
     function evalObjToMatrix(evalObj) {
         const empty = Array.from({ length: 8 }, () => Array(8).fill(0));
         if (!evalObj) return empty;
+        if (typeof evalObj === 'string') {
+            try { evalObj = JSON.parse(evalObj); } catch (e) { return empty; }
+        }
         if (evalObj.type === 'evalTable' && Array.isArray(evalObj.table)) {
-            // normalize length to 8
-            const m = Array.from({ length: 8 }, (_, y) => Array.from({ length: 8 }, (_, x) => {
+            return Array.from({ length: 8 }, (_, y) => Array.from({ length: 8 }, (_, x) => {
                 return (evalObj.table[y] && typeof evalObj.table[y][x] !== 'undefined') ? Number(evalObj.table[y][x]) : 0;
             }));
-            return m;
         }
         if (evalObj.type === 'evalGroups' && evalObj.values) {
             const m = Array.from({ length: 8 }, () => Array(8).fill(0));
@@ -159,6 +170,7 @@
         table.style.width = '100%';
         table.style.maxWidth = '420px';
         table.style.fontSize = '12px';
+        table.style.margin = '0 auto';
         for (let y = 0; y < 8; y++) {
             const tr = document.createElement('tr');
             for (let x = 0; x < 8; x++) {
@@ -169,7 +181,6 @@
                 td.style.width = '12.5%';
                 const v = (matrix[y] && typeof matrix[y][x] !== 'undefined') ? matrix[y][x] : 0;
                 td.textContent = v;
-                // color by group
                 let group = null;
                 for (const g in GROUP_COORDS) {
                     const coords = GROUP_COORDS[g];
@@ -195,22 +206,20 @@
         const select = document.getElementById('evalFuncSelect');
         const tablesWrap = document.getElementById('evalTablesContainer');
         if (!select || !tablesWrap) return;
-        const map = collectFunctionEvals();
-        // clear select
+        const map = getFunctionEvalMap();
         select.innerHTML = '';
-        const names = Object.keys(map);
-        // add default/global option
         const optGlobal = document.createElement('option');
         optGlobal.value = '__GLOBAL__';
-        optGlobal.textContent = 'グローバル（既定）';
+        optGlobal.textContent = '初期値';
         select.appendChild(optGlobal);
-        names.forEach(n => {
+        Object.keys(map).forEach(n => {
+            if (n === '__GLOBAL__') return;
             const o = document.createElement('option');
             o.value = n;
             o.textContent = n;
             select.appendChild(o);
         });
-        // render first (global)
+        select.value = (select.options.length > 1) ? select.options[1].value : '__GLOBAL__';
         renderTableForSelected();
     }
 
@@ -220,10 +229,9 @@
         const tablesWrap = document.getElementById('evalTablesContainer');
         if (!select || !tablesWrap) return;
         const sel = select.value;
-        const map = collectFunctionEvals();
+        const map = getFunctionEvalMap();
         if (sel === '__GLOBAL__') {
-            // show current window.evaluate8 if present, else default
-            const matrix = (window.evaluate8 && Array.isArray(window.evaluate8)) ? window.evaluate8 : (window.__DEFAULT_EVALUATE8__ || Array.from({ length: 8 }, () => Array(8).fill(0)));
+            const matrix = (window.evaluate8 && Array.isArray(window.evaluate8)) ? window.evaluate8 : (map['__GLOBAL__'] ? evalObjToMatrix(map['__GLOBAL__']) : Array.from({ length: 8 }, () => Array(8).fill(0)));
             renderMatrix(matrix, tablesWrap);
             return;
         }
@@ -232,20 +240,50 @@
         renderMatrix(matrix, tablesWrap);
     }
 
-    // wrap runCode so displays update before running
+    // wrap runCode so displays update only when runCode is pressed
     function wrapRunCode() {
         if (typeof window.runCode !== 'function') return;
         const orig = window.runCode;
         window.runCode = function (...args) {
-            try { updateDisplays(); } catch (e) { console.warn(e); }
+            try {
+                // workspace_function の Hat 出力を基に表示を更新する
+                updateDisplays();
+            } catch (e) { console.warn(e); }
             return orig.apply(this, args);
         };
     }
 
+    // do not auto-update on load; only set up UI and runCode wrapper
     window.addEventListener('load', () => {
-        // initial UI create
-        setTimeout(() => { try { ensureUI(); updateDisplays(); } catch (e) { } }, 200);
-        // wrap runCode after short delay
-        setTimeout(wrapRunCode, 400);
+        try {
+            ensureUI();
+            // 初期表示: グローバル評価値をすぐ表示（runCode 押下前）
+            const tablesWrap = document.getElementById('evalTablesContainer');
+            const select = document.getElementById('evalFuncSelect');
+            // セレクトにグローバルのみ追加（後で runCode 時に上書きされる）
+            if (select) {
+                select.innerHTML = '';
+                const optGlobal = document.createElement('option');
+                optGlobal.value = '__GLOBAL__';
+                optGlobal.textContent = '初期値';
+                select.appendChild(optGlobal);
+                select.value = '__GLOBAL__';
+            }
+            // グローバル行列を決定：まず window.evaluate8、なければ workspace_function のパース、さらに無ければゼロ行列
+            let matrix = Array.from({ length: 8 }, () => Array(8).fill(0));
+            if (window.evaluate8 && Array.isArray(window.evaluate8)) {
+                matrix = window.evaluate8;
+            } else {
+                try {
+                    const map = getFunctionEvalMap();
+                    if (map && map['__GLOBAL__']) matrix = evalObjToMatrix(map['__GLOBAL__']);
+                } catch (e) { /* ignore */ }
+            }
+            if (tablesWrap) renderMatrix(matrix, tablesWrap);
+        } catch (e) { /* ignore */ }
+        setTimeout(wrapRunCode, 200);
     });
+
+    // expose for debugging if needed
+    window._evalDisplay_update = updateDisplays;
 })();
