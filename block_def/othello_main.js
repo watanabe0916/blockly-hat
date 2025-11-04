@@ -24,10 +24,10 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['finishGame'] = function(block) {
+Blockly.Hat['finishGame'] = function (block) {
   // TODO: Assemble Hat into code variable.
   let code = 'JavaScript';
-  code += ' '+'"finishGame"';
+  code += ' ' + '"finishGame"';
   //code += ' '+'^(result)\n';
   return code;
 };
@@ -44,10 +44,10 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['turnPut'] = function(block) {
+Blockly.Hat['turnPut'] = function (block) {
   // TODO: Assemble Hat into code variable.
   let code = 'JavaScript';
-  code += ' '+'"turnPut"';
+  code += ' ' + '"turnPut"';
   //code += ' '+'^(turnPossibility)\n';
   return code;
 };
@@ -64,10 +64,10 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['opponentPut'] = function(block) {
+Blockly.Hat['opponentPut'] = function (block) {
   // TODO: Assemble Hat into code variable.
   let code = 'JavaScript';
-  code += ' '+'"opponentPut"';
+  code += ' ' + '"opponentPut"';
   //code += ' '+'^(opponentPossibility)\n';
   return code;
 };
@@ -86,11 +86,11 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['printboard'] = function(block) {
+Blockly.Hat['printboard'] = function (block) {
   // TODO: Assemble Hat into code variable.
   let code = 'JavaScript';
-  code += ' '+'"printBoard"';
-  code += ' '+'^(dummy)\n';
+  code += ' ' + '"printBoard"';
+  code += ' ' + '^(dummy)\n';
   return code;
 };
 
@@ -107,11 +107,11 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['break'] = function(block) {
+Blockly.Hat['break'] = function (block) {
   // TODO: Assemble Hat into code variable.
 
   let code = 'break';
-  code += ' '+'^()';
+  code += ' ' + '^()';
   return code;
 };
 
@@ -129,7 +129,7 @@ Blockly.defineBlocksWithJsonArray([
   }
 ]);
 
-Blockly.Hat['turn_select'] = function(block) {
+Blockly.Hat['turn_select'] = function (block) {
   // TODO: Assemble Hat into code variable.
   let code = "turnSelect ^(userSente)\n";
   return code;
@@ -268,16 +268,16 @@ Blockly.defineBlocksWithJsonArray(
   }]
 );
 
-Blockly.Hat['othello_put'] = function(block) {
+Blockly.Hat['othello_put'] = function (block) {
   var dropdown_board_x = block.getFieldValue('board_x');
   var dropdown_board_y = block.getFieldValue('board_y');
   var dropdown_color = block.getFieldValue('color');
   // TODO: Assemble JavaScript into code variable.
-  
+
   let code = 'JavaScript';
-  code += ' '+'"othello_put"';
-  code += ' '+ dropdown_board_x +' '+ dropdown_board_y +' '+ dropdown_color;
-  code += ' '+'^()\n';
+  code += ' ' + '"othello_put"';
+  code += ' ' + dropdown_board_x + ' ' + dropdown_board_y + ' ' + dropdown_color;
+  code += ' ' + '^()\n';
   return code;
 };
 
@@ -322,12 +322,12 @@ Blockly.defineBlocksWithJsonArray(
   }]
 );
 
-Blockly.Hat['startothello'] = function(block) {
+Blockly.Hat['startothello'] = function (block) {
   var dropdown_boardnum = block.getFieldValue('boardnum');
   let code = 'JavaScript' + ' ';
-  code += '"hatStart"'+ ' ' + dropdown_boardnum;
+  code += '"hatStart"' + ' ' + dropdown_boardnum;
   //code += 'num ^()';
-  code += ' '+'^(redata)\n';
+  code += ' ' + '^(redata)\n';
   return code;
 };
 
@@ -432,22 +432,22 @@ Blockly.Hat['startothello'] = function(block) {
 //position定義　othello.jsのdataに該当
 Blockly.defineBlocksWithJsonArray(
 
-[{
-  "type": "position",
-  "message0": "現在の盤面",
-  //"inputsInline": true,
-  "previousStatement": null,
-  "nextStatement": null,
-  "output": null,
-  "colour": 230,
-  "tooltip": "現在の盤面の状態を表す配列を返す",
-  "helpUrl": ""
-}]
+  [{
+    "type": "position",
+    "message0": "現在の盤面",
+    //"inputsInline": true,
+    "previousStatement": null,
+    "nextStatement": null,
+    "output": null,
+    "colour": 230,
+    "tooltip": "現在の盤面の状態を表す配列を返す",
+    "helpUrl": ""
+  }]
 );
-Blockly.Hat['position'] = function(block) {
+Blockly.Hat['position'] = function (block) {
   let code = 'JavaScript';
-  code += ' '+'"returnPosition"';
-  code += ' '+'^(data)\n';
+  code += ' ' + '"returnPosition"';
+  code += ' ' + '^(data)\n';
   return code;
 };
 
@@ -464,7 +464,7 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['turnPlayer'] = function(block) {
+Blockly.Hat['turnPlayer'] = function (block) {
   // TODO: Assemble Hat into code variable.
   var code = 'turnPlayer ^(x y)\n';
   // var code = 'turnPlayer ^(nextp)\n';
@@ -484,7 +484,7 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['turnCPU'] = function(block) {
+Blockly.Hat['turnCPU'] = function (block) {
   // TODO: Assemble Hat into code variable.
   var code = "turnCPU \n"
   return code;
@@ -502,10 +502,10 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['returnTurn'] = function(block) {
+Blockly.Hat['returnTurn'] = function (block) {
   // TODO: Assemble Hat into code variable.
   var code = 'JavaScript';
-  code += ' '+'"returnTurn"';
+  code += ' ' + '"returnTurn"';
   //code += ' '+'^(turn)\n';
   return code;
 };
@@ -524,7 +524,7 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['turnChange'] = function(block) {
+Blockly.Hat['turnChange'] = function (block) {
   // TODO: Assemble Hat into code variable.
   var code = 'turnChange ^(dummy)';
   return code;
@@ -544,11 +544,11 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['skip'] = function(block) {
+Blockly.Hat['skip'] = function (block) {
   // TODO: Assemble Hat into code variable.
   var code = 'JavaScript';
-  code += ' '+'"skip"';
-  code += ' '+'^(dummy)\n';
+  code += ' ' + '"skip"';
+  code += ' ' + '^(dummy)\n';
   return code;
 };
 
@@ -565,11 +565,11 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['showResult'] = function(block) {
+Blockly.Hat['showResult'] = function (block) {
   // TODO: Assemble Hat into code variable.
   var code = 'JavaScript';
-  code += ' '+'"showResult"';
-  code += ' '+'^(dummy)\n';
+  code += ' ' + '"showResult"';
+  code += ' ' + '^(dummy)\n';
   return code;
 };
 
@@ -585,11 +585,11 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['Init'] = function(block) {
+Blockly.Hat['Init'] = function (block) {
   // TODO: Assemble Hat into code variable.
   var code = 'JavaScript';
-  code += ' '+'"Init"';
-  code += ' '+'^(dummy)\n';
+  code += ' ' + '"Init"';
+  code += ' ' + '^(dummy)\n';
   return code;
 };
 
@@ -605,11 +605,11 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['showTurn'] = function(block) {
+Blockly.Hat['showTurn'] = function (block) {
   // TODO: Assemble Hat into code variable.
   var code = 'JavaScript';
-  code += ' '+'"showTurn"';
-  code += ' '+'^(dummy)\n';
+  code += ' ' + '"showTurn"';
+  code += ' ' + '^(dummy)\n';
   return code;
 };
 
@@ -625,10 +625,10 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['CPUsTurn'] = function(block) {
+Blockly.Hat['CPUsTurn'] = function (block) {
   // TODO: Assemble Hat into code variable.
   let code = 'JavaScript';
-  code += ' '+'"CPUsTurn"';
+  code += ' ' + '"CPUsTurn"';
   //code += ' '+'^(opponentPossibility)\n';
   return code;
 };
@@ -644,10 +644,10 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['TestLoopOutCondition'] = function(block) {
+Blockly.Hat['TestLoopOutCondition'] = function (block) {
   // TODO: Assemble Hat into code variable.
   let code = 'JavaScript';
-  code += ' '+'"TestLoopOutCondition"';
+  code += ' ' + '"TestLoopOutCondition"';
   //code += ' '+'^(opponentPossibility)\n';
   return code;
 };
@@ -664,12 +664,12 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['PrintTest'] = function(block) {
+Blockly.Hat['PrintTest'] = function (block) {
   // TODO: Assemble Hat into code variable.
   var code = 'JavaScript';
-  code += ' '+'"PrintTest"';
-  code += ' '+'testcnt';
-  code += ' '+'^(printtest)\n';
+  code += ' ' + '"PrintTest"';
+  code += ' ' + 'testcnt';
+  code += ' ' + '^(printtest)\n';
   return code;
 };
 
@@ -684,10 +684,10 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['userTurncheck'] = function(block) {
+Blockly.Hat['userTurncheck'] = function (block) {
   // TODO: Assemble Hat into code variable.
   let code = 'JavaScript';
-  code += ' '+'"userTurncheck"';
+  code += ' ' + '"userTurncheck"';
   //code += ' '+'^(opponentPossibility)\n';
   return code;
 };
@@ -704,12 +704,12 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['CPU_Put'] = function(block) {
+Blockly.Hat['CPU_Put'] = function (block) {
   // TODO: Assemble Hat into code variable.
   var code = 'JavaScript';
-  code += ' '+'"CPUput"';
-  code += ' '+'p';
-  code += ' '+'^(nextp)\n';
+  code += ' ' + '"CPUput"';
+  code += ' ' + 'p';
+  code += ' ' + '^(nextp)\n';
   return code;
 };
 
@@ -725,12 +725,12 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['test_printBoard'] = function(block) {
+Blockly.Hat['test_printBoard'] = function (block) {
   // TODO: Assemble Hat into code variable.
   var code = 'JavaScript';
-  code += ' '+'"test_printBoard"';
-  code += ' '+'p';
-  code += ' '+'^(dummy)\n';
+  code += ' ' + '"test_printBoard"';
+  code += ' ' + 'p';
+  code += ' ' + '^(dummy)\n';
   return code;
 };
 
@@ -747,7 +747,7 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['test_Yamamoto'] = function(block) {
+Blockly.Hat['test_Yamamoto'] = function (block) {
   // TODO: Assemble Hat into code variable.
   var code = 'print("testyamamoto\n")^()';
   return code;
@@ -767,7 +767,7 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['minimaxturnCPU'] = function(block) {
+Blockly.Hat['minimaxturnCPU'] = function (block) {
   // TODO: Assemble Hat into code variable.
   var code = "minimaxturnCPU \n";
   /*var code = 'JavaScript';
@@ -788,14 +788,14 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['alphabetaturnCPU'] = function(block) {
+Blockly.Hat['alphabetaturnCPU'] = function (block) {
   // TODO: Assemble Hat into code variable.
   var code = "alphabetaturnCPU \n";
   return code;
 };
 
 Blockly.defineBlocksWithJsonArray(
-  
+
   [{
     "type": "minimaxNturnCPU",
     "message0": "CPUの操作(ミニマックス法 深さ %1)",
@@ -815,14 +815,14 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['minimaxNturnCPU'] = function(block) {
-  var depth = block.getFieldValue('DEPTH'); 
+Blockly.Hat['minimaxNturnCPU'] = function (block) {
+  var depth = block.getFieldValue('DEPTH');
   var code = `minimaxNturnCPU ${depth}\n`;
   return code;
 };
 
 Blockly.defineBlocksWithJsonArray(
-  
+
   [{
     "type": "alphabetaNturnCPU",
     "message0": "CPUの操作(α-β法 深さ %1)",
@@ -842,8 +842,8 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   }]
 );
-Blockly.Hat['alphabetaNturnCPU'] = function(block) {
-  var depth = block.getFieldValue('DEPTH'); 
+Blockly.Hat['alphabetaNturnCPU'] = function (block) {
+  var depth = block.getFieldValue('DEPTH');
   var code = `alphabetaNturnCPU ${depth}\n`;
   return code;
 };
@@ -859,7 +859,7 @@ Blockly.defineBlocksWithJsonArray([{
   "colour": 230
 }]);
 
-Blockly.Hat['mmN'] = function(block) {
+Blockly.Hat['mmN'] = function (block) {
   var depth = block.getFieldValue('DEPTH');
   // JSON 文字列リテラル（Hat に渡る値を「文字列」として固定する）
   var code = `"{\\"type\\":\\"mmN\\",\\"depth\\":${depth}}"`;
@@ -877,7 +877,7 @@ Blockly.defineBlocksWithJsonArray([{
   "colour": 230
 }]);
 
-Blockly.Hat['abN'] = function(block) {
+Blockly.Hat['abN'] = function (block) {
   var depth = block.getFieldValue('DEPTH');
   var code = `"{\\"type\\":\\"abN\\",\\"depth\\":${depth}}"`;
   return [code, Hat.ORDER_ATOMIC];
@@ -914,7 +914,7 @@ Blockly.defineBlocksWithJsonArray([{
   "colour": 120
 }]);
 
-Blockly.Hat['chessCPUTurn'] = function(block) {
+Blockly.Hat['chessCPUTurn'] = function (block) {
   var algo = Blockly.Hat.valueToCode(block, 'ALGO', Hat.ORDER_NONE) || 'null';
   var code = `(chessCPUTurn ${algo})\n`;
   return code;
@@ -983,7 +983,7 @@ Blockly.defineBlocksWithJsonArray([{
   "colour": 120
 }]);
 
-Blockly.Hat['othelloCPUTurn'] = function(block) {
+Blockly.Hat['othelloCPUTurn'] = function (block) {
   var algo = Blockly.Hat.valueToCode(block, 'ALGO', Hat.ORDER_NONE) || 'null';
   var evaltbl = Blockly.Hat.valueToCode(block, 'EVAL', Hat.ORDER_NONE) || 'null';
   // pass two args to othelloCPUTurn: algorithm and evaltable
@@ -993,68 +993,68 @@ Blockly.Hat['othelloCPUTurn'] = function(block) {
 
 // ...existing code...
 const GROUP_COLORS = {
-    A: '#16a085', B: '#e67e22', C: '#34495e', D: '#2ecc71', E: '#f1c40f',
-    F: '#e74c3c', G: '#3498db', H: '#9b59b6', I: '#bdc3c7'
+  A: '#16a085', B: '#e67e22', C: '#34495e', D: '#2ecc71', E: '#f1c40f',
+  F: '#e74c3c', G: '#3498db', H: '#9b59b6', I: '#bdc3c7'
 };
 
 Blockly.defineBlocksWithJsonArray([{
   "type": "eval_table",
   "message0": "評価値グループ",
-  
+
   "message1": "A %1 %2",
   "args1": [
-    {"type": "field_colour","colour": GROUP_COLORS.A},
+    { "type": "field_colour", "colour": GROUP_COLORS.A },
     { "type": "input_value", "name": "G_A", "check": "Number" }
   ],
 
   "message2": "B %1 %2",
   "args2": [
-    {"type": "field_colour","colour": GROUP_COLORS.B},
+    { "type": "field_colour", "colour": GROUP_COLORS.B },
     { "type": "input_value", "name": "G_B", "check": "Number" }
   ],
-  
+
   "message3": "C %1 %2",
   "args3": [
-    {"type": "field_colour","colour": GROUP_COLORS.C},
+    { "type": "field_colour", "colour": GROUP_COLORS.C },
     { "type": "input_value", "name": "G_C", "check": "Number" }
   ],
-  
+
   "message4": "D %1 %2",
   "args4": [
-    {"type": "field_colour","colour": GROUP_COLORS.D},
+    { "type": "field_colour", "colour": GROUP_COLORS.D },
     { "type": "input_value", "name": "G_D", "check": "Number" }
   ],
-  
+
   "message5": "E %1 %2",
   "args5": [
-    {"type": "field_colour","colour": GROUP_COLORS.E},
+    { "type": "field_colour", "colour": GROUP_COLORS.E },
     { "type": "input_value", "name": "G_E", "check": "Number" }
   ],
 
   "message6": "F %1 %2",
   "args6": [
-    {"type": "field_colour","colour": GROUP_COLORS.F},
+    { "type": "field_colour", "colour": GROUP_COLORS.F },
     { "type": "input_value", "name": "G_F", "check": "Number" }
   ],
-  
+
   "message7": "G %1 %2",
   "args7": [
-    {"type": "field_colour","colour": GROUP_COLORS.G},
+    { "type": "field_colour", "colour": GROUP_COLORS.G },
     { "type": "input_value", "name": "G_G", "check": "Number" }
   ],
-  
+
   "message8": "H %1 %2",
   "args8": [
-    {"type": "field_colour","colour": GROUP_COLORS.H},
+    { "type": "field_colour", "colour": GROUP_COLORS.H },
     { "type": "input_value", "name": "G_H", "check": "Number" }
   ],
-  
+
   "message9": "I %1 %2",
   "args9": [
-    {"type": "field_colour","colour": GROUP_COLORS.I},
+    { "type": "field_colour", "colour": GROUP_COLORS.I },
     { "type": "input_value", "name": "G_I", "check": "Number" }
   ],
-  
+
   "inputsInline": false,
   "output": "EvalTable",
   "colour": 200,
@@ -1062,8 +1062,8 @@ Blockly.defineBlocksWithJsonArray([{
 }]);
 
 // Hat 出力: 9グループの数値を集めて JSON 文字列を返す
-Blockly.Hat['eval_table'] = function(block) {
-  const groups = ['A','B','C','D','E','F','G','H','I'];
+Blockly.Hat['eval_table'] = function (block) {
+  const groups = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
   const vals = {};
   groups.forEach(g => {
     const code = Blockly.Hat.valueToCode(block, 'G_' + g, Hat.ORDER_NONE) || '0';
@@ -1095,7 +1095,7 @@ Blockly.defineBlocksWithJsonArray([{
   "colour": 200
 }]);
 
-Blockly.Hat['eval_group_value'] = function(block) {
+Blockly.Hat['eval_group_value'] = function (block) {
   const v = Number(block.getFieldValue('VAL')) || 0;
   return [String(v), Hat.ORDER_ATOMIC];
 };
