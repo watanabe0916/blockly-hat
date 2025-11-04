@@ -37,7 +37,7 @@
         container.style.background = '#fff';
         container.style.maxHeight = '360px';
         container.style.overflow = 'auto';
-        container.style.marginTop = '66px';
+        container.style.marginTop = '30px';
 
         const header = document.createElement('div');
         header.textContent = '評価値表示';
