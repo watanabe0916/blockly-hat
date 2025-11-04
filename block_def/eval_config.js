@@ -1,4 +1,4 @@
-(function () {
+/*(function () {
     // 保存キー
     const STORAGE_KEY = 'othello.eval.group.values';
 
@@ -337,3 +337,4 @@
         updatePreview
     };
 })();
+*/
