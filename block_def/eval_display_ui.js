@@ -27,7 +27,7 @@
     // UI を作る（Hat出力と othello_area の間に挿入）
     function ensureUI() {
         if (document.getElementById('evalMultiDisplay')) return;
-        const hatOut = document.getElementById('HatCode');
+        const hatOut = document.getElementById('terminal');
         const othelloArea = document.getElementById('othello_area');
         const container = document.createElement('div');
         container.id = 'evalMultiDisplay';
@@ -37,6 +37,7 @@
         container.style.background = '#fff';
         container.style.maxHeight = '360px';
         container.style.overflow = 'auto';
+        container.style.marginTop = '66px';
 
         const header = document.createElement('div');
         header.textContent = '評価値表示';
