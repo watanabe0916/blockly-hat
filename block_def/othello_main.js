@@ -992,30 +992,71 @@ Blockly.Hat['othelloCPUTurn'] = function(block) {
 };
 
 // ...existing code...
-// 変更: 評価値グループを出力タイプ "EvalTable" にして CPU の EVAL 入力と一致させる
+const GROUP_COLORS = {
+    A: '#16a085', B: '#e67e22', C: '#34495e', D: '#2ecc71', E: '#f1c40f',
+    F: '#e74c3c', G: '#3498db', H: '#9b59b6', I: '#bdc3c7'
+};
+
 Blockly.defineBlocksWithJsonArray([{
   "type": "eval_table",
   "message0": "評価値グループ",
-  "message1": "A %1",
-  "args1": [{ "type": "input_value", "name": "G_A", "check": "Number" }],
-  "message2": "B %1",
-  "args2": [{ "type": "input_value", "name": "G_B", "check": "Number" }],
-  "message3": "C %1",
-  "args3": [{ "type": "input_value", "name": "G_C", "check": "Number" }],
-  "message4": "D %1",
-  "args4": [{ "type": "input_value", "name": "G_D", "check": "Number" }],
-  "message5": "E %1",
-  "args5": [{ "type": "input_value", "name": "G_E", "check": "Number" }],
-  "message6": "F %1",
-  "args6": [{ "type": "input_value", "name": "G_F", "check": "Number" }],
-  "message7": "G %1",
-  "args7": [{ "type": "input_value", "name": "G_G", "check": "Number" }],
-  "message8": "H %1",
-  "args8": [{ "type": "input_value", "name": "G_H", "check": "Number" }],
-  "message9": "I %1",
-  "args9": [{ "type": "input_value", "name": "G_I", "check": "Number" }],
+  
+  "message1": "A %1 %2",
+  "args1": [
+    {"type": "field_colour","colour": GROUP_COLORS.A},
+    { "type": "input_value", "name": "G_A", "check": "Number" }
+  ],
+
+  "message2": "B %1 %2",
+  "args2": [
+    {"type": "field_colour","colour": GROUP_COLORS.B},
+    { "type": "input_value", "name": "G_B", "check": "Number" }
+  ],
+  
+  "message3": "C %1 %2",
+  "args3": [
+    {"type": "field_colour","colour": GROUP_COLORS.C},
+    { "type": "input_value", "name": "G_C", "check": "Number" }
+  ],
+  
+  "message4": "D %1 %2",
+  "args4": [
+    {"type": "field_colour","colour": GROUP_COLORS.D},
+    { "type": "input_value", "name": "G_D", "check": "Number" }
+  ],
+  
+  "message5": "E %1 %2",
+  "args5": [
+    {"type": "field_colour","colour": GROUP_COLORS.E},
+    { "type": "input_value", "name": "G_E", "check": "Number" }
+  ],
+
+  "message6": "F %1 %2",
+  "args6": [
+    {"type": "field_colour","colour": GROUP_COLORS.F},
+    { "type": "input_value", "name": "G_F", "check": "Number" }
+  ],
+  
+  "message7": "G %1 %2",
+  "args7": [
+    {"type": "field_colour","colour": GROUP_COLORS.G},
+    { "type": "input_value", "name": "G_G", "check": "Number" }
+  ],
+  
+  "message8": "H %1 %2",
+  "args8": [
+    {"type": "field_colour","colour": GROUP_COLORS.H},
+    { "type": "input_value", "name": "G_H", "check": "Number" }
+  ],
+  
+  "message9": "I %1 %2",
+  "args9": [
+    {"type": "field_colour","colour": GROUP_COLORS.I},
+    { "type": "input_value", "name": "G_I", "check": "Number" }
+  ],
+  
   "inputsInline": false,
-  "output": "EvalTable",  // ← ここを EvalTable に
+  "output": "EvalTable",
   "colour": 200,
   "tooltip": "グループごとの評価値（各引数は数値ブロック）"
 }]);
