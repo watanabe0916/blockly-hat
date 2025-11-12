@@ -164,8 +164,8 @@
         return empty;
     }
 
-    // render one 8x8 matrix into container element (color by group)
-    function renderMatrix(matrix, container) {
+    // matrix: 8x8 数値行列
+    function renderMatrix(matrix, container, forceLetters = false) {
         container.innerHTML = '';
         const table = document.createElement('table');
         table.style.borderCollapse = 'collapse';
@@ -173,6 +173,8 @@
         table.style.maxWidth = '420px';
         table.style.fontSize = '12px';
         table.style.margin = '0 auto';
+        // 判定: 全セルが 0 のときはグループ文字を表示するモード
+        const allZero = forceLetters || matrix.every(row => row.every(v => Number(v) === 0));
         for (let y = 0; y < 8; y++) {
             const tr = document.createElement('tr');
             for (let x = 0; x < 8; x++) {
@@ -182,7 +184,7 @@
                 td.style.textAlign = 'center';
                 td.style.width = '12.5%';
                 const v = (matrix[y] && typeof matrix[y][x] !== 'undefined') ? matrix[y][x] : 0;
-                td.textContent = v;
+                // グループ判定
                 let group = null;
                 for (const g in GROUP_COORDS) {
                     const coords = GROUP_COORDS[g];
@@ -190,6 +192,15 @@
                         if (coords[i][0] === y && coords[i][1] === x) { group = g; break; }
                     }
                     if (group) break;
+                }
+                if (allZero) {
+                    // グループアルファベットを表示
+                    td.textContent = group ? group : '';
+                    td.style.fontWeight = '600';
+                    td.style.color = '#333';
+                } else {
+                    // 値があるときは数値表示
+                    td.textContent = (typeof v !== 'undefined') ? String(v) : '0';
                 }
                 if (group) {
                     td.style.background = hexToRgba(GROUP_COLORS[group], 0.12);
@@ -212,7 +223,7 @@
         select.innerHTML = '';
         const optGlobal = document.createElement('option');
         optGlobal.value = '__GLOBAL__';
-        optGlobal.textContent = '初期値';
+        optGlobal.textContent = '評価値グループ';
         select.appendChild(optGlobal);
         Object.keys(map).forEach(n => {
             if (n === '__GLOBAL__') return;
@@ -233,13 +244,14 @@
         const sel = select.value;
         const map = getFunctionEvalMap();
         if (sel === '__GLOBAL__') {
+            // 初期「評価値グループ」は常にアルファベット表示にしたい（forceLetters = true）
             const matrix = (window.evaluate8 && Array.isArray(window.evaluate8)) ? window.evaluate8 : (map['__GLOBAL__'] ? evalObjToMatrix(map['__GLOBAL__']) : Array.from({ length: 8 }, () => Array(8).fill(0)));
-            renderMatrix(matrix, tablesWrap);
+            renderMatrix(matrix, tablesWrap, true);
             return;
         }
         const evalObj = map[sel] || null;
         const matrix = evalObjToMatrix(evalObj);
-        renderMatrix(matrix, tablesWrap);
+        renderMatrix(matrix, tablesWrap, false);
     }
 
     // wrap runCode so displays update only when runCode is pressed
@@ -267,7 +279,7 @@
                 select.innerHTML = '';
                 const optGlobal = document.createElement('option');
                 optGlobal.value = '__GLOBAL__';
-                optGlobal.textContent = '初期値';
+                optGlobal.textContent = '評価値グループ';
                 select.appendChild(optGlobal);
                 select.value = '__GLOBAL__';
             }
