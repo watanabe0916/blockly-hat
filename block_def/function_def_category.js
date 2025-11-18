@@ -126,7 +126,7 @@ Blockly.Blocks.def_func = {
                 {
                     type: "field_input",
                     name: "return",
-                    text: "break",
+                    text: "",
                 },
                 {
                     type: "input_dummy"
@@ -137,7 +137,7 @@ Blockly.Blocks.def_func = {
                 }
             ],
 
-            colour: 200,
+            colour: 170,
             tooltip: "",
             helpUrl: "",
             extensions: ["contextMenu_variableSetterGetter"]

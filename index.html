@@ -256,31 +256,25 @@
       </category>
       <!--ここまで-->
 
-      <!--実験用ブロック追加順-->
-      <category name="実験用" colour="150">
-        <block type="turn_select"></block>
-        <block type="loop_if_break"></block>
-        <block type="update_variable"></block>
-        <block type="finishGame"></block>
-        <block type="if_else"></block>
-        <block type="turnPut"></block> 
-        <block type="if_else"></block>
+      <!--ユーザー使用ブロック-->
+      <category name="ユーザー使用ブロック" colour="190">
         <block type="userTurncheck"></block>
         <block type="turnPlayer"></block>
+        <block type="opponentPut"></block>
+        <block type="turn_select"></block>
+        <block type="finishGame"></block>
+        <block type="turnChange"></block>
+        <block type="break"></block>
+        <block type="showResult"></block>
+        <block type="turnPut"></block> 
+        <block type="loop_if_break"></block>
+        <block type="if_else"></block>
         <block type="call_def_func">
           <value name="call">
             <block type="call_func_andarg">
             </block>
           </value>
         </block>
-        <block type="if_else"></block>
-        <block type="opponentPut"></block>
-        <block type="turnChange"></block>
-        <block type="break"></block>
-        <block type="showResult"></block>
-        <block type="othelloCPUTurn"></block>
-        <block type="mmN"></block>
-        <block type="abN"></block>
       </category>
       <!--ここまで-->
 
@@ -330,82 +324,6 @@
         <block type="num2_statement"></block>
       </category>
       <!--ここまで-->
-
-      <!-- 組み立て済み
-      <category name="組み立て済み" colour="50">
-        reduce ここから
-        <block type="def_func">
-          <value name="define">
-            <block type="call_def_func">
-              <value name="call">
-                <block type="call_func_andarg">
-                  <value name="arg">
-                    <block type="arg">
-                      <value name="arg_elem">
-                        <block type="num">
-                        </block>
-                      </value>
-                    </block>
-                  </value>
-                  <value name="arg">
-                    <block type="arg">
-                      <value name="arg_elem">
-                        <block type="num">
-                        </block>
-                      </value>
-                    </block>
-                  </value>
-                </block>
-              </value>
-              <value name="return">
-                <block type="num2">
-                </block>
-              </value>
-            </block>
-          </value>
-          <value name="do">
-            <block type="if_else">
-              <value name="if_conditions">
-                <block type="list_null_check"></block>
-              </value>
-              <value name="if">
-                <block type="return"></block>
-              </value>
-              <value name="else">
-                <block type="get_list_headnode"></block>
-              </value>
-            </block>
-          </value>
-        </block>
-        reduce ここまで
-        <block type="call_def_func">
-          <value name="call">
-            <block type="call_func_andarg">
-              <value name="arg">
-                <block type="arg">
-                  <value name="arg_elem">
-                    <block type="num">
-                    </block>
-                  </value>
-                </block>
-              </value>
-              <value name="arg">
-                <block type="arg">
-                  <value name="arg_elem">
-                    <block type="num">
-                    </block>
-                  </value>
-                </block>
-              </value>
-            </block>
-          </value>
-          <value name="return">
-            <block type="num2">
-            </block>
-          </value>
-        </block>
-      </category>
-      ここまで -->
 
       <!--関数定義-->
       <category name="関数定義" colour="200">
@@ -497,6 +415,24 @@
         <block type="go_left"></block>
         <!-- <block type=""></block> -->
       </category>
+
+      <!--ユーザー使用ブロック-->
+      <category name="ユーザー使用ブロック" colour="190">
+        <block type="othelloCPUTurn"></block>
+        <block type="mmN"></block>
+        <block type="abN"></block>
+        <block type="eval_table"></block>
+        <block type="eval_group_value"></block>
+        <block type="def_func"></block>
+        <block type="call_def_func">
+          <value name="call">
+            <block type="call_func_andarg">
+            </block>
+          </value>
+        </block>
+      </category>
+      <!--ここまで-->
+
     </xml>
     <!--関数定義エリアここまで-->
   </div>
