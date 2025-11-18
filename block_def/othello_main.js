@@ -993,30 +993,37 @@ Blockly.Hat['othelloCPUTurn'] = function (block) {
 
 // ...existing code...
 const GROUP_COLORS = {
-  A: '#16a085', B: '#e67e22', C: '#34495e', D: '#2ecc71', E: '#f1c40f',
-  F: '#e74c3c', G: '#3498db', H: '#9b59b6', I: '#bdc3c7'
+  A: '#16a085', B: '#e67e22', C: '#bdc3c7', D: '#2ecc71', E: '#f1c40f',
+  F: '#e74c3c', G: '#3498db', H: '#9b59b6'
 };
 
 Blockly.defineBlocksWithJsonArray([{
   "type": "eval_table",
   "message0": "評価値グループ",
 
-  "message1": "A %1 %2",
+  "message1": "A %1 評価値大 %2",
   "args1": [
     { "type": "field_colour", "colour": GROUP_COLORS.A },
     { "type": "input_value", "name": "G_A", "check": "Number" }
   ],
 
-  "message2": "B %1 %2",
+  "message2": "B %1 %3 ↑ %2",
   "args2": [
     { "type": "field_colour", "colour": GROUP_COLORS.B },
-    { "type": "input_value", "name": "G_B", "check": "Number" }
+    { "type": "input_value", "name": "G_B", "check": "Number" },
+    {
+      "type": "field_image",
+      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+      "width": 12,
+      "height": 1,
+      "alt": "space"
+    }
   ],
 
   "message3": "C %1 %2",
   "args3": [
     { "type": "field_colour", "colour": GROUP_COLORS.C },
-    { "type": "input_value", "name": "G_C", "check": "Number" }
+    { "type": "input_value", "name": "G_C", "check": "Number" },
   ],
 
   "message4": "D %1 %2",
@@ -1037,22 +1044,23 @@ Blockly.defineBlocksWithJsonArray([{
     { "type": "input_value", "name": "G_F", "check": "Number" }
   ],
 
-  "message7": "G %1 %2",
+  "message7": "G %1 %3 ↓ %2",
   "args7": [
     { "type": "field_colour", "colour": GROUP_COLORS.G },
-    { "type": "input_value", "name": "G_G", "check": "Number" }
+    { "type": "input_value", "name": "G_G", "check": "Number" },
+    {
+      "type": "field_image",
+      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+      "width": 12,
+      "height": 1,
+      "alt": "space"
+    }
   ],
 
-  "message8": "H %1 %2",
+  "message8": "H %1 評価値小 %2",
   "args8": [
     { "type": "field_colour", "colour": GROUP_COLORS.H },
-    { "type": "input_value", "name": "G_H", "check": "Number" }
-  ],
-
-  "message9": "I %1 %2",
-  "args9": [
-    { "type": "field_colour", "colour": GROUP_COLORS.I },
-    { "type": "input_value", "name": "G_I", "check": "Number" }
+    { "type": "input_value", "name": "G_H", "check": "Number" },
   ],
 
   "inputsInline": false,
@@ -1063,7 +1071,7 @@ Blockly.defineBlocksWithJsonArray([{
 
 // Hat 出力: 9グループの数値を集めて JSON 文字列を返す
 Blockly.Hat['eval_table'] = function (block) {
-  const groups = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
+  const groups = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
   const vals = {};
   groups.forEach(g => {
     const code = Blockly.Hat.valueToCode(block, 'G_' + g, Hat.ORDER_NONE) || '0';
@@ -1083,12 +1091,15 @@ Blockly.Hat['eval_table'] = function (block) {
 // 単体の評価値ブロック
 Blockly.defineBlocksWithJsonArray([{
   "type": "eval_group_value",
-  "message0": "評価値 %1",
+  "message0": "評価値(-100〜100） %1",
   "args0": [
     {
       "type": "field_number",
       "name": "VAL",
       "value": 0,
+      "min": -100,
+      "max": 100,
+      "precision": 1
     }
   ],
   "output": "Number",
