@@ -1582,48 +1582,49 @@ function othelloCPUTurn(algoArgFromHat, evalArgFromHat) {
 }
 */
 
-// evaluate 関数：evaluate8 があればそれを使う。なければ既存の boardscore を利用
-  const evaluateFn = function(board, rootTurn) {
-    if (!window.evaluate8 || !Array.isArray(window.evaluate8)) return boardscore(board, rootTurn);
-    const myColor = rootTurn ? BLACK : WHITE;
-    const oppColor = rootTurn ? WHITE : BLACK;
-    let score = 0;
-    for (let y = 0; y < board.length; y++) {
-      for (let x = 0; x < board.length; x++) {
-        const val = (window.evaluate8[y] && typeof window.evaluate8[y][x] !== 'undefined') ? Number(window.evaluate8[y][x]) : 0;
-        if (board[y][x] === myColor) score += val;
-        else if (board[y][x] === oppColor) score -= val;
-      }
+function evaluateFn(board, rootTurn) {
+  const n = Array.isArray(board) ? board.length : 8;
+  const table = (window.evaluate8 && Array.isArray(window.evaluate8)) ?
+                  window.evaluate8 :
+                  Array.from({ length: n }, () => Array(n).fill(0));
+
+  const myColor = rootTurn ? BLACK : WHITE;
+  const oppColor = rootTurn ? WHITE : BLACK;
+  let score = 0;
+  for (let y = 0; y < n; y++) {
+    for (let x = 0; x < n; x++) {
+      const val = (table[y] && typeof table[y][x] !== 'undefined') ? Number(table[y][x]) : 0;
+      if (board[y][x] === myColor) score += val;
+      else if (board[y][x] === oppColor) score -= val;
     }
-    return score;
-  };
+  }
+  return score;
+}
 
 function othelloCPUTurn(algoArgFromHat, evalArgFromHat) {
-  // Hat/Blockly から渡される引数を安全にパースするユーティリティ
   function parseHatStringArg(arg) {
     if (!arg) return null;
-    // 文字列として渡される場合（JSON文字列／二重JSONなど）
+    // plain JS string (可能な二重 JSON に対応)
     if (typeof arg === 'string') {
       try {
-        const first = JSON.parse(arg);
-        // first がさらに文字列化された JSON の場合はもう一度パース
-        if (typeof first === 'string') {
-          try { return JSON.parse(first); } catch (e) { return first; }
+        const p = JSON.parse(arg);
+        if (typeof p === 'string') {
+          try { return JSON.parse(p); } catch (e) { return p; }
         }
-        return first;
+        return p;
       } catch (e) {
-        // そのまま数値リテラルなどが来る場合
+        // 試しにもう一度パース
         try { return JSON.parse(JSON.parse(arg)); } catch (e2) { return null; }
       }
     }
-    // Hat の List(JSVar, Str) 形式
+    // Hat List(JSVar, Str) 形式
     if (arg && arg.type === 'List' && Array.isArray(arg.array) && arg.array.length >= 2) {
       const s = arg.array[1] && arg.array[1].string;
       if (typeof s === 'string') {
         try { return JSON.parse(s); } catch (e) { return null; }
       }
     }
-    // 既にオブジェクトの場合はそのまま返す
+    // 既にオブジェクトであればそのまま返す
     if (typeof arg === 'object') return arg;
     return null;
   }
@@ -1634,7 +1635,12 @@ function othelloCPUTurn(algoArgFromHat, evalArgFromHat) {
     return;
   }
 
-  // グループ座標定義（A..I）
+  // ensure evaluate8 exists
+  if (!Array.isArray(window.evaluate8)) {
+    window.evaluate8 = Array.from({ length: 8 }, () => Array(8).fill(0));
+  }
+
+  // グループ定義(既存の定義に合わせる)
   const GROUP_COORDS = {
     A: [[0,0],[0,7],[7,0],[7,7]],
     B: [[0,2],[0,5],[2,0],[2,7],[5,0],[5,7],[7,2],[7,5]],
@@ -1646,21 +1652,17 @@ function othelloCPUTurn(algoArgFromHat, evalArgFromHat) {
     H: [[1,1],[1,6],[6,1],[6,6]]
   };
 
-  // evalArgFromHat をパースして evaluate8 に反映する
   const evalObj = parseHatStringArg(evalArgFromHat);
   if (evalObj) {
     if (evalObj.type === 'evalTable' && Array.isArray(evalObj.table)) {
-      // フルテーブルをそのまま適用
-      if (typeof window.evaluate8 === 'undefined') window.evaluate8 = Array.from({length:8}, ()=>Array(8).fill(0));
+      // フルテーブルをそのまま反映（8x8 を想定）
       for (let y = 0; y < 8; y++) {
         for (let x = 0; x < 8; x++) {
-          const v = (evalObj.table[y] && typeof evalObj.table[y][x] !== 'undefined') ? Number(evalObj.table[y][x]) : 0;
-          window.evaluate8[y][x] = v;
+          window.evaluate8[y][x] = (evalObj.table[y] && typeof evalObj.table[y][x] !== 'undefined') ? Number(evalObj.table[y][x]) : 0;
         }
       }
     } else if (evalObj.type === 'evalGroups' && evalObj.values) {
-      // グループ指定を展開して適用
-      if (typeof window.evaluate8 === 'undefined') window.evaluate8 = Array.from({length:8}, ()=>Array(8).fill(0));
+      // グループ指定を展開して反映
       Object.keys(evalObj.values).forEach(g => {
         const v = Number(evalObj.values[g]) || 0;
         const coords = GROUP_COORDS[g];
@@ -1670,11 +1672,8 @@ function othelloCPUTurn(algoArgFromHat, evalArgFromHat) {
         });
       });
     } else {
-      // 未知の形式はログ出力して無視
       console.log("othelloCPUTurn: evalArg ignored (unknown format):", evalObj);
     }
-  } else {
-    // evalObj が無ければ既存の evaluate8 をそのまま使う
   }
 
   const depth = Number(algoObj.depth) || 0;
@@ -1682,7 +1681,7 @@ function othelloCPUTurn(algoArgFromHat, evalArgFromHat) {
 
   if (algoObj.type === "mmN") {
     bestMove = mmN(data, moves, evaluateFn, turn, depth);
-  } else if (algoObj.type === "abN") {
+  } else if (algoObj.type === "abN" || algoObj.type === "ab") {
     bestMove = abN(data, moves, evaluateFn, turn, depth);
   } else {
     console.error("othelloCPUTurn: unknown algorithm type:", algoObj.type);
