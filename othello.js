@@ -1582,7 +1582,22 @@ function othelloCPUTurn(algoArgFromHat, evalArgFromHat) {
 }
 */
 
-// ...existing code...
+// evaluate 関数：evaluate8 があればそれを使う。なければ既存の boardscore を利用
+  const evaluateFn = function(board, rootTurn) {
+    if (!window.evaluate8 || !Array.isArray(window.evaluate8)) return boardscore(board, rootTurn);
+    const myColor = rootTurn ? BLACK : WHITE;
+    const oppColor = rootTurn ? WHITE : BLACK;
+    let score = 0;
+    for (let y = 0; y < board.length; y++) {
+      for (let x = 0; x < board.length; x++) {
+        const val = (window.evaluate8[y] && typeof window.evaluate8[y][x] !== 'undefined') ? Number(window.evaluate8[y][x]) : 0;
+        if (board[y][x] === myColor) score += val;
+        else if (board[y][x] === oppColor) score -= val;
+      }
+    }
+    return score;
+  };
+
 function othelloCPUTurn(algoArgFromHat, evalArgFromHat) {
   // Hat/Blockly から渡される引数を安全にパースするユーティリティ
   function parseHatStringArg(arg) {
@@ -1661,22 +1676,6 @@ function othelloCPUTurn(algoArgFromHat, evalArgFromHat) {
   } else {
     // evalObj が無ければ既存の evaluate8 をそのまま使う
   }
-
-  // evaluate 関数：evaluate8 があればそれを使う。なければ既存の boardscore を利用
-  const evaluateFn = function(board, rootTurn) {
-    if (!window.evaluate8 || !Array.isArray(window.evaluate8)) return boardscore(board, rootTurn);
-    const myColor = rootTurn ? BLACK : WHITE;
-    const oppColor = rootTurn ? WHITE : BLACK;
-    let score = 0;
-    for (let y = 0; y < board.length; y++) {
-      for (let x = 0; x < board.length; x++) {
-        const val = (window.evaluate8[y] && typeof window.evaluate8[y][x] !== 'undefined') ? Number(window.evaluate8[y][x]) : 0;
-        if (board[y][x] === myColor) score += val;
-        else if (board[y][x] === oppColor) score -= val;
-      }
-    }
-    return score;
-  };
 
   const depth = Number(algoObj.depth) || 0;
   let bestMove = null;
