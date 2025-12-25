@@ -1601,35 +1601,26 @@ function evaluateFn(board, rootTurn) {
   return score;
 }
 
-function othelloCPUTurn(algoArgFromHat, evalArgFromHat) {
-  function parseHatStringArg(arg) {
-    if (!arg) return null;
-    // plain JS string (可能な二重 JSON に対応)
-    if (typeof arg === 'string') {
-      try {
-        const p = JSON.parse(arg);
-        if (typeof p === 'string') {
-          try { return JSON.parse(p); } catch (e) { return p; }
-        }
-        return p;
-      } catch (e) {
-        // 試しにもう一度パース
-        try { return JSON.parse(JSON.parse(arg)); } catch (e2) { return null; }
-      }
+function parseHatStringArg(arg) {
+  if (!arg) return null;
+  // オブジェクトが渡される場合（Hat の List 形式や既にオブジェクトの場合）
+  if (typeof arg === 'object') {
+    // Hat の List(JSVar, Str) の可能性：array[1].string を JSON パース
+    if (Array.isArray(arg.array) && arg.array.length >= 2 && typeof arg.array[1].string === 'string') {
+      try { return JSON.parse(arg.array[1].string); } catch (e) { return null; }
     }
-    // Hat List(JSVar, Str) 形式
-    if (arg && arg.type === 'List' && Array.isArray(arg.array) && arg.array.length >= 2) {
-      const s = arg.array[1] && arg.array[1].string;
-      if (typeof s === 'string') {
-        try { return JSON.parse(s); } catch (e) { return null; }
-      }
-    }
-    // 既にオブジェクトであればそのまま返す
-    if (typeof arg === 'object') return arg;
-    return null;
+    // 既にオブジェクトならそのまま返す
+    return arg;
   }
+  // 文字列が渡された場合は一度だけ JSON.parse を試す（失敗すれば null）
+  if (typeof arg === 'string') {
+    try { return JSON.parse(arg); } catch (e) { return null; }
+  }
+  return null;
+}
 
-  const algoObj = parseHatStringArg(algoArgFromHat);
+function othelloCPUTurn(algoArgFromHat, evalArgFromHat) {
+  const algoObj = JSON.parse(algoArgFromHat);
   if (!algoObj) {
     console.error("othelloCPUTurn: invalid algorithm argument:", algoArgFromHat);
     return;
@@ -1652,7 +1643,7 @@ function othelloCPUTurn(algoArgFromHat, evalArgFromHat) {
     H: [[1,1],[1,6],[6,1],[6,6]]
   };
 
-  const evalObj = parseHatStringArg(evalArgFromHat);
+  const evalObj = JSON.parse(evalArgFromHat);
   if (evalObj) {
     if (evalObj.type === 'evalTable' && Array.isArray(evalObj.table)) {
       // フルテーブルをそのまま反映（8x8 を想定）
