@@ -853,7 +853,12 @@ Blockly.defineBlocksWithJsonArray([{
   "type": "mmN",
   "message0": "ミニマックス探索 (深さ %1)",
   "args0": [
-    { "type": "field_number", "name": "DEPTH", "value": 5, "min": 1, "max": 10 }
+    { "type": "field_number", 
+      "name": "DEPTH", 
+      "value": 5, 
+      "min": 1, 
+      "max": 10,
+      "precision": 1 }
   ],
   "output": "Algorithm",
   "colour": 230
@@ -871,7 +876,12 @@ Blockly.defineBlocksWithJsonArray([{
   "type": "abN",
   "message0": "アルファベータ探索 (深さ %1)",
   "args0": [
-    { "type": "field_number", "name": "DEPTH", "value": 5, "min": 1, "max": 10 }
+    { "type": "field_number", 
+      "name": "DEPTH", 
+      "value": 5, 
+      "min": 1, 
+      "max": 10,
+      "precision": 1 }
   ],
   "output": "Algorithm",
   "colour": 230
@@ -1069,7 +1079,7 @@ Blockly.defineBlocksWithJsonArray([{
   "tooltip": "グループごとの評価値（各引数は数値ブロック）"
 }]);
 
-// Hat 出力: 9グループの数値を集めて JSON 文字列を返す
+// Hat 出力: 8グループの数値を集めて JSON 文字列を返す
 Blockly.Hat['eval_table'] = function (block) {
   const groups = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
   const vals = {};
