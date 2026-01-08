@@ -1619,19 +1619,7 @@ function parseHatStringArg(arg) {
   return null;
 }
 
-function othelloCPUTurn(algoArgFromHat, evalArgFromHat) {
-  const algoObj = JSON.parse(algoArgFromHat);
-  if (!algoObj) {
-    console.error("othelloCPUTurn: invalid algorithm argument:", algoArgFromHat);
-    return;
-  }
-
-  // ensure evaluate8 exists
-  if (!Array.isArray(window.evaluate8)) {
-    window.evaluate8 = Array.from({ length: 8 }, () => Array(8).fill(0));
-  }
-
-  // グループ定義(既存の定義に合わせる)
+// グループ定義(既存の定義に合わせる)
   const GROUP_COORDS = {
     A: [[0,0],[0,7],[7,0],[7,7]],
     B: [[0,2],[0,5],[2,0],[2,7],[5,0],[5,7],[7,2],[7,5]],
@@ -1643,6 +1631,15 @@ function othelloCPUTurn(algoArgFromHat, evalArgFromHat) {
     H: [[1,1],[1,6],[6,1],[6,6]]
   };
 
+function othelloCPUTurn(algoArgFromHat, evalArgFromHat) {
+  const algoObj = JSON.parse(algoArgFromHat);
+  if (!algoObj) {
+    console.error("othelloCPUTurn: invalid algorithm argument:", algoArgFromHat);
+    return;
+  }
+  if (!Array.isArray(window.evaluate8)) {
+    window.evaluate8 = Array.from({ length: 8 }, () => Array(8).fill(0));
+  }
   const evalObj = JSON.parse(evalArgFromHat);
   if (evalObj) {
     if (evalObj.type === 'evalTable' && Array.isArray(evalObj.table)) {
@@ -1666,19 +1663,16 @@ function othelloCPUTurn(algoArgFromHat, evalArgFromHat) {
       console.log("othelloCPUTurn: evalArg ignored (unknown format):", evalObj);
     }
   }
-
   const depth = Number(algoObj.depth) || 0;
   let bestMove = null;
-
   if (algoObj.type === "mmN") {
     bestMove = mmN(data, moves, evaluateFn, turn, depth);
-  } else if (algoObj.type === "abN" || algoObj.type === "ab") {
+  } else if (algoObj.type === "abN") {
     bestMove = abN(data, moves, evaluateFn, turn, depth);
   } else {
     console.error("othelloCPUTurn: unknown algorithm type:", algoObj.type);
     return;
   }
-
   if (bestMove !== null) {
     printBoard(bestMove);
     console.log("CPU move chosen by", algoObj.type, "depth", depth);
@@ -1691,7 +1685,6 @@ function othelloCPUTurn(algoArgFromHat, evalArgFromHat) {
       console.log("No legal moves for CPU");
     }
   }
-
   turnChange();
 }
 // ...existing code...
