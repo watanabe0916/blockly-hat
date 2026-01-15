@@ -737,6 +737,12 @@ function turnChange(){
   turn = !turn;
   console.log("turnchange done :次は" + turn + "\n");
   showTurn();
+  
+  // ゲーム終了チェックと平均時間の表示（CPUの手番に関係なく）
+  if (finishGame()) {
+    const averageTime = totalCpuTime / cpuMoveCount;
+    console.log(`CPUの手の平均時間: ${averageTime.toFixed(2)} ms`);
+  }
 }
 
 //ゲーム終了後、勝敗を表示
@@ -979,7 +985,6 @@ function boardscore(data, evalTurn){
   return score;
 }
 
-
 //mini-maxを用いたCPU(改良版)
 function minimaxturnCPU(){
   let candidates = moves(data);
@@ -1144,7 +1149,66 @@ function min2(list){
 function newminimax(data) {
   const myTurn = turn;
   let nextMoves = moves(data, myTurn); // 一手目（CPU）
-  let xy2 = [];
+//   let secondMoves = [];
+//   let scores2 = [];
+//   let xy2 = [];
+
+//   for (let i = 0; i < nextMoves.length; i++) {
+//     secondMoves = moves(nextMoves[i], !myTurn); // 二手目（User）
+//     scores2 = [];
+
+//     if (secondMoves.length === 0) {
+//       scores2.push(boardscore(nextMoves[i], myTurn));
+//     } else {
+//       for (let j = 0; j < secondMoves.length; j++) {
+//         let thirdMoves = moves(secondMoves[j], myTurn); // 三手目（CPU）
+//         let scores3 = [];
+
+//         if (thirdMoves.length === 0) {
+//           scores3.push(boardscore(secondMoves[j], myTurn));
+//         } else {
+//           for (let k = 0; k < thirdMoves.length; k++) {
+//             let fourthMoves = moves(thirdMoves[k], !myTurn); // 四手目（User）
+//             let scores4 = [];
+
+//             if (fourthMoves.length === 0) {
+//               scores4.push(boardscore(thirdMoves[k], myTurn));
+//             } else {
+//               for (let l = 0; l < fourthMoves.length; l++) {
+//                 let fifthMoves = moves(fourthMoves[l], myTurn); // 五手目（CPU）
+//                 let scores5 = [];
+
+//                 if (fifthMoves.length === 0) {
+//                   scores5.push(boardscore(fourthMoves[l], myTurn));
+//                 } else {
+//                   for (let m = 0; m < fifthMoves.length; m++) {
+//                     scores5.push(boardscore(fifthMoves[m], myTurn));
+//                   }
+//                 }
+//                 if (scores5.length > 0) {
+//                   scores4.push(Math.max(...scores5));
+//                 }
+//               }
+//             }
+//             if (scores4.length > 0) {
+//               scores3.push(Math.min(...scores4));
+//             }
+//           }
+//         }
+//         if (scores3.length > 0) {
+//           scores2.push(Math.max(...scores3));
+//         }
+//       }
+//     }
+//     if (scores2.length > 0) {
+//       xy2.push([Math.min(...scores2), i]);
+//     }
+//   }
+//   if (xy2.length === 0) return null;
+//   console.log("xy2:", xy2);
+//   console.log("best move:", max2(xy2)[1]);
+//   return nextMoves[max2(xy2)[1]];
+let xy2 = [];
 
   for (let i = 0; i < nextMoves.length; i++) {
     let secondMoves = moves(nextMoves[i], !myTurn); // 二手目（User）
@@ -1256,6 +1320,72 @@ function newminimaxN(data, depth) {
 function alphabeta(data) {
   const myTurn = turn;
   let nextMoves = moves(data, myTurn); // 一手目（CPU）
+//   let secondMoves = [];
+//   let scores2 = [];
+//   let xy2 = [];
+
+//   for (let i = 0; i < nextMoves.length; i++) {
+//     secondMoves = moves(nextMoves[i], !myTurn); // 二手目（User）
+//     scores2 = [];
+
+//     if (secondMoves.length === 0) {
+//       scores2.push(boardscore(nextMoves[i], myTurn));
+//     } else {
+//       for (let j = 0; j < secondMoves.length; j++) {
+//         let thirdMoves = moves(secondMoves[j], myTurn); // 三手目（CPU）
+//         let scores3 = [];
+
+//         if (thirdMoves.length === 0) {
+//           scores3.push(boardscore(secondMoves[j], myTurn));
+//         } else {
+//           for (let k = 0; k < thirdMoves.length; k++) {
+//             let fourthMoves = moves(thirdMoves[k], !myTurn); // 四手目（User）
+//             let scores4 = [];
+
+//             if (fourthMoves.length === 0) {
+//               scores4.push(boardscore(thirdMoves[k], myTurn));
+//             } else {
+//               for (let l = 0; l < fourthMoves.length; l++) {
+//                 let fifthMoves = moves(fourthMoves[l], myTurn); // 五手目（CPU）
+//                 let scores5 = [];
+
+//                 if (fifthMoves.length === 0) {
+//                   scores5.push(boardscore(fourthMoves[l], myTurn));
+//                 } else {
+//                   for (let m = 0; m < fifthMoves.length; m++) {
+//                     scores5.push(boardscore(fifthMoves[m], myTurn));
+//                   }
+//                 }
+//                 if (scores5.length > 0) {
+//                   scores4.push(Math.max(...scores5));
+//                   beta = Math.min(beta, Math.max(...scores5));
+//                   if (alpha >= beta) break;
+//                 }
+//               }
+//             }
+//             if (scores4.length > 0) {
+//               scores3.push(Math.min(...scores4));
+//               alpha = Math.max(alpha, Math.min(...scores4));
+//               if (alpha >= beta) break;
+//             }
+//           }
+//         }
+//         if (scores3.length > 0) {
+//           scores2.push(Math.max(...scores3));
+//           beta = Math.min(beta, Math.max(...scores3));
+//           if (alpha >= beta) break;
+//         }
+//       }
+//     }
+//     if (scores2.length > 0) {
+//       alpha = Math.max(alpha, Math.min(...scores2));
+//       xy2.push([Math.min(...scores2), i]);
+//     }
+//   }
+//   if (xy2.length === 0) return null;
+//   console.log("xy2:", xy2);
+//   console.log("best move:", max2(xy2)[1]);
+//   return nextMoves[max2(xy2)[1]];
   let xy2 = [];
 
   for (let i = 0; i < nextMoves.length; i++) {
@@ -1323,8 +1453,6 @@ function alphabeta(data) {
   console.log("best move:", max2(xy2)[1]);
   return nextMoves[max2(xy2)[1]];
 }
-
-
 
 
 function alphabetaN(data, depth) {
@@ -1693,8 +1821,5 @@ function othelloCPUTurn(algoArgFromHat, evalArgFromHat) {
   const moveTime = endTime - startTime;
   cpuMoveCount++;
   totalCpuTime += moveTime;
-  if (finishGame()) {
-    const averageTime = totalCpuTime / cpuMoveCount;
-    console.log(`CPUの手の平均時間: ${averageTime.toFixed(2)} ms`);
-  }
+  // 平均表示は turnChange() に移す
 }
