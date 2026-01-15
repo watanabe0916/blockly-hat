@@ -1631,7 +1631,12 @@ function parseHatStringArg(arg) {
     H: [[1,1],[1,6],[6,1],[6,6]]
   };
 
+let cpuMoveCount = 0;
+let totalCpuTime = 0;
+
 function othelloCPUTurn(algoArgFromHat, evalArgFromHat) {
+  const startTime = performance.now(); 
+
   const algoObj = JSON.parse(algoArgFromHat);
   if (!algoObj) {
     console.error("othelloCPUTurn: invalid algorithm argument:", algoArgFromHat);
@@ -1643,14 +1648,12 @@ function othelloCPUTurn(algoArgFromHat, evalArgFromHat) {
   const evalObj = JSON.parse(evalArgFromHat);
   if (evalObj) {
     if (evalObj.type === 'evalTable' && Array.isArray(evalObj.table)) {
-      // フルテーブルをそのまま反映（8x8 を想定）
       for (let y = 0; y < 8; y++) {
         for (let x = 0; x < 8; x++) {
           window.evaluate8[y][x] = (evalObj.table[y] && typeof evalObj.table[y][x] !== 'undefined') ? Number(evalObj.table[y][x]) : 0;
         }
       }
     } else if (evalObj.type === 'evalGroups' && evalObj.values) {
-      // グループ指定を展開して反映
       Object.keys(evalObj.values).forEach(g => {
         const v = Number(evalObj.values[g]) || 0;
         const coords = GROUP_COORDS[g];
@@ -1686,5 +1689,12 @@ function othelloCPUTurn(algoArgFromHat, evalArgFromHat) {
     }
   }
   turnChange();
+  const endTime = performance.now();  
+  const moveTime = endTime - startTime;
+  cpuMoveCount++;
+  totalCpuTime += moveTime;
+  if (finishGame()) {
+    const averageTime = totalCpuTime / cpuMoveCount;
+    console.log(`CPUの手の平均時間: ${averageTime.toFixed(2)} ms`);
+  }
 }
-// ...existing code...
