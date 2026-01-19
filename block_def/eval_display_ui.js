@@ -41,7 +41,7 @@
 
 
         const header = document.createElement('div');
-        header.textContent = '評価値表示';
+        header.textContent = '評価値表示エリア';
         header.style.fontWeight = '600';
         header.style.marginBottom = '6px';
         container.appendChild(header);
