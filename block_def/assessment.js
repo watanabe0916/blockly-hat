@@ -105,7 +105,7 @@
                 padding: '6px 8px',
                 fontSize: '16px',
                 borderRadius: '8px',
-                //display: 'none',
+                display: 'none',
                 boxShadow: '0 1px 4px rgba(0,0,0,0.12)'
             });
             document.body.appendChild(openBtn);
