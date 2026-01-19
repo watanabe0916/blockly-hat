@@ -28,8 +28,14 @@ h1{
 #btn_area{
     float: left;
     width:60%;
+    margin-left: 100px;
     margin-top:10px;
     margin-bottom:50px;
+}
+#btn_area button {
+      font-size: 23px;
+      padding: 1px 3px;
+      height: 40px;
 }
 .js_area{
     /* height: 200px; */
