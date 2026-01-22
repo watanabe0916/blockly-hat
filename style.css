@@ -42,10 +42,12 @@ h1{
     padding:10px;
 }
 .hat_area{  /*Hat出力エリア*/
+    display: none;
     height: 400px; 
     padding:10px;
 }
 .hat_output_area{
+    display: none;
     height: 200px; 
     padding:10px;
 }
