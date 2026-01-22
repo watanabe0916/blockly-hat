@@ -11,12 +11,12 @@ h1{
     overflow: hidden;
 }
 #blocklyDiv{
-    width:100%;
-    height: 600px;
+    width:92%;
+    height: 465px;
 }
 #blocklyDiv_function{
-    width:100%;
-    height: 1000px;
+    width:92%;
+    height: 430px;
 }
 #code_area{ /*#othello_area*/ 
     float: right;
