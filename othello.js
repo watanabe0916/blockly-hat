@@ -740,6 +740,7 @@ function turnChange(){
   
   // ゲーム終了チェックと平均時間の表示（CPUの手番に関係なく）
   if (finishGame()) {
+    console.log(`CPUの手の合計時価間: ${totalCpuTime.toFixed(2)} ms`);
     const averageTime = totalCpuTime / cpuMoveCount;
     console.log(`CPUの手の平均時間: ${averageTime.toFixed(2)} ms`);
   }
